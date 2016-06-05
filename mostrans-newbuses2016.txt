@@ -1,0 +1,20 @@
+http://overpass-api.de/api/interpreter?data=[out:xml]
+[timeout:120]
+;
+(
+  relation
+    ["ref"="432"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="483"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="540"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+);
+out meta;
+>;
+out meta qt;

@@ -66,10 +66,16 @@ sudo apt-get install python-pip
 sudo apt-get install libpq-dev
 sudo pip install -r requirements.txt
 
+sudo nano /etc/postgresql/9.3/main/pg_hba.conf
+#set local   all             all                                     peer to local   all             all                                     md5
+sudo service postgresql restart
+
+
+sudo -u postgres psql -d osmot -c "ALTER USER "gisuser" WITH PASSWORD 'localgisuserpassword'"
+sudo -u postgres psql -d osmot -c "ALTER ROLE gisuser WITH login;"
+
+
 #end
-
-
-
 
 ```
 

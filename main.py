@@ -10,10 +10,13 @@ import argparse
 
 def download_osm():
     import urllib
-    urllib.urlretrieve ('''http://overpass-api.de/api/interpreter?data=[out:xml]
-[timeout:120]
-;
-(
+    with open('mostrans-newbuses2016.txt', 'r') as myfile:
+        overpass_query=myfile.read()
+    urllib.urlretrieve(overpass_query, "data.osm")
+
+
+
+'''
   relation
     ["ref"="309"]
     ["payment:troika"="yes"]
@@ -27,28 +30,8 @@ def download_osm():
     ["ref"="361"]
     ["payment:troika"="yes"]
     (55.597747184319935,37.354888916015625,55.94458588614092,38.06350708007812);
-);
-out meta;
->;
-out meta qt;''', "data.osm")
 
 
-
-'''
-
-
-  relation
-    ["ref"="432"]
-    ["payment:troika"="yes"]
-    (55.597747184319935,37.354888916015625,55.94458588614092,38.06350708007812);
-  relation
-    ["ref"="483"]
-    ["payment:troika"="yes"]
-    (55.597747184319935,37.354888916015625,55.94458588614092,38.06350708007812);
-  relation
-    ["ref"="540"]
-    ["payment:troika"="yes"]
-    (55.597747184319935,37.354888916015625,55.94458588614092,38.06350708007812);
 '''
 
 
@@ -103,14 +86,13 @@ def cleardb(host,dbname,user,password):
     DROP TABLE IF EXISTS terminals_export         CASCADE;
     '''
 
-    
     cur.execute(sql)
     conn.commit()
-    print 'database cleared'
+    print ('Database wiped')
 
 def importdb(host,dbname,user,password):
     os.system('''
-    osm2pgsql --create --slim -E 3857 --database '''+dbname+''' --username '''+user+'''  data.osm
+    osm2pgsql --create --slim -E 3857 --cache-strategy sparse --cache 100 --database '''+dbname+''' --username '''+user+'''  data.osm
     ''')
 
 def process(host,dbname,user,password):
