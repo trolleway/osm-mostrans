@@ -1,7 +1,8 @@
-*.config
+config.py
 *~
 *.osm
 *.geojson
+
 
 
 

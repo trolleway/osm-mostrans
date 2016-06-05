@@ -103,8 +103,10 @@ def cleardb(host,dbname,user,password):
     DROP TABLE IF EXISTS terminals_export         CASCADE;
     '''
 
+    
     cur.execute(sql)
     conn.commit()
+    print 'database cleared'
 
 def importdb(host,dbname,user,password):
     os.system('''
@@ -148,6 +150,8 @@ if __name__ == '__main__':
         if is_download == True:
             print "downloading"
             download_osm()
+
+        os.system('export PGPASS='+password)
 
         cleardb(host,dbname,user,password)
         importdb(host,dbname,user,password)

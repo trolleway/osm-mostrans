@@ -103,6 +103,7 @@ def cleardb(host,dbname,user,password):
     DROP TABLE IF EXISTS terminals_export         CASCADE;
     '''
 
+    print 'database cleared'
     cur.execute(sql)
     conn.commit()
 
@@ -113,7 +114,7 @@ def importdb(host,dbname,user,password):
 
 def process(host,dbname,user,password):
     
-        cmd='''python ../../osmot.py -hs localhost -d '''+dbname+''' -u '''+user+''' -p '''+password+'''
+        cmd='''python osmot/osmot.py -hs localhost -d '''+dbname+''' -u '''+user+''' -p '''+password+'''
     '''
         print cmd
         os.system(cmd)
@@ -148,6 +149,8 @@ if __name__ == '__main__':
         if is_download == True:
             print "downloading"
             download_osm()
+
+        os.system('export PGPASS='+password)
 
         cleardb(host,dbname,user,password)
         importdb(host,dbname,user,password)

@@ -1,9 +1,8 @@
-dbname='gis'
-user='trolleway'
+dbname='osmot'
+user='gisuser'
 host='localhost'
-password='admin'
+password='localgisuserpassword'
 
 ngw_url='http://trolleway.nextgis.com'
 ngw_login = 'administrator'
-ngw_password = 'admin' 
-
+ngw_password = '16208ii' 
