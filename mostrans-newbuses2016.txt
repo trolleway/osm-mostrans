@@ -1,7 +1,24 @@
 http://overpass-api.de/api/interpreter?data=[out:xml]
-[timeout:120]
+[timeout:300]
 ;
 (
+
+/*
+09.05.2016
+http://tr.ru/news/1219-prevrashchenie-stolichnyh-marshrutok-v-avtobusy-prodolzhenie-s-9-maya
+*/
+  relation
+    ["ref"="309"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="346"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="361"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
   relation
     ["ref"="432"]
     ["payment:troika"="yes"]
@@ -14,6 +31,320 @@ http://overpass-api.de/api/interpreter?data=[out:xml]
     ["ref"="540"]
     ["payment:troika"="yes"]
     (55.5977,37.3548,55.9445,38.0635);
+/*
+end of day batch
+*/
+
+
+/*
+16.05.2016
+http://tr.ru/news/1219-prevrashchenie-stolichnyh-marshrutok-v-avtobusy-prodolzhenie-s-9-maya
+*/
+
+  relation
+    ["ref"="40к"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="139"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="206к"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="322"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="328"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="338"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="352"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+
+  relation
+    ["ref"="352"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="386"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="387"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="415"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="423"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="425"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="461"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="466"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="500"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="567"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="571"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+
+  relation
+    ["ref"="571"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="591"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="592"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="594"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="827"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="888"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+
+  relation
+    ["ref"="994"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+
+
+/*
+end of day batch
+*/
+
+
+/*
+17.05.2016
+http://tr.ru/news/1219-prevrashchenie-stolichnyh-marshrutok-v-avtobusy-prodolzhenie-s-9-maya
+*/
+
+  relation
+    ["ref"="336"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="378"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="418"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="428"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="436"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="522"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="528"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="541"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="544"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="714к"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="965"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+
+
+/*
+end of day batch
+*/
+
+/*
+23.05.2016
+http://tr.ru/news/1219-prevrashchenie-stolichnyh-marshrutok-v-avtobusy-prodolzhenie-s-9-maya
+*/
+
+  relation
+    ["ref"="21к"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+
+  relation
+    ["ref"="22к"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="319"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="375"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="417"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="496"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="502"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="574"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="595"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+
+/*
+25.05.2016
+http://tr.ru/news/1219-prevrashchenie-stolichnyh-marshrutok-v-avtobusy-prodolzhenie-s-9-maya
+*/
+  relation
+    ["ref"="405"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="410"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+
+/*
+30.05.2016
+http://tr.ru/news/1219-prevrashchenie-stolichnyh-marshrutok-v-avtobusy-prodolzhenie-s-9-maya
+*/
+
+  relation
+    ["ref"="51к"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="76"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="115"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="311"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="312"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="326"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="332"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="353"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+
+  relation
+    ["ref"="372"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="429"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="469"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="469к"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="491"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="505"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="511"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="552"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="559"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+  relation
+    ["ref"="С7"]
+    ["payment:troika"="yes"]
+    (55.5977,37.3548,55.9445,38.0635);
+
+
+
+
+
 );
 out meta;
 >;
