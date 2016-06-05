@@ -1,0 +1,3 @@
+[submodule "osmot"]
+	path = osmot
+	url = https://github.com/trolleway/osmot.git
