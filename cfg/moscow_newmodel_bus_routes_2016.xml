@@ -1,0 +1,40 @@
+<?xml>
+<batch 
+    source="http://tr.ru/news/1219-prevrashchenie-stolichnyh-marshrutok-v-avtobusy-prodolzhenie-s-9-maya"
+    date_start="09.05.2016"
+    >
+    <ref>309</ref>
+    <ref>346</ref>
+    <ref>361</ref>
+    <ref>432</ref>
+    <ref>483</ref>
+    <ref>540</ref>
+</batch>
+<batch 
+    source="http://tr.ru/news/1219-prevrashchenie-stolichnyh-marshrutok-v-avtobusy-prodolzhenie-s-9-maya"
+    date_start="16.05.2016"
+    >
+    <ref>40к</ref>
+    <ref>139</ref>
+    <ref>206к</ref>
+    <ref>322</ref>
+    <ref>328</ref>
+    <ref>338</ref>
+    <ref>352</ref>
+    <ref>386</ref>
+    <ref>387</ref>
+    <ref>415</ref>
+    <ref>423</ref>
+    <ref>425</ref>
+    <ref>461</ref>
+    <ref>466</ref>
+    <ref>500</ref>
+    <ref>567</ref>
+    <ref>571</ref>
+    <ref>591</ref>
+    <ref>592</ref>
+    <ref>594</ref>
+    <ref>888</ref>
+    <ref>827</ref>
+    <ref>994</ref>
+</batch></xml>
