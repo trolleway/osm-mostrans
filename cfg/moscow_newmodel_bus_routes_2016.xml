@@ -1,4 +1,5 @@
-<?xml>
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
 <batch 
     source="http://tr.ru/news/1219-prevrashchenie-stolichnyh-marshrutok-v-avtobusy-prodolzhenie-s-9-maya"
     date_start="09.05.2016"
@@ -37,4 +38,6 @@
     <ref>888</ref>
     <ref>827</ref>
     <ref>994</ref>
-</batch></xml>
+</batch>
+</dataset>
+

@@ -1,0 +1,47 @@
+{
+    "dataset": {
+        "batch": [
+            {
+                "ref": [
+                    "309",
+                    "346",
+                    "361",
+                    "432",
+                    "483",
+                    "540"
+                ],
+                "_source": "http://tr.ru/news/1219-prevrashchenie-stolichnyh-marshrutok-v-avtobusy-prodolzhenie-s-9-maya",
+                "_date_start": "09.05.2016"
+            },
+            {
+                "ref": [
+                    "40к",
+                    "139",
+                    "206к",
+                    "322",
+                    "328",
+                    "338",
+                    "352",
+                    "386",
+                    "387",
+                    "415",
+                    "423",
+                    "425",
+                    "461",
+                    "466",
+                    "500",
+                    "567",
+                    "571",
+                    "591",
+                    "592",
+                    "594",
+                    "888",
+                    "827",
+                    "994"
+                ],
+                "_source": "http://tr.ru/news/1219-prevrashchenie-stolichnyh-marshrutok-v-avtobusy-prodolzhenie-s-9-maya",
+                "_date_start": "16.05.2016"
+            }
+        ]
+    }
+}

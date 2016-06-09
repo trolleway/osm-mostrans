@@ -53,22 +53,54 @@ bin/osmosis \
 def download_osm_dump():
     os.system('wget -N http://data.gis-lab.info/osm_dump/dump/latest/RU-MOW.osm.pbf')
 
+    import json
+    import pprint
+    pp=pprint.PrettyPrinter(indent=2)
+
+    refs=[]
+
+    with open('cfg/moscow_newmodel_bus_routes_2016.json') as data_file:    
+        data = json.load(data_file)
+
+    for batches in data['dataset'].values():
+        for batch in batches:
+            for ref in batch['ref']:
+                refs.append(ref)
+
+    refsString=','.join(refs)
+    
+
     cmd='''
 ~/osmosis/bin/osmosis \
+  -q \
   --read-pbf RU-MOW.osm.pbf \
   --tf accept-relations route=bus \
   --used-way --used-node \
   --write-pbf routes.osm.pbf
 '''
     os.system(cmd)
+
     cmd='''
 ~/osmosis/bin/osmosis \
+  -q  \
   --read-pbf routes.osm.pbf \
-  --tf accept-relations ref=3М,3Мб \
+  --tf accept-relations ref="'''+refsString.encode("UTF-8")+'''" \
   --used-way --used-node \
-  --write-pbf routes.osm.pbf
+  --write-pbf routes2.osm.pbf
     '''
+    #print cmd
+    #quit()
+    os.system(cmd)
 
+    cmd='''
+~/osmosis/bin/osmosis \
+  -q \
+  --read-pbf routes2.osm.pbf \
+  --tf accept-relations "payment:troika=yes" \
+  --used-way --used-node \
+  --write-pbf routesFinal.osm.pbf
+    '''
+    os.system(cmd)
 
 
 
@@ -133,7 +165,7 @@ def cleardb(host,dbname,user,password):
 
 def importdb(host,dbname,user,password):
     os.system('''
-    osm2pgsql --create --slim -E 3857 --cache-strategy sparse --cache 100 --database '''+dbname+''' --username '''+user+'''  data.osm.pbf
+    osm2pgsql --create --slim -E 3857 --cache-strategy sparse --cache 100 --database '''+dbname+''' --username '''+user+'''  routesFinal.osm.pbf
     ''')
 
 def process(host,dbname,user,password):
