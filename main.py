@@ -8,8 +8,10 @@ import config
 import argparse
 
 
+
 def download_osm():
     import urllib
+    from urllib import quote_plus
     with open('mostrans-newbuses2016.txt', 'r') as myfile:
         overpass_query=myfile.read()
     urllib.urlretrieve(overpass_query, "data.osm")
@@ -33,7 +35,46 @@ def download_osm():
 
 
 '''
+'''
+bin/osmosis \
+  --read-pbf ~/Downloads/RU-SPE.osm.pbf \
+  --tf accept-relations route=bus,trolleybus,tram \
+  --used-way --used-node \
+  --write-pbf ~/Downloads/filtered.osm.pbf
 
+bin/osmosis \
+  --read-pbf ~/Downloads/filtered.osm.pbf \
+  --tf accept-relations ref=3М,3Мб \
+  --used-way --used-node \
+  --write-pbf ~/Downloads/filtered-numbers.osm.pbf
+
+'''
+
+def download_osm_dump():
+    os.system('wget -N http://data.gis-lab.info/osm_dump/dump/latest/RU-MOW.osm.pbf')
+
+    cmd='''
+~/osmosis/bin/osmosis \
+  --read-pbf RU-MOW.osm.pbf \
+  --tf accept-relations route=bus \
+  --used-way --used-node \
+  --write-pbf routes.osm.pbf
+'''
+    os.system(cmd)
+    cmd='''
+~/osmosis/bin/osmosis \
+  --read-pbf routes.osm.pbf \
+  --tf accept-relations ref=3М,3Мб \
+  --used-way --used-node \
+  --write-pbf routes.osm.pbf
+    '''
+
+
+
+
+    #os.system('osmconvert RU-MOW.osm.pbf -o=RU-MOW.o5m')
+    #os.system('osmfilter RU-MOW.o5m --parameter-file=mostrans-newbuses2016_osmfilter.txt >bus_lines.o5m')
+    #os.system('osmconvert bus_lines.o5m -o=data.osm')
 
 def argparser_prepare():
 
@@ -92,7 +133,7 @@ def cleardb(host,dbname,user,password):
 
 def importdb(host,dbname,user,password):
     os.system('''
-    osm2pgsql --create --slim -E 3857 --cache-strategy sparse --cache 100 --database '''+dbname+''' --username '''+user+'''  data.osm
+    osm2pgsql --create --slim -E 3857 --cache-strategy sparse --cache 100 --database '''+dbname+''' --username '''+user+'''  data.osm.pbf
     ''')
 
 def process(host,dbname,user,password):
@@ -131,7 +172,7 @@ if __name__ == '__main__':
         is_download = True
         if is_download == True:
             print "downloading"
-            download_osm()
+            download_osm_dump()
 
         os.system('export PGPASS='+password)
 
@@ -141,6 +182,6 @@ if __name__ == '__main__':
         postgis2geojson(host,dbname,user,password,'terminals_export')
         postgis2geojson(host,dbname,user,password,'routes_with_refs')
 
-        os.system('python update_ngw_from_geojson.py  --ngw_url '+config.ngw_url+' --ngw_resource_id 94 --ngw_login '+config.ngw_login+' --ngw_password '+config.ngw_password+' --check_field road_id --filename routes_with_refs.geojson')
-        os.system('python update_ngw_from_geojson.py  --ngw_url '+config.ngw_url+' --ngw_resource_id 95 --ngw_login '+config.ngw_login+' --ngw_password '+config.ngw_password+' --check_field terminal_id --filename terminals_export.geojson')
+        #os.system('python update_ngw_from_geojson.py  --ngw_url '+config.ngw_url+' --ngw_resource_id 94 --ngw_login '+config.ngw_login+' --ngw_password '+config.ngw_password+' --check_field road_id --filename routes_with_refs.geojson')
+        #os.system('python update_ngw_from_geojson.py  --ngw_url '+config.ngw_url+' --ngw_resource_id 95 --ngw_login '+config.ngw_login+' --ngw_password '+config.ngw_password+' --check_field terminal_id --filename terminals_export.geojson')
     
