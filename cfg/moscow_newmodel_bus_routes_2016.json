@@ -41,6 +41,13 @@
                 ],
                 "_source": "http://tr.ru/news/1219-prevrashchenie-stolichnyh-marshrutok-v-avtobusy-prodolzhenie-s-9-maya",
                 "_date_start": "16.05.2016"
+            },
+             {
+                "ref": [
+                    "975"
+                ],
+                "_source": "http://tr.ru/articles/1348-moskva-marshrutki-prevrashchayutsya-prevrashchayutsya-marshrutki-v-elegantnye-avtobusy",
+                "rem": "test overpass api"
             }
         ]
     }
