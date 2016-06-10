@@ -270,7 +270,7 @@ if __name__ == '__main__':
         is_download = True
         if is_download == True:
             print "downloading"
-            download_osm_dump()
+            download_osm_overpass()
 
         os.system('export PGPASS='+password)
 
