@@ -106,7 +106,7 @@ def download_osm_overpass():
     import urllib
     def makeOverpassQuery(currentmap):
 
-        data=  {'data':  '''[out:xml][timeout:55];(relation["route"="bus"](55.5977,37.3548,55.9440,38.0635);out meta;>;out meta qt;'''}
+        data=  {'data':  '''[out:xml][timeout:55];(relation["route"="bus"]["payment:troika"="yes"](55.5977,37.3548,55.9440,38.0635);out meta;>;out meta qt;'''}
         print 'new '+urllib.unquote(urllib.urlencode(data)).decode('utf8')
         #return  'http://overpass.osm.rambler.ru/cgi/interpreter?'+urllib.urlencode(data)
         return  'http://overpass-api.de/api/interpreter?'+urllib.urlencode(data)
