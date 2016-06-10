@@ -102,6 +102,72 @@ def download_osm_dump():
     '''
     os.system(cmd)
 
+def download_osm_overpass():
+    def makeOverpassQuery(currentmap):
+
+        data=  {'data':  '''[out:xml][timeout:55];(relation["route"="bus"](55.5977,37.3548,55.9440,38.0635);out meta;>;out meta qt;'''}
+        print 'new '+urllib.unquote(urllib.urlencode(data)).decode('utf8')
+        #return  'http://overpass.osm.rambler.ru/cgi/interpreter?'+urllib.urlencode(data)
+        return  'http://overpass-api.de/api/interpreter?'+urllib.urlencode(data)
+    
+    #Make overpass-api query
+    overpass_query=makeOverpassQuery(currentmap)
+    #print overpass_query
+            
+    #Do overpass query
+    osmFileHandler='data.osm'
+
+    urllib.urlretrieve(overpass_query,osmFileHandler)
+    
+
+    import json
+    import pprint
+    pp=pprint.PrettyPrinter(indent=2)
+
+    refs=[]
+
+    with open('cfg/moscow_newmodel_bus_routes_2016.json') as data_file:    
+        data = json.load(data_file)
+
+    for batches in data['dataset'].values():
+        for batch in batches:
+            for ref in batch['ref']:
+                refs.append(ref)
+
+    refsString=','.join(refs)
+    
+
+    cmd='''
+~/osmosis/bin/osmosis \
+  -q \
+  --read-xml data.osm \
+  --tf accept-relations route=bus \
+  --used-way --used-node \
+  --write-pbf routes.osm.pbf
+'''
+    os.system(cmd)
+
+    cmd='''
+~/osmosis/bin/osmosis \
+  -q  \
+  --read-pbf routes.osm.pbf \
+  --tf accept-relations ref="'''+refsString.encode("UTF-8")+'''" \
+  --used-way --used-node \
+  --write-pbf routes2.osm.pbf
+    '''
+    #print cmd
+    #quit()
+    os.system(cmd)
+
+    cmd='''
+~/osmosis/bin/osmosis \
+  -q \
+  --read-pbf routes2.osm.pbf \
+  --tf accept-relations "payment:troika=yes" \
+  --used-way --used-node \
+  --write-pbf routesFinal.osm.pbf
+    '''
+    os.system(cmd)
 
 
     #os.system('osmconvert RU-MOW.osm.pbf -o=RU-MOW.o5m')
