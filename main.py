@@ -103,6 +103,7 @@ def download_osm_dump():
     os.system(cmd)
 
 def download_osm_overpass():
+    import urllib
     def makeOverpassQuery(currentmap):
 
         data=  {'data':  '''[out:xml][timeout:55];(relation["route"="bus"](55.5977,37.3548,55.9440,38.0635);out meta;>;out meta qt;'''}
