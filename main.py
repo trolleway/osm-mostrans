@@ -111,7 +111,7 @@ def download_osm_overpass():
         return  'http://overpass-api.de/api/interpreter?'+urllib.urlencode(data)
     
     #Make overpass-api query
-    overpass_query=makeOverpassQuery(currentmap)
+    overpass_query=makeOverpassQuery(currentmap={})
     #print overpass_query
             
     #Do overpass query
