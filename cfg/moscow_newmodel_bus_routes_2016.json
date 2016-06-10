@@ -44,10 +44,43 @@
             },
              {
                 "ref": [
-                    "975"
+                    "336",
+                    "378",
+                    "418",
+                    "428",
+                    "436",
+                    "522",
+                    "528",
+                    "541",
+                    "544",
+                    "714к",
+                    "965"
                 ],
-                "_source": "http://tr.ru/articles/1348-moskva-marshrutki-prevrashchayutsya-prevrashchayutsya-marshrutki-v-elegantnye-avtobusy",
-                "rem": "test overpass api"
+                "_source": "http://tr.ru/news/1219-prevrashchenie-stolichnyh-marshrutok-v-avtobusy-prodolzhenie-s-9-maya",
+                "_date_start": "17.05.2016"
+            },             
+			{
+                "ref": [
+                    "21к",
+                    "22к",
+                    "319",
+                    "375",
+                    "417",
+                    "496",
+                    "502",
+                    "574",
+                    "595"
+                ],
+                "_source": "http://tr.ru/news/1219-prevrashchenie-stolichnyh-marshrutok-v-avtobusy-prodolzhenie-s-9-maya",
+                "_date_start": "23.05.2016"
+            },			
+			{
+                "ref": [
+                    "405",
+                    "410"
+                ],
+                "_source": "http://tr.ru/news/1219-prevrashchenie-stolichnyh-marshrutok-v-avtobusy-prodolzhenie-s-9-maya",
+                "_date_start": "25.05.2016"
             }
         ]
     }
