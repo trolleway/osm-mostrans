@@ -157,8 +157,6 @@ def download_osm_overpass():
   --used-way --used-node \
   --write-pbf routes2.osm.pbf
     '''
-    #print cmd
-    #quit()
     os.system(cmd)
 
     cmd='''
