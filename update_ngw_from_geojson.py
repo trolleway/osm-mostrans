@@ -92,8 +92,6 @@ class NGWSynchroniser:
         return True
         
     def comparePoints(self,ngw_pt, wfs_pt):
-        print ngw_pt, wfs_pt
-
         return (abs(ngw_pt[0] - wfs_pt[0]) < self.delta) and (abs(ngw_pt[1] - wfs_pt[1]) < self.delta)
         
     def compareLines(self,ngw_line, wfs_line):
@@ -344,7 +342,7 @@ class NGWSynchroniser:
                     payload = self.createPayload(wfs_result[ngw_id])
                     req = requests.put(self.ngw_url + str(self.resid) + '/feature/' + str(ngwFeatureId), data=json.dumps(payload), auth=self.ngw_creds)
                     print 'update feature #' + str(ngw_id) + ' ' + str(req)
-                print 'same feature: '+str(ngw_id)
+                #print 'same feature: '+str(ngw_id)
             else:
                 print 'delete feature ' + str(ngw_id) + ' ngw_feature_id='+str(ngwFeatureId)
                 req = requests.delete(self.ngw_url + str(self.resid) + '/feature/' + str(ngwFeatureId), auth=self.ngw_creds)
