@@ -167,7 +167,51 @@
                 ],
                 "_source": "http://tr.ru/news/1219-prevrashchenie-stolichnyh-marshrutok-v-avtobusy-prodolzhenie-s-9-maya",
                 "_date_start": "03.06.2016"
-            },	
+            },			
+			{
+                "ref": [
+                    "314",
+                    "340",
+                    "365",
+                    "379",
+                    "380",
+                    "409",
+                    "440",
+                    "561",
+                    "602",
+                    "613к",
+                    "975",
+                    "987"
+                ],
+                "_source": "http://tr.ru/articles/1348-moskva-marshrutki-prevrashchayutsya-prevrashchayutsya-marshrutki-v-elegantnye-avtobusy",
+                "_date_start": "07.06.2016"
+            },
+			{
+                "ref": [
+                    "334",
+                    "350",
+                    "443",
+                    "448",
+                    "471",
+                    "530",
+                    "551",
+                    "824",
+                    "957",
+                    "981"
+                ],
+                "_source": "http://tr.ru/articles/1348-moskva-marshrutki-prevrashchayutsya-prevrashchayutsya-marshrutki-v-elegantnye-avtobusy",
+                "_date_start": "08.06.2016"
+            },			
+			{
+                "ref": [
+                    "413",
+                    "426",
+                    "438",
+                    "524"
+                ],
+                "_source": "http://tr.ru/articles/1348-moskva-marshrutki-prevrashchayutsya-prevrashchayutsya-marshrutki-v-elegantnye-avtobusy",
+                "_date_start": "10.06.2016"
+            }	
         ]
     }
 }
