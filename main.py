@@ -267,7 +267,11 @@ if __name__ == '__main__':
 
         parser = argparser_prepare()
         args = parser.parse_args()
-
+        
+        import time
+        now = time.strftime("%c")
+        print ("Current time %s"  % now )
+        
         is_download = args.download
         is_download = True
         if is_download == True:
