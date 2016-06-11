@@ -81,7 +81,31 @@
                 ],
                 "_source": "http://tr.ru/news/1219-prevrashchenie-stolichnyh-marshrutok-v-avtobusy-prodolzhenie-s-9-maya",
                 "_date_start": "25.05.2016"
-            }
+            },
+						{
+                "ref": [
+                    "51к",
+                    "76к",
+                    "115",
+                    "311",
+                    "312",
+                    "326",
+                    "332",
+                    "353",
+                    "372",
+                    "429",
+                    "469",
+                    "469к",
+                    "491",
+                    "505",
+                    "511",
+                    "552",
+                    "559",
+                    "С7"
+                ],
+                "_source": "http://tr.ru/news/1219-prevrashchenie-stolichnyh-marshrutok-v-avtobusy-prodolzhenie-s-9-maya",
+                "_date_start": "30.05.2016"
+            },	
         ]
     }
 }
