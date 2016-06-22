@@ -17,39 +17,6 @@ def download_osm():
     urllib.urlretrieve(overpass_query, "data.osm")
 
 
-
-'''
-  relation
-    ["ref"="309"]
-    ["payment:troika"="yes"]
-    (55.597747184319935,37.354888916015625,55.94458588614092,38.06350708007812);
-  relation
-    ["ref"="346"]
-    ["payment:troika"="yes"]
-    (55.597747184319935,37.354888916015625,55.94458588614092,38.06350708007812);
-
-  relation
-    ["ref"="361"]
-    ["payment:troika"="yes"]
-    (55.597747184319935,37.354888916015625,55.94458588614092,38.06350708007812);
-
-
-'''
-'''
-bin/osmosis \
-  --read-pbf ~/Downloads/RU-SPE.osm.pbf \
-  --tf accept-relations route=bus,trolleybus,tram \
-  --used-way --used-node \
-  --write-pbf ~/Downloads/filtered.osm.pbf
-
-bin/osmosis \
-  --read-pbf ~/Downloads/filtered.osm.pbf \
-  --tf accept-relations ref=3М,3Мб \
-  --used-way --used-node \
-  --write-pbf ~/Downloads/filtered-numbers.osm.pbf
-
-'''
-
 def download_osm_dump():
     os.system('wget -N http://data.gis-lab.info/osm_dump/dump/latest/RU-MOW.osm.pbf')
 
@@ -107,7 +74,7 @@ def download_osm_overpass():
     def makeOverpassQuery(currentmap):
 
         data=  {'data':  '''
-[out:xml][timeout:25];(relation["route"="bus"]["payment:troika"="yes"](55.56126252639952,37.346649169921875,55.91842985630817,37.87261962890624););out meta;>;out meta qt;'''}
+[out:xml][timeout:65];(relation["route"="bus"]["payment:troika"="yes"](55.56126252639952,37.346649169921875,55.91842985630817,37.87261962890624););out meta;>;out meta qt;'''}
         print 'new '+urllib.unquote(urllib.urlencode(data)).decode('utf8')
         #return  'http://overpass.osm.rambler.ru/cgi/interpreter?'+urllib.urlencode(data)
         return  'http://overpass-api.de/api/interpreter?'+urllib.urlencode(data)
