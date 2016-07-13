@@ -65,7 +65,7 @@ def download_osm_overpass():
     import urllib
     def makeOverpassQuery(currentmap):
         data=  {'data':  '''
-[out:xml][timeout:65];(relation["route"="tram"](51,27,63,44););out meta;>;out meta qt;'''}
+[out:xml][timeout:65];(relation["route"="trolleybus"](51,27,63,44););out meta;>;out meta qt;'''}
         print 'new '+urllib.unquote(urllib.urlencode(data)).decode('utf8')
         #return  'http://overpass.osm.rambler.ru/cgi/interpreter?'+urllib.urlencode(data)
         return  'http://overpass-api.de/api/interpreter?'+urllib.urlencode(data)
@@ -210,6 +210,6 @@ if __name__ == '__main__':
         postgis2geojson(host,dbname,user,password,'terminals_export')
         postgis2geojson(host,dbname,user,password,'routes_with_refs')
 
-        os.system('python update_ngw_from_geojson.py  --ngw_url '+config.ngw_url+' --ngw_resource_id 349 --ngw_login '+config.ngw_login+' --ngw_password '+config.ngw_password+' --check_field road_id --filename routes_with_refs.geojson')
-        os.system('python update_ngw_from_geojson.py  --ngw_url '+config.ngw_url+' --ngw_resource_id 350 --ngw_login '+config.ngw_login+' --ngw_password '+config.ngw_password+' --check_field terminal_id --filename terminals_export.geojson')
+        os.system('python update_ngw_from_geojson.py  --ngw_url '+config.ngw_url+' --ngw_resource_id 356 --ngw_login '+config.ngw_login+' --ngw_password '+config.ngw_password+' --check_field road_id --filename routes_with_refs.geojson')
+        os.system('python update_ngw_from_geojson.py  --ngw_url '+config.ngw_url+' --ngw_resource_id 358 --ngw_login '+config.ngw_login+' --ngw_password '+config.ngw_password+' --check_field terminal_id --filename terminals_export.geojson')
     
