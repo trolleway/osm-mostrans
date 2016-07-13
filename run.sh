@@ -1,5 +1,5 @@
  #!/bin/bash         
 
 cd ~/osm-mostrans
-python main.py
+python mostrans-newbuses2016.py
 
