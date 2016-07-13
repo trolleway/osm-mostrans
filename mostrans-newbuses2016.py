@@ -9,14 +9,6 @@ import argparse
 
 
 
-def download_osm():
-    import urllib
-    from urllib import quote_plus
-    with open('mostrans-newbuses2016.txt', 'r') as myfile:
-        overpass_query=myfile.read()
-    urllib.urlretrieve(overpass_query, "data.osm")
-
-
 def download_osm_dump():
     os.system('wget -N http://data.gis-lab.info/osm_dump/dump/latest/RU-MOW.osm.pbf')
 
