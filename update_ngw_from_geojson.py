@@ -73,7 +73,7 @@ class NGWSynchroniser:
 
     def __init__(self,cfg):
 
-        self.ForceToMultiPolygon = True #Не знаю, нужно ли?
+        self.ForceToMultiGeom = False #Не знаю, нужно ли?
         self.delta = 0.00000001 #Using in compare points 
         self.ngw_url = cfg['ngw_url']+'/api/resource/'
         self.resid=cfg['ngw_resource_id']
@@ -201,19 +201,22 @@ class NGWSynchroniser:
                 geom_type = geom.GetGeometryType() #say to Dima
                 geom.TransformTo(sr)
                 
-                if geom_type == ogr.wkbLineString:
-                    mercator_geom = ogr.ForceToLineString(geom)
-                elif geom_type == ogr.wkbPolygon:
-                    mercator_geom = ogr.ForceToPolygon(geom)
-                elif geom_type == ogr.wkbPoint:
-                    mercator_geom = ogr.ForceToMultiPoint(geom)
-                elif geom_type == ogr.wkbMultiPolygon:
-                    mercator_geom = ogr.ForceToMultiPolygon(geom)
-                elif geom_type == ogr.wkbMultiPoint:
-                    mercator_geom = ogr.ForceToMultiPoint(geom)
-                elif geom_type == ogr.wkbMultiLineString:
-                    mercator_geom = ogr.ForceToMultiPolygon(geom)
-                else:            
+                if self.ForceToMultiGeom:
+                    if geom_type == ogr.wkbLineString:
+                        mercator_geom = ogr.ForceToLineString(geom)
+                    elif geom_type == ogr.wkbPolygon:
+                        mercator_geom = ogr.ForceToPolygon(geom)
+                    elif geom_type == ogr.wkbPoint:
+                        mercator_geom = ogr.ForceToMultiPoint(geom)
+                    elif geom_type == ogr.wkbMultiPolygon:
+                        mercator_geom = ogr.ForceToMultiPolygon(geom)
+                    elif geom_type == ogr.wkbMultiPoint:
+                        mercator_geom = ogr.ForceToMultiPoint(geom)
+                    elif geom_type == ogr.wkbMultiLineString:
+                        mercator_geom = ogr.ForceToMultiPolygon(geom)
+                    else:            
+                        mercator_geom = geom
+                else:
                     mercator_geom = geom
             else:
                 continue
