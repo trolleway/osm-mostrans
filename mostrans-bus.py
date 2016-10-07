@@ -211,10 +211,10 @@ if __name__ == '__main__':
 
         os.system('export PGPASS='+password)
 
-        cleardb(host,dbname,user,password)
-        importdb(host,dbname,user,password)
-        filter_routes(host,dbname,user,password) 
-        process(host,dbname,user,password) 
+        #cleardb(host,dbname,user,password)
+        #importdb(host,dbname,user,password)
+        #filter_routes(host,dbname,user,password) 
+        #process(host,dbname,user,password) 
         postgis2geojson(host,dbname,user,password,'terminals_export')
         postgis2geojson(host,dbname,user,password,'routes_with_refs')
 

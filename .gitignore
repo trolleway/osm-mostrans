@@ -6,7 +6,7 @@ config.py
 *.pbf
 *.csv
 *.txt
-
+!\cfg\*.geojson
 
 
 
