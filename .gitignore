@@ -1,12 +1,13 @@
 config.py
 *~
 *.osm
-*.geojson
+
 *.o5m
 *.pbf
 *.csv
 *.txt
-!\cfg\*.geojson
+terminals_export.geojson
+routes_with_refs.geojson
 
 
 
