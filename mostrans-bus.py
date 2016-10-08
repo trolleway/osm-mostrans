@@ -36,24 +36,13 @@ def download_osm_dump():
     ~/osmosis/bin/osmosis \
       -q \
       --read-pbf moscow_russia.osm.pbf \
-      --tf accept-relations route=bus \
-      --used-way --used-node \
-      --write-pbf osm/routes.osm.pbf
-    '''
-        os.system(cmd)
-
-        print 'OSM filter step last'
-        cmd='''
-    ~/osmosis/bin/osmosis \
-      -q  \
-      --read-pbf osm/routes.osm.pbf \
       --tf accept-relations route="bus" \
       --used-way --used-node \
       --write-pbf osm/routesFinal.osm.pbf
-        '''
-        #print cmd
-        #quit()
+    '''
         os.system(cmd)
+
+
 
 
 def argparser_prepare():
