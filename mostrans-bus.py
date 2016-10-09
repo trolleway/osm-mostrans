@@ -120,7 +120,7 @@ def filter_routes(host,dbname,user,password):
     cmd='''
 ogr2ogr -overwrite    \
   "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+''' password='''+password+'''" -nln red_zone \
-     cfg/red_zone.geojson -t_srs EPSG:3857
+     cfg/mostrans-bus_red_zone.geojson -t_srs EPSG:3857
     '''
     print cmd
     os.system(cmd)
@@ -193,7 +193,7 @@ if __name__ == '__main__':
         print ("Current time %s"  % now )
         
         is_download = args.download
-        is_download = True
+        is_download = False
         if is_download == True:
             print "downloading"
             download_osm_dump()
@@ -207,7 +207,7 @@ if __name__ == '__main__':
         postgis2geojson(host,dbname,user,password,'terminals_export')
         postgis2geojson(host,dbname,user,password,'routes_with_refs')
 
-        os.system('python update_ngw_from_geojson.py  --ngw_url '+config.ngw_url+' --ngw_resource_id 94000 --ngw_login '+config.ngw_login+' --ngw_password '+config.ngw_password+' --check_field road_id --filename routes_with_refs.geojson')
+        os.system('python update_ngw_from_geojson.py  --ngw_url '+config.ngw_url+' --ngw_resource_id 649 --ngw_login '+config.ngw_login+' --ngw_password '+config.ngw_password+' --check_field road_id --filename routes_with_refs.geojson')
         os.system('python update_ngw_from_geojson.py  --ngw_url '+config.ngw_url+' --ngw_resource_id 653 --ngw_login '+config.ngw_login+' --ngw_password '+config.ngw_password+' --check_field terminal_id --filename terminals_export.geojson')
 
 

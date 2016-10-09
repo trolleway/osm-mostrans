@@ -92,17 +92,13 @@ class NGWSynchroniser:
         return True
         
     def comparePoints(self,ngw_pt, wfs_pt):
-        print 'ngw:'
-        print ngw_pt
-        print 'loc'
-        print wfs_pt
-        
         return (abs(ngw_pt[0] - wfs_pt[0]) < self.delta) and (abs(ngw_pt[1] - wfs_pt[1]) < self.delta)
         
     def compareLines(self,ngw_line, wfs_line):
         if ngw_line.GetPointCount() != wfs_line.GetPointCount():
             return False
         for i in range(ngw_line.GetPointCount()):
+            
 
             if not self.comparePoints(ngw_line.GetPoint(i), wfs_line.GetPoint(i)):
                 return False
@@ -134,7 +130,7 @@ class NGWSynchroniser:
         if ngw_geom.GetGeometryCount() <> wfs_geom.GetGeometryCount():
             return False    #Diffirent geometry count
         elif ngw_geom.GetGeometryType() is ogr.wkbPoint:      
-            return self.comparePoints(ngw_geom, wfs_geom)  
+            return self.comparePoints(ngw_geom.GetPoint(), wfs_geom.GetPoint())  
         elif ngw_geom.GetGeometryType() is ogr.wkbLineString:
             return self.compareLines(ngw_geom, wfs_geom)  
         elif ngw_geom.GetGeometryType() is ogr.wkbPolygon:
