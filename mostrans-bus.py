@@ -193,7 +193,7 @@ if __name__ == '__main__':
         print ("Current time %s"  % now )
         
         is_download = args.download
-        is_download = False
+        is_download = True
         if is_download == True:
             print "downloading"
             download_osm_dump()
