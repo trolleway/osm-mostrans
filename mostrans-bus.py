@@ -56,7 +56,7 @@ def argparser_prepare():
             formatter_class=PrettyFormatter)
     parser.add_argument('--download', dest='download', action='store_true')
     parser.add_argument('--no-download', dest='download', action='store_false')
-    parser.set_defaults(download=True)
+    parser.set_defaults(download=False)
 
     parser.epilog = \
         '''Samples:
@@ -193,7 +193,7 @@ if __name__ == '__main__':
         print ("Current time %s"  % now )
         
         is_download = args.download
-        is_download = True
+        
         if is_download == True:
             print "downloading"
             download_osm_dump()
