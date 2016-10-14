@@ -4,27 +4,32 @@
 # Author: Artem Svetlov <artem.svetlov@nextgis.com>
 
 
-'''
+
+import os
 
 #if prevdump not exists - download CFO from geofabrik and crop to MosOblast
 def updateDump():
     
     dump_url='http://download.geofabrik.de/russia/central-fed-district-latest.osm.pbf'
     downloaded_dump='central-fed-district-latest.osm.pbf'
-    work_dump='data.osm.pbf'
+    work_dump='moscow_russia.osm.pbf'
     updated_dump='just_updated_dump.osm.pbf'
     poly_file='cfg/mostrans.poly'
 
     #frist run of program
-    if exists(work_dump) = False:
+    if os.path.exists(work_dump) == False:
         os.system('wget '+dump_url)
         os.rename(downloaded_dump, work_dump) 
 
     #if prevdump dump exists - run osmupdate, it updating it to last hour state with MosOblast clipping, and save as currentdump
-    os.system('osmupdate '+ work_dump + ' ' + updated_dump + '--daily --hourly -B='+poly_file)
-    
+    cmd='osmupdate '+ work_dump + ' ' + updated_dump + ' --day --hour -v -B='+poly_file
+    print cmd
+    os.system(cmd)    
+
     #rename currentdump to prevdump
     os.remove(work_dump)
     os.rename(updated_dump, work_dump)
 
-return 0
+    return 0
+
+updateDump()

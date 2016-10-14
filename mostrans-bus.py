@@ -23,6 +23,7 @@ def download_osm_dump():
             os.makedirs('osm')
         os.system('wget --timestamping  https://s3.amazonaws.com/metro-extracts.mapzen.com/moscow_russia.osm.pbf')
 
+def filter_osm_dump():
         import json
         import pprint
         pp=pprint.PrettyPrinter(indent=2)
@@ -197,7 +198,8 @@ if __name__ == '__main__':
         if is_download == True:
             print "downloading"
             download_osm_dump()
-
+        
+        filter_osm_dump()
         os.system('export PGPASS='+password)
 
         cleardb(host,dbname,user,password)

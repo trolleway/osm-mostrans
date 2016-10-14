@@ -3,6 +3,9 @@
 #TODO: Updatedump
 #TODO: If update dump not working - run scripts with --download key 
 
+#print  timestamp of run
+timedatectl | grep Local >> cronruns.txt
 cd ~/osm-mostrans
-python mostrans-newbuses2016.py
-
+python update_dump.py
+#python mostrans-newbuses2016.py
+python mostrans-bus.py
