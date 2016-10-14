@@ -28,6 +28,7 @@ def filter_osm_dump():
     refsString=','.join(refs)
     
 
+    print 'Filter step 1'
     cmd='''
 ~/osmosis/bin/osmosis \
   -q \
@@ -38,6 +39,7 @@ def filter_osm_dump():
 '''
     os.system(cmd)
 
+    print 'Filter step 2'
     cmd='''
 ~/osmosis/bin/osmosis \
   -q  \
@@ -48,6 +50,7 @@ def filter_osm_dump():
     '''
     os.system(cmd)
 
+    print 'Filter step 3'
     cmd='''
 ~/osmosis/bin/osmosis \
   -q \
