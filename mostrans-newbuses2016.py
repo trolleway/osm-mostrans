@@ -7,13 +7,12 @@ import time
 import config
 import argparse
 
+import json
+import pprint
+
+def filter_osm_dump():
 
 
-def download_osm_dump():
-    os.system('wget -N http://data.gis-lab.info/osm_dump/dump/latest/RU-MOW.osm.pbf')
-
-    import json
-    import pprint
     pp=pprint.PrettyPrinter(indent=2)
 
     refs=[]
@@ -32,7 +31,7 @@ def download_osm_dump():
     cmd='''
 ~/osmosis/bin/osmosis \
   -q \
-  --read-pbf RU-MOW.osm.pbf \
+  --read-pbf moscow_russia.osm.pbf \
   --tf accept-relations route=bus \
   --used-way --used-node \
   --write-pbf routes.osm.pbf
@@ -47,8 +46,6 @@ def download_osm_dump():
   --used-way --used-node \
   --write-pbf routes2.osm.pbf
     '''
-    #print cmd
-    #quit()
     os.system(cmd)
 
     cmd='''
@@ -224,19 +221,9 @@ if __name__ == '__main__':
 
         parser = argparser_prepare()
         args = parser.parse_args()
-        
-        import time
-        now = time.strftime("%c")
-        print ("Current time %s"  % now )
-        
-        is_download = args.download
-        is_download = True
-        if is_download == True:
-            print "downloading"
-            download_osm_overpass()
 
+        filter_osm_dump()
         os.system('export PGPASS='+password)
-
         cleardb(host,dbname,user,password)
         importdb(host,dbname,user,password)
         process(host,dbname,user,password) 
