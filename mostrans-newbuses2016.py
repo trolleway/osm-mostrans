@@ -202,7 +202,7 @@ def postgis2geojson(host,dbname,user,password,table):
         os.remove(table+'.geojson')
 
     cmd='''
-ogr2ogr -f GeoJSON '''+table+'''.geojson  -nlt PROMOTE_TO_MULTI -nlt MULTIPOINT \
+ogr2ogr -f GeoJSON '''+table+'''.geojson    \
   "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+''' password='''+password+'''" "'''+table+'''"
     '''
     print cmd
