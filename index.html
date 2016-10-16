@@ -14,6 +14,27 @@
     <title>Osm-mostrans by trolleway</title>
     <meta name = "description" content = "Автоматически обновляемая веб-карта московского транспорта из данных Openstreetmap, с конечными и направлениями движения." />
    <meta name = "author" content = "trolleway">
+   
+       <style>
+      .map {
+        /*width: 100%;*/
+        }
+      .map:-moz-full-screen {
+        height: 100%;
+      }
+      .map:-webkit-full-screen {
+        height: 100%;
+      }
+      .map:-ms-fullscreen {
+        height: 100%;
+      }
+      .map:fullscreen {
+        height: 100%;
+      }
+      .ol-rotate {
+        top: 3em;
+      }
+    </style>
   </head>
 
   <body>
@@ -42,7 +63,7 @@
 <a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
         -->
     <h3>Дежурная карта</h3> 
-    <div id="map" class="map" style="height: 600px;width: 100%;"></div>
+    <div id="map" class="map" ></div>
 
  <table class="controls" style="display:none;"> <!-- Максимально быстрая переделка семпла из документации под мой стиль -->
   <tr>
@@ -219,6 +240,9 @@ raster.on('beforeoperations', function(event) {
 });
 
 var map = new ol.Map({
+controls: ol.control.defaults().extend([
+          new ol.control.FullScreen()
+        ]),
   layers: [
     new ol.layer.Image({source: raster}),
               new ol.layer.Tile({
@@ -251,7 +275,7 @@ controlIds.forEach(function(id) {
 });
 
     </script>
- 
+ Мне понравилось слово "Дежурная карта", оно звучит серьёзно. Базовая карта - OSM Mapnik, которая перекрашивается на клиенте: https://jsfiddle.net/trolleway/76yee6uc/
 <p>В этом репозитории находится скрипт, который регулярно генерирует карты городского транспорта Москвы по данным Openstreetmap. Данные в нём неполные, но одна из задач этой странички - сделать так, что бы люди правили эти данные. </p>
 
 <p>Скрипт работает на digitalocean, и отправляет данные на сервис nextgis.com, который занимается хранением геоданных, и рендерингом веб-карты.</p>
