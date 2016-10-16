@@ -44,11 +44,17 @@
     <h3>Дежурная карта</h3>
     <div id="map" class="map" style="height: 600px;width: 100%;"></div>
     <script type="text/javascript">
-     var attribution = new ol.Attribution({
+ var attribution = new ol.Attribution({
         html: 'Tiles cc-by-sa trolleway, data: Openstreetmap, hosting: NextGIS'
       });
       var map = new ol.Map({
         target: 'map',
+       controls: ol.control.defaults({
+          zoom: true,
+          FullScreen:true,
+          attribution: true,
+          rotate: false
+          }),
         layers: [
           new ol.layer.Tile({
             source: new ol.source.OSM()
