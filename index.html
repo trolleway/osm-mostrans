@@ -66,7 +66,8 @@
 <a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
         -->
     <h3>Дежурная карта</h3> 
-    <a href=# id="layer_bus">Автобусы</a>
+        <a href=# id="layer_tram">Трамвай</a>
+    <a href=# id="layer_bus">Автобус</a>
 <a href=# id="layer_osoc">Осоциаленные маршрутки</a>
     <div id="map" class="map" ></div>
 
@@ -261,7 +262,14 @@ var layer_osoc=new ol.layer.Tile({
               url: 'http://trolleway.nextgis.com/api/component/render/tile?z={z}&x={x}&y={y}&resource=102,101'
             , isBaseLayer: true})
           });
-
+var layer_tram=new ol.layer.Tile({
+            source: new ol.source.XYZ({
+              attributions: [new ol.Attribution({
+        html: 'Tiles cc-by-sa trolleway, data: Openstreetmap, hosting: NextGIS'
+      })],
+              url: 'http://trolleway.nextgis.com/api/component/render/tile?z={z}&x={x}&y={y}&resource=679,687'
+            , isBaseLayer: true})
+          });
 
 var map = new ol.Map({
   layers: [
@@ -296,6 +304,7 @@ $(document).ready(function() {
   function removeNamedLayers(map) {
     map.removeLayer(layer_bus);
     map.removeLayer(layer_osoc);
+    map.removeLayer(layer_tram);
   }
   $('#layer_bus').on('click', function() {
     removeNamedLayers(map);
@@ -306,7 +315,11 @@ $(document).ready(function() {
     removeNamedLayers(map);
     map.addLayer(layer_osoc);
   });
-
+  
+  $('#layer_tram').on('click', function() {
+    removeNamedLayers(map);
+    map.addLayer(layer_tram);
+  });
 });
             
     </script>
