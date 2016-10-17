@@ -23,24 +23,27 @@ def filter_osm_dump():
 
 
         
-        print 'OSM filter step 1'
+        print 'Filter step 1'
         cmd='''
-    ~/osmosis/bin/osmosis \
-      -q \
-      --read-pbf moscow_russia.osm.pbf \
-      --tf accept-relations route="tram" \
-
-      --used-way --used-node \
-      --write-pbf osm/routesStep1.osm.pbf
-    '''
-        os.system(cmd)
-        
-        print 'OSM filter step 2'
-        cmd='''
- ~/osmosis/bin/osmosis  -q  --read-pbf osm/routesStep1.osm.pbf --tf accept-relations type=route --used-way --used-node       --write-pbf osm/routesFinal.osm.pbf
-    '''
+~/osmosis/bin/osmosis \
+  -q \
+  --read-pbf moscow_russia.osm.pbf \
+  --tf accept-relations route=tram \
+  --used-way --used-node \
+  --write-pbf routes.osm.pbf
+'''
         os.system(cmd)
 
+        print 'Filter step 3'
+        cmd='''
+~/osmosis/bin/osmosis \
+  -q \
+  --read-pbf routes.osm.pbf \
+  --tf accept-relations "type=route" \
+  --used-way --used-node \
+  --write-pbf routesFinal.osm.pbf
+    '''
+        os.system(cmd)
 
 
 
