@@ -275,6 +275,7 @@ var map = new ol.Map({
   layers: [
     new ol.layer.Image({source: raster}),
   ],
+  controls: ol.control.defaults().extend([new ol.control.FullScreen() ]),
   target: 'map',
   view: new ol.View({
           center: ol.proj.fromLonLat([37.6316, 55.7188]),
