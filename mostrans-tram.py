@@ -28,7 +28,8 @@ def filter_osm_dump():
     ~/osmosis/bin/osmosis \
       -q \
       --read-pbf moscow_russia.osm.pbf \
-      --tf accept-relations type="route",route="tram" \
+      --tf accept-relations route="tram" \
+      --tf reject-relations type="route_stopped"
       --used-way --used-node \
       --write-pbf osm/routesFinal.osm.pbf
     '''
