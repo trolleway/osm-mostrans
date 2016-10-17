@@ -66,6 +66,8 @@
 <a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
         -->
     <h3>Дежурная карта</h3> 
+    <a href=# id="layer_bus">Автобусы</a>
+<a href=# id="layer_osoc">Осоциаленные маршрутки</a>
     <div id="map" class="map" ></div>
 
  <table class="controls" style="display:none;"> <!-- Максимально быстрая переделка семпла из документации под мой стиль -->
@@ -86,14 +88,7 @@
   </tr>
 </table>
 
-Автобусы
-<a href=# id="layer_bus1">ВКЛ</a>
-<a href=# id="layer_bus2">ВЫКЛ</a>
 
-Осоциаленные маршрутки
-<a href=# id="layer_osoc1">
-ВКЛ</a>
-<a href=# id="layer_osoc2">ВЫКЛ</a>
 <br />
     <script type="text/javascript">
 /**
@@ -298,21 +293,21 @@ controlIds.forEach(function(id) {
 
 $(document).ready(function() {
 
-                $('#layer_bus1').on('click', function() {
-                    map.addLayer(layer_bus);
-                });
-                $('#layer_bus2').on('click', function() {
-                    map.removeLayer(layer_bus);
-                });
-                
-                $('#layer_osoc1').on('click', function() {
-                    map.addLayer(layer_osoc);
-                });
-                $('#layer_osoc2').on('click', function() {
-                    map.removeLayer(layer_osoc);
-                });
-               
-            }); 
+  function removeNamedLayers(map) {
+    map.removeLayer(layer_bus);
+    map.removeLayer(layer_osoc);
+  }
+  $('#layer_bus').on('click', function() {
+    removeNamedLayers(map);
+    map.addLayer(layer_bus);
+  });
+
+  $('#layer_osoc').on('click', function() {
+    removeNamedLayers(map);
+    map.addLayer(layer_osoc);
+  });
+
+});
             
     </script>
  Мне понравилось слово "Дежурная карта", оно звучит серьёзно. Базовая карта - OSM Mapnik, которая перекрашивается на клиенте: https://jsfiddle.net/trolleway/76yee6uc/
