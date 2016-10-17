@@ -29,7 +29,18 @@ def filter_osm_dump():
       -q \
       --read-pbf moscow_russia.osm.pbf \
       --tf accept-relations route="tram" \
-      --tf reject-relations type="route_stopped"
+
+      --used-way --used-node \
+      --write-pbf osm/routesStep1.osm.pbf
+    '''
+        os.system(cmd)
+        
+        print 'OSM filter step 2'
+        cmd='''
+    ~/osmosis/bin/osmosis \
+      -q \
+      --read-pbf routesStep1.osm.pbf \
+      --tf accept-relations type="route"
       --used-way --used-node \
       --write-pbf osm/routesFinal.osm.pbf
     '''
