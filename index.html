@@ -10,6 +10,9 @@
     
     <link rel="stylesheet" href="https://openlayers.org/en/v3.18.2/css/ol.css" type="text/css">
      <script src="https://openlayers.org/en/v3.18.2/build/ol.js" type="text/javascript"></script>
+     
+     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+     
 
     <title>Osm-mostrans by trolleway</title>
     <meta name = "description" content = "Автоматически обновляемая веб-карта московского транспорта из данных Openstreetmap, с конечными и направлениями движения." />
@@ -83,7 +86,15 @@
   </tr>
 </table>
 
+Автобусы
+<a href=# id="layer_bus1">ВКЛ</a>
+<a href=# id="layer_bus2">ВЫКЛ</a>
 
+Осоциаленные маршрутки
+<a href=# id="layer_osoc1">
+ВКЛ</a>
+<a href=# id="layer_osoc2">ВЫКЛ</a>
+<br />
     <script type="text/javascript">
 /**
  * Color manipulation functions below are adapted from
@@ -239,21 +250,27 @@ raster.on('beforeoperations', function(event) {
   }
 });
 
-var map = new ol.Map({
-controls: ol.control.defaults().extend([
-          new ol.control.FullScreen()
-        ]),
-  layers: [
-    new ol.layer.Image({source: raster}),
-              new ol.layer.Tile({
+var layer_bus=new ol.layer.Tile({
             source: new ol.source.XYZ({
               attributions: [new ol.Attribution({
         html: 'Tiles cc-by-sa trolleway, data: Openstreetmap, hosting: NextGIS'
       })],
               url: 'http://trolleway.nextgis.com/api/component/render/tile?z={z}&x={x}&y={y}&resource=650,654'
-            })
-          })
-    
+            , isBaseLayer: true})
+          });
+var layer_osoc=new ol.layer.Tile({
+            source: new ol.source.XYZ({
+              attributions: [new ol.Attribution({
+        html: 'Tiles cc-by-sa trolleway, data: Openstreetmap, hosting: NextGIS'
+      })],
+              url: 'http://trolleway.nextgis.com/api/component/render/tile?z={z}&x={x}&y={y}&resource=102,101'
+            , isBaseLayer: true})
+          });
+
+
+var map = new ol.Map({
+  layers: [
+    new ol.layer.Image({source: raster}),
   ],
   target: 'map',
   view: new ol.View({
@@ -262,6 +279,9 @@ controls: ol.control.defaults().extend([
   })
 });
 
+map.addLayer(layer_bus);
+
+/* basemap rasert operation controls*/
 var controlIds = ['hue', 'chroma', 'lightness'];
 controlIds.forEach(function(id) {
   var control = document.getElementById(id);
@@ -274,6 +294,26 @@ controlIds.forEach(function(id) {
   controls[id] = control;
 });
 
+
+
+$(document).ready(function() {
+
+                $('#layer_bus1').on('click', function() {
+                    map.addLayer(layer_bus);
+                });
+                $('#layer_bus2').on('click', function() {
+                    map.removeLayer(layer_bus);
+                });
+                
+                $('#layer_osoc1').on('click', function() {
+                    map.addLayer(layer_osoc);
+                });
+                $('#layer_osoc2').on('click', function() {
+                    map.removeLayer(layer_osoc);
+                });
+               
+            }); 
+            
     </script>
  Мне понравилось слово "Дежурная карта", оно звучит серьёзно. Базовая карта - OSM Mapnik, которая перекрашивается на клиенте: https://jsfiddle.net/trolleway/76yee6uc/
 <p>В этом репозитории находится скрипт, который регулярно генерирует карты городского транспорта Москвы по данным Openstreetmap. Данные в нём неполные, но одна из задач этой странички - сделать так, что бы люди правили эти данные. </p>
