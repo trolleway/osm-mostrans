@@ -40,7 +40,7 @@ def filter_osm_dump():
     ~/osmosis/bin/osmosis \
       -q \
       --read-pbf osm/routesStep1.osm.pbf \
-      --tf accept-relations type="route"
+      --tf accept-relations "type"="route"
       --used-way --used-node \
       --write-pbf osm/routesFinal.osm.pbf
     '''
