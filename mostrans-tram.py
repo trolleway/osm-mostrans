@@ -37,12 +37,7 @@ def filter_osm_dump():
         
         print 'OSM filter step 2'
         cmd='''
-    ~/osmosis/bin/osmosis \
-      -q \
-      --read-pbf osm/routesStep1.osm.pbf \
-      --tf accept-relations "type"="route"
-      --used-way --used-node \
-      --write-pbf osm/routesFinal.osm.pbf
+ ~/osmosis/bin/osmosis  -q  --read-pbf osm/routesStep1.osm.pbf --tf accept-relations type=route --used-way --used-node       --write-pbf osm/routesFinal.osm.pbf
     '''
         os.system(cmd)
 
