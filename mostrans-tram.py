@@ -103,7 +103,7 @@ def cleardb(host,dbname,user,password):
 
 def importdb(host,dbname,user,password):
     os.system('''
-    osm2pgsql --create --slim -E 3857 --cache-strategy sparse --cache 100 --database '''+dbname+''' --username '''+user+'''  osm/routesFinal.osm.pbf
+    osm2pgsql --create --slim -E 3857 --cache-strategy sparse --cache 100 --database '''+dbname+''' --username '''+user+'''  routesFinal.osm.pbf
     ''')
 
 def filter_routes(host,dbname,user,password):
