@@ -67,8 +67,9 @@
         -->
     <h3>Дежурная карта</h3> 
         <a href=# id="layer_tram">Трамвай</a>
-    <a href=# id="layer_bus">Автобус</a>
-<a href=# id="layer_osoc">Осоциаленные маршрутки</a>
+        <a href=# id="layer_trolleybus">Троллейбус</a>
+        <a href=# id="layer_bus">Автобус</a>
+        <a href=# id="layer_osoc">Осоциаленные маршрутки</a>
     <div id="map" class="map" ></div>
 
  <table class="controls" style="display:none;"> <!-- Максимально быстрая переделка семпла из документации под мой стиль -->
@@ -262,6 +263,7 @@ var layer_osoc=new ol.layer.Tile({
               url: 'http://trolleway.nextgis.com/api/component/render/tile?z={z}&x={x}&y={y}&resource=102,101'
             , isBaseLayer: true})
           });
+      
 var layer_tram=new ol.layer.Tile({
             source: new ol.source.XYZ({
               attributions: [new ol.Attribution({
@@ -270,7 +272,16 @@ var layer_tram=new ol.layer.Tile({
               url: 'http://trolleway.nextgis.com/api/component/render/tile?z={z}&x={x}&y={y}&resource=678,679'
             , isBaseLayer: true})
           });
-
+      
+var layer_trolleybus=new ol.layer.Tile({
+            source: new ol.source.XYZ({
+              attributions: [new ol.Attribution({
+        html: 'Tiles cc-by-sa trolleway, data: Openstreetmap, hosting: NextGIS'
+      })],
+              url: 'http://trolleway.nextgis.com/api/component/render/tile?z={z}&x={x}&y={y}&resource=689,687'
+            , isBaseLayer: true})
+          });
+      
 var map = new ol.Map({
   layers: [
     new ol.layer.Image({source: raster}),
@@ -306,6 +317,7 @@ $(document).ready(function() {
     map.removeLayer(layer_bus);
     map.removeLayer(layer_osoc);
     map.removeLayer(layer_tram);
+    map.removeLayer(layer_trolleybus);
   }
   $('#layer_bus').on('click', function() {
     removeNamedLayers(map);
@@ -320,6 +332,11 @@ $(document).ready(function() {
   $('#layer_tram').on('click', function() {
     removeNamedLayers(map);
     map.addLayer(layer_tram);
+  });
+    
+  $('#layer_trolleybus').on('click', function() {
+    removeNamedLayers(map);
+    map.addLayer(layer_trolleybus);
   });
 });
             
