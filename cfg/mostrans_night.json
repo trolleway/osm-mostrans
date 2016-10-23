@@ -1,0 +1,17 @@
+{
+    "dataset": {
+        "batch": [
+        	    
+                    {              
+                "routes":[ {"bus":["Н1","Н2"], "tram":["3"]}],
+                "_source": "",
+                "_date_start": ""
+            },
+                    {              
+                "routes":[ {"trolleybus":["м7"]}],
+                "_source": "",
+                "_date_start": ""
+            }
+        ]
+    }
+}
