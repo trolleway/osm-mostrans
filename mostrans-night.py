@@ -141,8 +141,7 @@ def filter_osm_dump():
     '''
     os.system(cmd)
 
-    #if os.path.exists('osm/routesTramStep2.osm.pbf'):
-    #    os.remove('osm/routesTramStep2.osm.pbf')
+
 
 
 
@@ -249,3 +248,17 @@ if __name__ == '__main__':
         os.system('python update_ngw_from_geojson.py  --ngw_url '+config.ngw_url+' --ngw_resource_id 0000 --ngw_login '+config.ngw_login+' --ngw_password '+config.ngw_password+' --check_field road_id --filename routes_with_refs.geojson')
         os.system('python update_ngw_from_geojson.py  --ngw_url '+config.ngw_url+' --ngw_resource_id 0000 --ngw_login '+config.ngw_login+' --ngw_password '+config.ngw_password+' --check_field terminal_id --filename terminals_export.geojson')
     
+        if os.path.exists('osm/routes.osm.pbf'):
+            os.remove('osm/routes.osm.pbf')
+        if os.path.exists('osm/routes1.osm.pbff'):
+            os.remove('osm/routes1.osm.pbf')
+        if os.path.exists('osm/routesBus.osm.pbf'):
+            os.remove('osm/routesBus.osm.pbf')
+        if os.path.exists('osm/routesFinal.osm.pbf'):
+            os.remove('osm/routesFinal.osm.pbf')
+        if os.path.exists('osm/routesTram.osm.pbf'):
+            os.remove('osm/routesTram.osm.pbf')
+        if os.path.exists('osm/routesTramStep2.osm.pbf'):
+            os.remove('osm/routesTramStep2.osm.pbf')
+        if os.path.exists('osm/routesTrolleybus.osm.pbf'):
+            os.remove('osm/routesTrolleybus.osm.pbff')
