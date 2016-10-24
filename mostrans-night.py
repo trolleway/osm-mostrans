@@ -139,8 +139,8 @@ def filter_osm_dump():
     '''
     os.system(cmd)
 
-    if os.path.exists('osm/routesTramStep2.osm.pbf'):
-        os.remove('osm/routesTramStep2.osm.pbf')
+    #if os.path.exists('osm/routesTramStep2.osm.pbf'):
+    #    os.remove('osm/routesTramStep2.osm.pbf')
 
 
 
