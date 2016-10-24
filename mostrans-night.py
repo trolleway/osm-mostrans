@@ -261,4 +261,4 @@ if __name__ == '__main__':
         if os.path.exists('osm/routesTramStep2.osm.pbf'):
             os.remove('osm/routesTramStep2.osm.pbf')
         if os.path.exists('osm/routesTrolleybus.osm.pbf'):
-            os.remove('osm/routesTrolleybus.osm.pbff')
+            os.remove('osm/routesTrolleybus.osm.pbf')
