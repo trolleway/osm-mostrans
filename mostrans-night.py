@@ -47,21 +47,22 @@ def filter_osm_dump():
 
     print 'Filter step 1'
     cmd='''
-~/osmosis/bin/osmosis \
-  -q \
+    ~/osmosis/bin/osmosis \
+  -q  \
   --read-pbf moscow_russia.osm.pbf \
-  --tf accept-relations route=bus \
+  --tf accept-relations ref="'''+refStrings['bus'].encode("UTF-8")+'''" \
   --used-way --used-node \
-  --write-pbf osm/routes.osm.pbf
+  --write-pbf osm/routes1.osm.pbf
+
 '''
     os.system(cmd)
 
     print 'Filter step 2'
     cmd='''
 ~/osmosis/bin/osmosis \
-  -q  \
-  --read-pbf osm/routes.osm.pbf \
-  --tf accept-relations ref="'''+refStrings['bus'].encode("UTF-8")+'''" \
+  -q \
+  --read-pbf osm/routes1.osm.pbf \
+  --tf accept-relations route=bus \
   --used-way --used-node \
   --write-pbf osm/routesBus.osm.pbf
     '''
