@@ -131,11 +131,12 @@ def filter_osm_dump():
     cmd='''
 ~/osmosis/bin/osmosis \
   -q \
-  --read-pbf osm/routesTram.osm.pbf \
-  --read-pbf osm/routesTrolleybus.osm.pbf \
-  --read-pbf osm/routesBus.osm.pbf \
-  --merge   --merge
-  --write-pbf osm/routesFinal.osm.pbf
+--read-pbf file=osm/routesTram.osm.pbf outPipe.0=1 \
+--read-pbf file=osm/routesTrolleybus.osm.pbf outPipe.0=2 \
+--read-pbf file=osm/routesTram.osm.pbf outPipe.0=3 \
+--merge inPipe.0=1 inPipe.1=2 outPipe.0=4 \
+--merge inPipe.0=3 inPipe.1=4 outPipe.0=5 \
+--write-pbf file=osm/routesFinal.osm.pbf omitmetadata=true inPipe.0=5
 
     '''
     os.system(cmd)
