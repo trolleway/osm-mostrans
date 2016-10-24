@@ -7,5 +7,8 @@
 timedatectl | grep Local >> cronruns.txt
 cd ~/osm-mostrans
 python update_dump.py
-#python mostrans-newbuses2016.py
+python mostrans-newbuses2016.py
 python mostrans-bus.py
+python mostrans-trolleybus.py
+python mostrans-tram.py
+python mostrans-night.py

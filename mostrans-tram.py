@@ -58,12 +58,14 @@ def argparser_prepare():
             formatter_class=PrettyFormatter)
     parser.add_argument('--download', dest='download', action='store_true')
     parser.add_argument('--no-download', dest='download', action='store_false')
-    parser.set_defaults(download=False)
+    parser.add_argument('--no-filter',dest='filter', action='store_false')
+    parser.set_defaults(download=False,filter=True)
 
     parser.epilog = \
         '''Samples:
 %(prog)s --download
 %(prog)s --no-download
+%(prog)s --no-filter
 
 ''' \
         % {'prog': parser.prog}
@@ -200,7 +202,9 @@ if __name__ == '__main__':
             print "downloading"
             download_osm_dump()
         
-        filter_osm_dump()
+        if args.filter == True:
+            filter_osm_dump()
+        
         os.system('export PGPASS='+password)
 
         cleardb(host,dbname,user,password)
