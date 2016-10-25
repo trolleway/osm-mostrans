@@ -46,6 +46,7 @@ def filter_osm_dump():
 
 
     print 'Filter step 1'
+
     cmd='''
     ~/osmosis/bin/osmosis \
   -q  \
@@ -53,8 +54,9 @@ def filter_osm_dump():
   --tf accept-relations ref="'''+refStrings['bus'].encode("UTF-8")+'''" \
   --used-way --used-node \
   --write-pbf osm/routes1.osm.pbf
-
 '''
+
+    print cmd
     os.system(cmd)
 
     print 'Filter step 2'
@@ -66,6 +68,7 @@ def filter_osm_dump():
   --used-way --used-node \
   --write-pbf osm/routesBus.osm.pbf
     '''
+    print cmd
     os.system(cmd)
 
     print '---   trolleybus ---'
@@ -79,6 +82,7 @@ def filter_osm_dump():
   --used-way --used-node \
   --write-pbf osm/routes.osm.pbf
 '''
+    print cmd
     os.system(cmd)
 
     print 'Filter step 2'
@@ -90,6 +94,7 @@ def filter_osm_dump():
   --used-way --used-node \
   --write-pbf osm/routesTrolleybus.osm.pbf
     '''
+    print cmd
     os.system(cmd)
 
     print '---   tram ---'
@@ -103,6 +108,7 @@ def filter_osm_dump():
   --used-way --used-node \
   --write-pbf osm/routes.osm.pbf
 '''
+    print cmd
     os.system(cmd)
 
     print 'Filter step 2'
@@ -114,6 +120,7 @@ def filter_osm_dump():
   --used-way --used-node \
   --write-pbf osm/routesTramStep2.osm.pbf
     '''
+    print cmd
     os.system(cmd)
 
 
@@ -125,13 +132,14 @@ def filter_osm_dump():
   --used-way --used-node \
   --write-pbf osm/routesTram.osm.pbf
     '''
+    print cmd
     os.system(cmd)
 
     print 'Filter merge'
     cmd='''
 ~/osmosis/bin/osmosis \
   -q \
---read-pbf file=osm/routesTram.osm.pbf outPipe.0=1 \
+--read-pbf file=osm/routesBus.osm.pbf outPipe.0=1 \
 --read-pbf file=osm/routesTrolleybus.osm.pbf outPipe.0=2 \
 --read-pbf file=osm/routesTram.osm.pbf outPipe.0=3 \
 --merge inPipe.0=1 inPipe.1=2 outPipe.0=4 \
@@ -139,6 +147,7 @@ def filter_osm_dump():
 --write-pbf file=osm/routesFinal.osm.pbf omitmetadata=true inPipe.0=5
 
     '''
+    print cmd
     os.system(cmd)
 
 
@@ -247,7 +256,8 @@ if __name__ == '__main__':
 
         os.system('python update_ngw_from_geojson.py  --ngw_url '+config.ngw_url+' --ngw_resource_id 704 --ngw_login '+config.ngw_login+' --ngw_password '+config.ngw_password+' --check_field road_id --filename routes_with_refs.geojson')
         os.system('python update_ngw_from_geojson.py  --ngw_url '+config.ngw_url+' --ngw_resource_id 705 --ngw_login '+config.ngw_login+' --ngw_password '+config.ngw_password+' --check_field terminal_id --filename terminals_export.geojson')
-    
+        
+        #quit('Удаление выключено')
         if os.path.exists('osm/routes.osm.pbf'):
             os.remove('osm/routes.osm.pbf')
         if os.path.exists('osm/routes1.osm.pbff'):
