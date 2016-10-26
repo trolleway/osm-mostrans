@@ -70,6 +70,8 @@
         <a href=# id="layer_trolleybus">Троллейбус</a>
         <a href=# id="layer_bus">Автобус</a>
         <a href=# id="layer_osoc">Осоциаленные маршрутки</a>
+        <a href=# id="layer_frequent">Частоходящие и магистральные маршруты</a>
+        <a href=# id="layer_night">Ночные маршруты</a>
     <div id="map" class="map" ></div>
 
  <table class="controls" style="display:none;"> <!-- Максимально быстрая переделка семпла из документации под мой стиль -->
@@ -282,6 +284,23 @@ var layer_trolleybus=new ol.layer.Tile({
             , isBaseLayer: true})
           });
       
+var layer_frequent=new ol.layer.Tile({
+            source: new ol.source.XYZ({
+              attributions: [new ol.Attribution({
+        html: 'Tiles cc-by-sa trolleway, data: Openstreetmap, hosting: NextGIS'
+      })],
+              url: 'http://trolleway.nextgis.com/api/component/render/tile?z={z}&x={x}&y={y}&resource=713,711'
+            , isBaseLayer: true})
+          });     
+            
+var layer_night=new ol.layer.Tile({
+            source: new ol.source.XYZ({
+              attributions: [new ol.Attribution({
+        html: 'Tiles cc-by-sa trolleway, data: Openstreetmap, hosting: NextGIS'
+      })],
+              url: 'http://trolleway.nextgis.com/api/component/render/tile?z={z}&x={x}&y={y}&resource=706,707'
+            , isBaseLayer: true})
+          });  
 var map = new ol.Map({
   layers: [
     new ol.layer.Image({source: raster}),
@@ -318,6 +337,8 @@ $(document).ready(function() {
     map.removeLayer(layer_osoc);
     map.removeLayer(layer_tram);
     map.removeLayer(layer_trolleybus);
+    map.removeLayer(layer_frequent);
+    map.removeLayer(layer_night);
   }
   $('#layer_bus').on('click', function() {
     removeNamedLayers(map);
@@ -337,6 +358,16 @@ $(document).ready(function() {
   $('#layer_trolleybus').on('click', function() {
     removeNamedLayers(map);
     map.addLayer(layer_trolleybus);
+  });
+      
+  $('#layer_frequent').on('click', function() {
+    removeNamedLayers(map);
+    map.addLayer(layer_frequent);
+  });
+      
+  $('#layer_night').on('click', function() {
+    removeNamedLayers(map);
+    map.addLayer(layer_night);
   });
 });
             
