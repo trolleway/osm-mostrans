@@ -75,7 +75,7 @@ ST_PointN(Box2D(ST_Transform(wkb_geometry,3857)),2)
 ST_Distance(
 ST_PointN(Box2D(ST_Transform(wkb_geometry,3857)),2),
 ST_PointN(Box2D(ST_Transform(wkb_geometry,3857)),3)
-) )::double AS aspect,
+) )::real AS aspect,
 *
 FROM atlaspages
 WHERE map='mostrans-frequent-atlas4'
