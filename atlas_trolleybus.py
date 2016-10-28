@@ -25,7 +25,13 @@ def render_atlas():
     tmpfiles['stage1'] = 'tmp/stage1.tif'
     tmpfiles['background'] = 'tmp/background.png'
     #Query for active maps
+    
+    cmd='''
+ogr2ogr -f PostgreSQL "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+''' password='''+password+'''" cfg/atlaspages.geojson -nln atlaspages -progress -overwrite    \
 
+    '''
+    print cmd
+    os.system(cmd)
     cur.execute('''
 SELECT CONCAT(
 ST_YMin(Box2D(wkb_geometry)),',',
@@ -51,14 +57,15 @@ ST_PointN(Box2D(ST_Transform(wkb_geometry,3857)),2),
 ST_PointN(Box2D(ST_Transform(wkb_geometry,3857)),3)
 ) )AS aspect,
 *
-from meta.maps
-ORDER BY map_id;
+FROM atlaspages
+WHERE map="mostrans-frequent-atlas4"
+ORDER BY map,ref;
                 ''')
     rows = cur.fetchall()
     for currentmap in rows:
-        print currentmap['map_id']
+        print currentmap#['map_id']
 
-
+    quit()
 
         doPpreprocessing = False
         if doPpreprocessing == True:
