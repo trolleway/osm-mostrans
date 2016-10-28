@@ -130,8 +130,8 @@ if __name__ == '__main__':
         now = time.strftime("%c")
         print ("Current time %s"  % now )
         
-       
-        #import cfg.geojson to postgis in 3857
+        render_atlas()
+        #import geojson to postgis in 3857
         #generate png for all pages
         #montage pages
         #overlay texts
