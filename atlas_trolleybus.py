@@ -27,7 +27,8 @@ def argparser_prepare():
         % {'prog': parser.prog}
     return parser
 
-def render_atlas():
+def render_atlas(host,dbname,user,password):
+    ConnectionString="dbname=" + dbname + " user="+ user + " host=" + host + " password=" + password
     try:
         conn = psycopg2.connect(ConnectionString)
     except:
@@ -130,7 +131,7 @@ if __name__ == '__main__':
         now = time.strftime("%c")
         print ("Current time %s"  % now )
         
-        render_atlas()
+        render_atlas(host,dbname,user,password)
         #import geojson to postgis in 3857
         #generate png for all pages
         #montage pages
