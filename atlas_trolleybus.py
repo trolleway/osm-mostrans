@@ -65,37 +65,8 @@ ORDER BY map,ref;
     for currentmap in rows:
         print currentmap#['map_id']
 
-    quit()
+        continue
 
-        doPpreprocessing = False
-        if doPpreprocessing == True:
-            
-            #Make overpass-api query
-            overpass_query=makeOverpassQuery(currentmap)
-            #print overpass_query
-            
-            #Do overpass query
-            osmFileHandler='tmp/data.osm'
-
-            #urllib.urlretrieve(overpass_query,osmFileHandler)
-
-            #osmFileHandler=doOverpassQuery(overpass_query)
-            #Drop tables in DB
-            cleardb(host,dbname,user,password)
-            
-
-            #call osm2pgsql
-            importdb(host,dbname,user,password,osmFileHandler)
-            
-            #call osmot - do preprocessin
-            callOSMOT(host,dbname,user,password)
-                
-        #stat = calcCurrentStatistic(cur)   
-        compareResult, stat=compareStatistic(cur,currentmap)
-        compareResult = True
-        if (compareResult == False):
-            print 'not intresting'
-            continue
         
             
         #stage1 - simple png picture
