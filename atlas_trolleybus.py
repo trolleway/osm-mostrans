@@ -78,7 +78,7 @@ ST_PointN(Box2D(ST_Transform(wkb_geometry,3857)),3)
 ) )AS aspect,
 *
 FROM atlaspages
-WHERE map="mostrans-frequent-atlas4"
+WHERE map='mostrans-frequent-atlas4'
 ORDER BY map,ref;
                 ''')
     rows = cur.fetchall()
