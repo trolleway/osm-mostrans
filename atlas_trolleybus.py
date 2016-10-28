@@ -7,6 +7,25 @@ import time
 import config
 import argparse
 
+def argparser_prepare():
+
+    class PrettyFormatter(argparse.ArgumentDefaultsHelpFormatter,
+        argparse.RawDescriptionHelpFormatter):
+
+        max_help_position = 35
+
+    parser = argparse.ArgumentParser(description='',
+            formatter_class=PrettyFormatter)
+    #parser.add_argument('--download', dest='download', action='store_true')
+    #parser.add_argument('--no-download', dest='download', action='store_false')
+    #parser.set_defaults(download=True)
+
+    parser.epilog = \
+        '''Samples:
+%(prog)s 
+''' \
+        % {'prog': parser.prog}
+    return parser
 
 def render_atlas():
     try:
