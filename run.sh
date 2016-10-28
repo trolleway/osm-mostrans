@@ -12,3 +12,4 @@ python mostrans-bus.py
 python mostrans-trolleybus.py
 python mostrans-tram.py
 python mostrans-night.py
+python mostrans-frequent.py
