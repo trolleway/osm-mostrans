@@ -67,16 +67,12 @@ ST_YMin(Box2D(ST_Transform(wkb_geometry,3857)))
 ) AS bbox_string_gdal
 ,
 (
-ST_Distance(
-ST_PointN(Box2D(ST_Transform(wkb_geometry,3857)),1),
-ST_PointN(Box2D(ST_Transform(wkb_geometry,3857)),2)
-) 
-/
-ST_Distance(
-ST_PointN(Box2D(ST_Transform(wkb_geometry,3857)),2),
-ST_PointN(Box2D(ST_Transform(wkb_geometry,3857)),3)
-) )::real AS aspect,
-*
+ST_YMax(ST_Transform(wkb_geometry,3857)) - ST_YMin(ST_Transform(wkb_geometry,3857))
+)/
+(
+ST_XMax(ST_Transform(wkb_geometry,3857)) - ST_XMin(ST_Transform(wkb_geometry,3857))
+)::real AS aspect
+,ref,map
 FROM atlaspages
 WHERE map='mostrans-frequent-atlas4'
 ORDER BY map,ref;
