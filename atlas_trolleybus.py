@@ -66,6 +66,13 @@ ST_XMax(Box2D(ST_Transform(wkb_geometry,3857))),' ',
 ST_YMin(Box2D(ST_Transform(wkb_geometry,3857)))
 ) AS bbox_string_gdal
 ,
+CONCAT(
+ST_XMin(Box2D(ST_Transform(wkb_geometry,3857))),',',
+ST_YMin(Box2D(ST_Transform(wkb_geometry,3857))),',',
+ST_XMax(Box2D(ST_Transform(wkb_geometry,3857))),',',
+ST_YMax(Box2D(ST_Transform(wkb_geometry,3857)))
+) AS bbox_string_ngw_image
+,
 (
 ST_YMax(ST_Transform(wkb_geometry,3857)) - ST_YMin(ST_Transform(wkb_geometry,3857))
 )/
