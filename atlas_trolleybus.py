@@ -51,6 +51,8 @@ def render_atlas(host,dbname,user,password):
     
     tmpfiles=dict()
     tmpfiles['lines'] = 'tmp/lines.png'
+    tmpfiles['lines_worldfile'] = 'tmp/lines.pngw'
+    tmpfiles['folder'] = 'tmp'
     tmpfiles['terminals'] = 'tmp/terminals.png'
 
     tmpfiles['stage1'] = 'tmp/stage1.tif'
@@ -65,7 +67,7 @@ def render_atlas(host,dbname,user,password):
 ogr2ogr -f PostgreSQL "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+''' password='''+password+'''" cfg/atlaspages.geojson -nln atlaspages -progress -overwrite    \
 
     '''
-    print cmd
+    
     os.system(cmd)
     cur.execute('''
 SELECT 
@@ -88,54 +90,64 @@ ST_YMax(ST_Transform(wkb_geometry,3857)) - ST_YMin(ST_Transform(wkb_geometry,385
 )/
 (
 ST_XMax(ST_Transform(wkb_geometry,3857)) - ST_XMin(ST_Transform(wkb_geometry,3857))
-)::real AS aspect
-,ref,map
+)::real AS aspect,
+
+ST_XMin(Box2D(ST_Transform(wkb_geometry,3857))) AS xmin,
+ST_YMax(Box2D(ST_Transform(wkb_geometry,3857))) AS ymax,
+ST_XMax(Box2D(ST_Transform(wkb_geometry,3857))) AS xmax,
+ST_YMin(Box2D(ST_Transform(wkb_geometry,3857))) AS ymin,
+
+
+
+ref,
+map
 FROM atlaspages
 WHERE map='mostrans-frequent-atlas4' AND ref='all'
 ORDER BY map,ref;
                 ''')
     rows = cur.fetchall()
     for currentmap in rows:
-        print currentmap#['map_id']
+        
 
         size=7500
 
         url="http://trolleway.nextgis.com/api/component/render/image?resource=715,725&extent="+str(currentmap[1])+"&size="+str(size)+","+str(int(round(size*float(currentmap[2]))))
-        print url
+        #print url
+        #urllib.urlretrieve (url, tmpfiles['lines'])
 
-        urllib.urlretrieve (url, tmpfiles['lines'])
+        worldfile=open(tmpfiles['lines_worldfile'],'w')
+        worldfile.write(str((currentmap[5]-currentmap[3])/size)+"\n")
+        worldfile.write('0'+"\n")
+        worldfile.write('0'+"\n")
+        worldfile.write('-'+str((currentmap[4]-currentmap[6])/int(round(size*float(currentmap[2]))))+"\n")
+        worldfile.write(str(currentmap[3])+"\n")
+        worldfile.write(str(currentmap[4])+"\n")
+        worldfile.close()
 
 
         cur.execute('''
 SELECT 
 CONCAT(
 ST_XMin(Box2D(ST_Transform(wkb_geometry,3857))),' ',
-ST_YMax(Box2D(ST_Transform(wkb_geometry,3857))),' ',
+ST_YMin(Box2D(ST_Transform(wkb_geometry,3857))),' ',
 ST_XMax(Box2D(ST_Transform(wkb_geometry,3857))),' ',
-ST_YMin(Box2D(ST_Transform(wkb_geometry,3857)))
-) AS bbox_string_gdal
-,
-CONCAT(
-ST_XMin(Box2D(ST_Transform(wkb_geometry,3857))),',',
-ST_YMin(Box2D(ST_Transform(wkb_geometry,3857))),',',
-ST_XMax(Box2D(ST_Transform(wkb_geometry,3857))),',',
 ST_YMax(Box2D(ST_Transform(wkb_geometry,3857)))
-) AS bbox_string_ngw_image
-,
-(
-ST_YMax(ST_Transform(wkb_geometry,3857)) - ST_YMin(ST_Transform(wkb_geometry,3857))
-)/
-(
-ST_XMax(ST_Transform(wkb_geometry,3857)) - ST_XMin(ST_Transform(wkb_geometry,3857))
-)::real AS aspect
-,ref,map
+) AS bbox_string_gdalwarp,
+
+ref,map
 FROM atlaspages
-WHERE map='mostrans-frequent-atlas4' AND ref='all'
+WHERE map='mostrans-frequent-atlas4' AND ref<>'all'
 ORDER BY map,ref;
                 ''')
         rows = cur.fetchall()
         for currentmap in rows:
-        print currentmap#['map_id']
+            print currentmap
+
+            #Согласно принципу KISS: генерируются одиночные pdf в gdal, затем они склеиваются в один посредством pdfjoin
+
+            cmd="gdalwarp -of ""PDF"" -overwrite -t_srs ""EPSG:3857"" -co ""COMPRESS=JPEG"" -co ""JPEG_QUALITY=76"" -te "+currentmap[0]+" "+tmpfiles['lines'] +" "+os.path.join(tmpfiles['folder'], currentmap[1]+'-'+currentmap[2])+".pdf"
+            print cmd
+            os.system(cmd)
 
         continue
 
