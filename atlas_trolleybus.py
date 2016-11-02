@@ -7,6 +7,7 @@ import time
 import config
 import argparse
 import urllib
+import datetime
 
 def argparser_prepare():
 
@@ -48,10 +49,12 @@ def render_atlas(host,dbname,user,password):
     #Режем картинку на страницы по географическим координатам в EPSG:3857 используя gdal
     #Собираем из страниц книжку
 
-    
-    tmpfiles=dict()
+    now = datetime.datetime.now()
+
+    tmpfiles=dict()   
     tmpfiles['lines'] = 'tmp/lines.png'
     tmpfiles['lines_worldfile'] = 'tmp/lines.pngw'
+    tmpfiles['atlas'] = 'tmp/moscow_trolleybus_openstreetmap'+now.strftime("%Y-%m-%d %H:%M")+'.pdf'
     tmpfiles['folder'] = 'tmp'
     tmpfiles['terminals'] = 'tmp/terminals.png'
 
@@ -109,11 +112,11 @@ ORDER BY map,ref;
     for currentmap in rows:
         
 
-        size=7500
+        size=3500
 
         url="http://trolleway.nextgis.com/api/component/render/image?resource=715,725&extent="+str(currentmap[1])+"&size="+str(size)+","+str(int(round(size*float(currentmap[2]))))
         #print url
-        #urllib.urlretrieve (url, tmpfiles['lines'])
+        urllib.urlretrieve (url, tmpfiles['lines'])
 
         worldfile=open(tmpfiles['lines_worldfile'],'w')
         worldfile.write(str((currentmap[5]-currentmap[3])/size)+"\n")
@@ -125,14 +128,15 @@ ORDER BY map,ref;
         worldfile.close()
 
 
+        atlaspages=list()
         cur.execute('''
 SELECT 
 CONCAT(
 ST_XMin(Box2D(ST_Transform(wkb_geometry,3857))),' ',
-ST_YMin(Box2D(ST_Transform(wkb_geometry,3857))),' ',
+ST_YMax(Box2D(ST_Transform(wkb_geometry,3857))),' ',
 ST_XMax(Box2D(ST_Transform(wkb_geometry,3857))),' ',
-ST_YMax(Box2D(ST_Transform(wkb_geometry,3857)))
-) AS bbox_string_gdalwarp,
+ST_YMin(Box2D(ST_Transform(wkb_geometry,3857)))
+) AS bbox_string_gdaltranslate,
 
 ref,map
 FROM atlaspages
@@ -145,10 +149,18 @@ ORDER BY map,ref;
 
             #Согласно принципу KISS: генерируются одиночные pdf в gdal, затем они склеиваются в один посредством pdfjoin
 
-            cmd="gdalwarp -of ""PDF"" -overwrite -t_srs ""EPSG:3857"" -co ""COMPRESS=JPEG"" -co ""JPEG_QUALITY=76"" -te "+currentmap[0]+" "+tmpfiles['lines'] +" "+os.path.join(tmpfiles['folder'], currentmap[1]+'-'+currentmap[2])+".pdf"
+            #cmd="gdalwarp -of ""PDF"" -overwrite -t_srs ""EPSG:3857"" -co ""COMPRESS=JPEG"" -co ""JPEG_QUALITY=76"" -te "+currentmap[0]+" "+tmpfiles['lines'] +" "+os.path.join(tmpfiles['folder'], currentmap[1]+'-'+currentmap[2])+".pdf"
+            cmd="gdal_translate -of ""PDF""  -a_srs ""EPSG:3857"" -co ""COMPRESS=JPEG"" -co ""JPEG_QUALITY=76""  -projwin "+currentmap[0]+" "+tmpfiles['lines'] +" "+os.path.join(tmpfiles['folder'], currentmap[1]+'-'+currentmap[2])+".pdf"
+
+            print  "\n"
             print cmd
             os.system(cmd)
 
+            atlaspages.append(os.path.join(tmpfiles['folder'], currentmap[1]+'-'+currentmap[2])+".pdf")
+
+        cmd="convert "+' '.join(atlaspages)+' "'+tmpfiles['atlas']+'"'
+        print cmd
+        os.system(cmd) 
         continue
 
         
