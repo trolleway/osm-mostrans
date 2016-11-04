@@ -48,7 +48,7 @@ def render_atlas(host,dbname,user,password):
 
 
     #debug
-    retrive_map=False
+    retrive_map=True
 
 
 
@@ -201,7 +201,6 @@ ORDER BY map,ref;
         method_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload?'
         data = dict(path=config.yandex_disk_path+tmpfiles['atlas_yandex'],overwrite='True')
         response = requests.get(method_url, data,headers={'Authorization': 'OAuth '+token})
-        print response.text
         result = json.loads(response.text)
         upload_url = result['href']
 
