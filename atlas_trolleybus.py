@@ -7,7 +7,14 @@ import time
 import config
 import argparse
 import urllib
+import urllib2
+import requests
 import datetime
+import json
+import pprint
+
+
+
 
 def argparser_prepare():
 
@@ -40,6 +47,10 @@ def render_atlas(host,dbname,user,password):
     cur = conn.cursor()
 
 
+    #debug
+    retrive_map=False
+
+
 
 
     #Получаем одну картинку со всеми слоями на всю карту
@@ -54,7 +65,8 @@ def render_atlas(host,dbname,user,password):
     tmpfiles=dict()   
     tmpfiles['lines'] = 'tmp/lines.png'
     tmpfiles['lines_worldfile'] = 'tmp/lines.pngw'
-    tmpfiles['atlas'] = 'tmp/moscow_trolleybus_openstreetmap'+now.strftime("%Y-%m-%d %H:%M")+'.pdf'
+    tmpfiles['atlas'] = 'tmp/moscow_trolleybus_ru_openstreetmap_'+now.strftime("%Y-%m-%d %H:%M")+'.pdf'
+    tmpfiles['atlas_yandex'] = 'archive/moscow_trolleybus_ru_openstreetmap_'+now.strftime("%Y-%m-%d")+'.pdf' #withouth time - only one file at day will saved
     tmpfiles['folder'] = 'tmp'
     tmpfiles['terminals'] = 'tmp/terminals.png'
 
@@ -116,7 +128,12 @@ ORDER BY map,ref;
 
         url="http://trolleway.nextgis.com/api/component/render/image?resource=715,725&extent="+str(currentmap[1])+"&size="+str(size)+","+str(int(round(size*float(currentmap[2]))))
         #print url
-        urllib.urlretrieve (url, tmpfiles['lines'])
+        #urllib2.urlretrieve (url, tmpfiles['lines'])
+        if retrive_map:
+            response = urllib2.urlopen(url)
+            image=open(tmpfiles['lines'],'w')
+            image.write(response.read())
+            image.close()
 
         worldfile=open(tmpfiles['lines_worldfile'],'w')
         worldfile.write(str((currentmap[5]-currentmap[3])/size)+"\n")
@@ -159,8 +176,42 @@ ORDER BY map,ref;
             atlaspages.append(os.path.join(tmpfiles['folder'], currentmap[1]+'-'+currentmap[2])+".pdf")
 
         cmd="convert "+' '.join(atlaspages)+' "'+tmpfiles['atlas']+'"'
-        print cmd
         os.system(cmd) 
+
+
+
+
+
+
+
+        #upload pdf to yandex
+
+        token=config.yandex_token
+
+        method_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload?'
+        data = dict(path=config.yandex_disk_path+'Москва, атлас троллейбусных маршрутов [Openstreetmap] [latest].pdf',overwrite='True')
+        response = requests.get(method_url, data,headers={'Authorization': 'OAuth '+token})
+        result = json.loads(response.text)
+        upload_url = result['href']
+
+        response = requests.put(upload_url, data=open(tmpfiles['atlas'], 'rb'),headers={'Authorization': 'OAuth '+token})
+        if response.status_code <> 201:
+            print 'Error upload file to Yandex'
+
+        method_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload?'
+        data = dict(path=config.yandex_disk_path+tmpfiles['atlas_yandex'],overwrite='True')
+        response = requests.get(method_url, data,headers={'Authorization': 'OAuth '+token})
+        print response.text
+        result = json.loads(response.text)
+        upload_url = result['href']
+
+        response = requests.put(upload_url, data=open(tmpfiles['atlas'], 'rb'),headers={'Authorization': 'OAuth '+token})
+        if response.status_code <> 201:
+            print 'Error upload file to Yandex'
+
+        '''
+toilet -f bigmono12 --width 250 -k -F border  --export tga "Атлас Московского троллейбуса" > title.tga
+        '''
         continue
 
         
