@@ -236,25 +236,21 @@ ORDER BY map,ref;
 
         token=config.yandex_token
 
-        method_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload?'
-        data = dict(path=config.yandex_disk_path+'Москва, атлас троллейбусных маршрутов [Openstreetmap] [latest].tif',overwrite='True')
-        response = requests.get(method_url, data,headers={'Authorization': 'OAuth '+token}, timeout=20)
-        result = json.loads(response.text)
-        upload_url = result['href']
+        def upload_yandex(token,pathdata,filedata):
+            method_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload?'
+            response = requests.get(method_url, pathdata,headers={'Authorization': 'OAuth '+token}, timeout=20)
+            result = json.loads(response.text)
+            upload_url = result['href']
 
-        response = requests.put(upload_url, data=open(geotiff_export_filename, 'rb'),headers={'Authorization': 'OAuth '+token}, timeout=120)
-        if response.status_code <> 201:
-            print 'Error upload file to Yandex'
+            response = requests.put(upload_url, filedata,headers={'Authorization': 'OAuth '+token}, timeout=120)
+            if response.status_code <> 201:
+                print 'Error upload file to Yandex'
 
-        method_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload?'
-        data = dict(path=config.yandex_disk_path+tmpfiles['atlas_yandex']+'.tif',overwrite='True')
-        response = requests.get(method_url, data,headers={'Authorization': 'OAuth '+token}, timeout=20)
-        result = json.loads(response.text)
-        upload_url = result['href']
+        upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path+'Москва, атлас троллейбусных маршрутов [Openstreetmap] [latest].tif',overwrite='True'),filedata=open(geotiff_export_filename, 'rb'))
+        upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path+tmpfiles['atlas_yandex']+'.tif',overwrite='True'),filedata=open(geotiff_export_filename, 'rb'))
 
-        response = requests.put(upload_url, data=open(geotiff_export_filename, 'rb'),headers={'Authorization': 'OAuth '+token}, timeout=120)
-        if response.status_code <> 201:
-            print 'Error upload file to Yandex'
+
+
 
 
         print 'Upload PDF to Yandex'
