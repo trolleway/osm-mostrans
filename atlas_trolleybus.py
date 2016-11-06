@@ -232,52 +232,52 @@ ORDER BY map,ref;
 
 
 
-        #upload pdf to yandex
+        print 'Upload GeoTIF to Yandex'
 
         token=config.yandex_token
 
         method_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload?'
         data = dict(path=config.yandex_disk_path+'Москва, атлас троллейбусных маршрутов [Openstreetmap] [latest].tif',overwrite='True')
-        response = requests.get(method_url, data,headers={'Authorization': 'OAuth '+token})
+        response = requests.get(method_url, data,headers={'Authorization': 'OAuth '+token}, timeout=20)
         result = json.loads(response.text)
         upload_url = result['href']
 
-        response = requests.put(upload_url, data=open(geotiff_export_filename, 'rb'),headers={'Authorization': 'OAuth '+token})
+        response = requests.put(upload_url, data=open(geotiff_export_filename, 'rb'),headers={'Authorization': 'OAuth '+token}, timeout=120)
         if response.status_code <> 201:
             print 'Error upload file to Yandex'
 
         method_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload?'
         data = dict(path=config.yandex_disk_path+tmpfiles['atlas_yandex']+'.tif',overwrite='True')
-        response = requests.get(method_url, data,headers={'Authorization': 'OAuth '+token})
+        response = requests.get(method_url, data,headers={'Authorization': 'OAuth '+token}, timeout=20)
         result = json.loads(response.text)
         upload_url = result['href']
 
-        response = requests.put(upload_url, data=open(geotiff_export_filename, 'rb'),headers={'Authorization': 'OAuth '+token})
+        response = requests.put(upload_url, data=open(geotiff_export_filename, 'rb'),headers={'Authorization': 'OAuth '+token}, timeout=120)
         if response.status_code <> 201:
             print 'Error upload file to Yandex'
 
 
-        #upload pdf to yandex
+        print 'Upload PDF to Yandex'
 
 
 
         method_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload?'
         data = dict(path=config.yandex_disk_path+'Москва, атлас троллейбусных маршрутов [Openstreetmap] [latest].pdf',overwrite='True')
-        response = requests.get(method_url, data,headers={'Authorization': 'OAuth '+token})
+        response = requests.get(method_url, data,headers={'Authorization': 'OAuth '+token}, timeout=20)
         result = json.loads(response.text)
         upload_url = result['href']
 
-        response = requests.put(upload_url, data=open(tmpfiles['atlas'], 'rb'),headers={'Authorization': 'OAuth '+token})
+        response = requests.put(upload_url, data=open(tmpfiles['atlas'], 'rb'),headers={'Authorization': 'OAuth '+token}, timeout=120)
         if response.status_code <> 201:
             print 'Error upload file to Yandex'
 
         method_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload?'
         data = dict(path=config.yandex_disk_path+tmpfiles['atlas_yandex']+'.pdf',overwrite='True')
-        response = requests.get(method_url, data,headers={'Authorization': 'OAuth '+token})
+        response = requests.get(method_url, data,headers={'Authorization': 'OAuth '+token}, timeout=20)
         result = json.loads(response.text)
         upload_url = result['href']
 
-        response = requests.put(upload_url, data=open(tmpfiles['atlas'], 'rb'),headers={'Authorization': 'OAuth '+token})
+        response = requests.put(upload_url, data=open(tmpfiles['atlas'], 'rb'),headers={'Authorization': 'OAuth '+token}, timeout=120)
         if response.status_code <> 201:
             print 'Error upload file to Yandex'
 
