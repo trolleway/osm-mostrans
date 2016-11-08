@@ -118,7 +118,7 @@ ORDER BY map,ref;
     rows = cur.fetchall()
     size=3500
     for currentmap in rows:
-        url="http://trolleway.nextgis.com/api/component/render/image?resource=715,725&extent="+str(currentmap[0])+"&size="+str(size)+","+str(int(round(size*float(currentmap[1]))))
+        url="http://trolleway.nextgis.com/api/component/render/image?resource=749,755,751,753,715,725&extent="+str(currentmap[0])+"&size="+str(size)+","+str(int(round(size*float(currentmap[1]))))
         if retrive_map:
             response = urllib2.urlopen(url)
             image=open(tmpfiles['lines'],'w')
@@ -170,7 +170,7 @@ ORDER BY map,ref;
     rows = cur.fetchall()
     size=1500
     for currentmap in rows:
-        url="http://trolleway.nextgis.com/api/component/render/image?resource=715,725&extent="+str(currentmap[0])+"&size="+str(size)+","+str(int(round(size*float(currentmap[1]))))
+        url="http://trolleway.nextgis.com/api/component/render/image?resource=749,755,751,753,715,725&extent="+str(currentmap[0])+"&size="+str(size)+","+str(int(round(size*float(currentmap[1]))))
         if retrive_map:
             response = urllib2.urlopen(url)
             image=open(tmpfiles['center'],'w')

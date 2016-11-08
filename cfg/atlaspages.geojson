@@ -110,7 +110,7 @@
     {
       "type": "Feature",
       "properties": {
-        "ref": "3",
+        "ref": "4",
         "map": "mostrans-frequent-atlas4"
       },
       "geometry": {
@@ -144,7 +144,7 @@
     {
       "type": "Feature",
       "properties": {
-        "ref": "4",
+        "ref": "3",
         "map": "mostrans-frequent-atlas4"
       },
       "geometry": {
