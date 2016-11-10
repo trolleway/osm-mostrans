@@ -5,7 +5,7 @@
       "type": "Feature",
       "properties": {
         "ref": "center",
-        "map": "mostrans-frequent-atlas4"
+        "map": "mostrans-trolleybus-atlas4"
       },
       "geometry": {
         "type": "Polygon",
@@ -39,7 +39,7 @@
       "type": "Feature",
       "properties": {
         "ref": "1",
-        "map": "mostrans-frequent-atlas4"
+        "map": "mostrans-trolleybus-atlas4"
       },
       "geometry": {
         "type": "Polygon",
@@ -77,7 +77,7 @@
       "type": "Feature",
       "properties": {
         "ref": "2",
-        "map": "mostrans-frequent-atlas4"
+        "map": "mostrans-trolleybus-atlas4"
       },
       "geometry": {
         "type": "Polygon",
@@ -111,7 +111,7 @@
       "type": "Feature",
       "properties": {
         "ref": "4",
-        "map": "mostrans-frequent-atlas4"
+        "map": "mostrans-trolleybus-atlas4"
       },
       "geometry": {
         "type": "Polygon",
@@ -145,7 +145,7 @@
       "type": "Feature",
       "properties": {
         "ref": "3",
-        "map": "mostrans-frequent-atlas4"
+        "map": "mostrans-trolleybus-atlas4"
       },
       "geometry": {
         "type": "Polygon",
@@ -179,7 +179,7 @@
       "type": "Feature",
       "properties": {
         "ref": "all",
-        "map": "mostrans-frequent-atlas4"
+        "map": "mostrans-trolleybus-atlas4"
       },
       "geometry": {
         "type": "Polygon",

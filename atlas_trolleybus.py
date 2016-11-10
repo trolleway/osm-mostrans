@@ -37,6 +37,9 @@ def argparser_prepare():
     return parser
 
 def render_atlas(host,dbname,user,password):
+
+    size_main=3500
+
     ConnectionString="dbname=" + dbname + " user="+ user + " host=" + host + " password=" + password
     try:
         conn = psycopg2.connect(ConnectionString)
@@ -78,128 +81,100 @@ def render_atlas(host,dbname,user,password):
 
     if not os.path.exists('tmp'):
         os.makedirs('tmp')
-    #Query for active maps
+
     
-    #Запрашиваем охват листа с названием all
+    #Load to PostGIS config file with pages bounds
     cmd='''
 ogr2ogr -f PostgreSQL "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+''' password='''+password+'''" cfg/atlaspages.geojson -nln atlaspages  -overwrite    \
 
     '''
     
     os.system(cmd)
-
-    #main map
-    cur.execute('''
-SELECT 
-CONCAT(
-ST_XMin(Box2D(ST_Transform(wkb_geometry,3857))),',',
-ST_YMin(Box2D(ST_Transform(wkb_geometry,3857))),',',
-ST_XMax(Box2D(ST_Transform(wkb_geometry,3857))),',',
-ST_YMax(Box2D(ST_Transform(wkb_geometry,3857)))
-) AS bbox_string_ngw_image
-,
-(
-ST_YMax(ST_Transform(wkb_geometry,3857)) - ST_YMin(ST_Transform(wkb_geometry,3857))
-)/
-(
-ST_XMax(ST_Transform(wkb_geometry,3857)) - ST_XMin(ST_Transform(wkb_geometry,3857))
-)::real AS aspect,
-
-ST_XMin(Box2D(ST_Transform(wkb_geometry,3857))) AS xmin,
-ST_YMax(Box2D(ST_Transform(wkb_geometry,3857))) AS ymax,
-ST_XMax(Box2D(ST_Transform(wkb_geometry,3857))) AS xmax,
-ST_YMin(Box2D(ST_Transform(wkb_geometry,3857))) AS ymin,
-ref,
-map
-FROM atlaspages
-WHERE map='mostrans-frequent-atlas4' AND ref='all'
-ORDER BY map,ref;
-                ''')
-    rows = cur.fetchall()
-    size=3500
-    for currentmap in rows:
-        url="http://trolleway.nextgis.com/api/component/render/image?resource=749,755,751,753,715,725&extent="+str(currentmap[0])+"&size="+str(size)+","+str(int(round(size*float(currentmap[1]))))
-        if retrive_map:
-            response = urllib2.urlopen(url)
-            image=open(tmpfiles['lines'],'w')
-            image.write(response.read())
-            image.close()
-        worldfile=open(tmpfiles['lines_worldfile'],'w')
-        worldfile.write(str((currentmap[4]-currentmap[2])/size)+"\n")
-        worldfile.write('0'+"\n")
-        worldfile.write('0'+"\n")
-        worldfile.write('-'+str((currentmap[3]-currentmap[5])/int(round(size*float(currentmap[1]))))+"\n")
-        worldfile.write(str(currentmap[2])+"\n")
-        worldfile.write(str(currentmap[3])+"\n")
-        worldfile.close()
-
-        #save main map for export and storage in geotiff
-        geotiff_export_filename=os.path.join(tmpfiles['folder'], currentmap[7]+'-'+currentmap[6])+".tiff"
-        cmd="gdal_translate -of ""GTiff""  -a_srs ""EPSG:3857"" -co ""COMPRESS=JPEG"" -co ""JPEG_QUALITY=96""   "+tmpfiles['lines'] +" "+geotiff_export_filename
-        os.system(cmd)
-        
+    
 
 
-    #center
-    cur.execute('''
-SELECT 
-CONCAT(
-ST_XMin(Box2D(ST_Transform(wkb_geometry,3857))),',',
-ST_YMin(Box2D(ST_Transform(wkb_geometry,3857))),',',
-ST_XMax(Box2D(ST_Transform(wkb_geometry,3857))),',',
-ST_YMax(Box2D(ST_Transform(wkb_geometry,3857)))
-) AS bbox_string_ngw_image
-,
-(
-ST_YMax(ST_Transform(wkb_geometry,3857)) - ST_YMin(ST_Transform(wkb_geometry,3857))
-)/
-(
-ST_XMax(ST_Transform(wkb_geometry,3857)) - ST_XMin(ST_Transform(wkb_geometry,3857))
-)::real AS aspect,
+    def ngw2png(where,ngwstyles,size,filename):
 
-ST_XMin(Box2D(ST_Transform(wkb_geometry,3857))) AS xmin,
-ST_YMax(Box2D(ST_Transform(wkb_geometry,3857))) AS ymax,
-ST_XMax(Box2D(ST_Transform(wkb_geometry,3857))) AS xmax,
-ST_YMin(Box2D(ST_Transform(wkb_geometry,3857))) AS ymin,
-ref,
-map
-FROM atlaspages
-WHERE map='mostrans-frequent-atlas4' AND ref='center'
-ORDER BY map,ref;
-                ''')
-    rows = cur.fetchall()
-    size=1500
-    for currentmap in rows:
-        url="http://trolleway.nextgis.com/api/component/render/image?resource=749,755,751,753,715,725&extent="+str(currentmap[0])+"&size="+str(size)+","+str(int(round(size*float(currentmap[1]))))
-        if retrive_map:
-            response = urllib2.urlopen(url)
-            image=open(tmpfiles['center'],'w')
-            image.write(response.read())
-            image.close()
-        worldfile=open(tmpfiles['center_worldfile'],'w')
-        worldfile.write(str((currentmap[4]-currentmap[2])/size)+"\n")
-        worldfile.write('0'+"\n")
-        worldfile.write('0'+"\n")
-        worldfile.write('-'+str((currentmap[3]-currentmap[5])/int(round(size*float(currentmap[1]))))+"\n")
-        worldfile.write(str(currentmap[2])+"\n")
-        worldfile.write(str(currentmap[3])+"\n")
-        worldfile.close()
+        cur.execute('''
+    SELECT 
+    CONCAT(
+    ST_XMin(Box2D(ST_Transform(wkb_geometry,3857))),',',
+    ST_YMin(Box2D(ST_Transform(wkb_geometry,3857))),',',
+    ST_XMax(Box2D(ST_Transform(wkb_geometry,3857))),',',
+    ST_YMax(Box2D(ST_Transform(wkb_geometry,3857)))
+    ) AS bbox_string_ngw_image
+    ,
+    (
+    ST_YMax(ST_Transform(wkb_geometry,3857)) - ST_YMin(ST_Transform(wkb_geometry,3857))
+    )/
+    (
+    ST_XMax(ST_Transform(wkb_geometry,3857)) - ST_XMin(ST_Transform(wkb_geometry,3857))
+    )::real AS aspect,
+
+    ST_XMin(Box2D(ST_Transform(wkb_geometry,3857))) AS xmin,
+    ST_YMax(Box2D(ST_Transform(wkb_geometry,3857))) AS ymax,
+    ST_XMax(Box2D(ST_Transform(wkb_geometry,3857))) AS xmax,
+    ST_YMin(Box2D(ST_Transform(wkb_geometry,3857))) AS ymin,
+    ref,
+    map
+    FROM atlaspages
+    WHERE '''+where+'''
+    ORDER BY map,ref;
+                    ''')
+        rows = cur.fetchall()
+        size
+        for currentmap in rows:
+            url="http://trolleway.nextgis.com/api/component/render/image?resource="+ngwstyles+"&extent="+str(currentmap[0])+"&size="+str(size)+","+str(int(round(size*float(currentmap[1]))))
+            if retrive_map:
+                response = urllib2.urlopen(url)
+                image=open(filename+'.png','w')
+                image.write(response.read())
+                image.close()
+            worldfile=open(filename+'.pngw','w')
+            worldfile.write(str((currentmap[4]-currentmap[2])/size)+"\n")
+            worldfile.write('0'+"\n")
+            worldfile.write('0'+"\n")
+            worldfile.write('-'+str((currentmap[3]-currentmap[5])/int(round(size*float(currentmap[1]))))+"\n")
+            worldfile.write(str(currentmap[2])+"\n")
+            worldfile.write(str(currentmap[3])+"\n")
+            worldfile.close()
+
+
+        return
+
+    #used for convert to atlas 
+    ngw2png(where="map='mostrans-trolleybus-atlas4' AND ref='all'",
+        ngwstyles='759,758,760,753,715,725',
+        size=size_main,
+        filename=os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-all")
+    )      
+
+    
+
+    #used for convert to atlas 
+    ngw2png(where="map='mostrans-trolleybus-atlas4' AND ref='center'",
+        ngwstyles='759,758,760,753,715,725',
+        size=1500,
+        filename=os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-center")
+    )    
+
+
 
 
 #Согласно принципу KISS: генерируются одиночные pdf в gdal, затем они склеиваются в один посредством pdfjoin
-        atlaspages=list()
-        cur.execute('''
+    atlaspages=list()
+    cur.execute('''
 SELECT 
 CONCAT(
 ST_XMin(Box2D(ST_Transform(wkb_geometry,3857))),' ',ST_YMax(Box2D(ST_Transform(wkb_geometry,3857))),' ',ST_XMax(Box2D(ST_Transform(wkb_geometry,3857))),' ',ST_YMin(Box2D(ST_Transform(wkb_geometry,3857)))
 ) AS bbox_string_gdaltranslate,
 ref,map
 FROM atlaspages
-WHERE map='mostrans-frequent-atlas4' AND ref<>'all' AND ref<>'center'
+WHERE map='mostrans-trolleybus-atlas4' AND ref<>'all' AND ref<>'center'
 ORDER BY map,ref;
                 ''')
-        rows = cur.fetchall()
-        for currentmap in rows:
+    rows = cur.fetchall()
+    for currentmap in rows:
             cmd="gdal_translate -of ""PDF""  -a_srs ""EPSG:3857"" -co ""COMPRESS=JPEG"" -co ""JPEG_QUALITY=76""  -projwin "+currentmap[0]+" "+tmpfiles['lines'] +" "+os.path.join(tmpfiles['folder'], currentmap[1]+'-'+currentmap[2])+".pdf"
             os.system(cmd)
             atlaspages.append(os.path.join(tmpfiles['folder'], currentmap[1]+'-'+currentmap[2])+".pdf")
@@ -207,36 +182,37 @@ ORDER BY map,ref;
 
         #Врезка center
 
-        cur.execute('''
+    cur.execute('''
 SELECT 
 CONCAT(
 ST_XMin(Box2D(ST_Transform(wkb_geometry,3857))),' ',ST_YMax(Box2D(ST_Transform(wkb_geometry,3857))),' ',ST_XMax(Box2D(ST_Transform(wkb_geometry,3857))),' ',ST_YMin(Box2D(ST_Transform(wkb_geometry,3857)))
 ) AS bbox_string_gdaltranslate,
 ref,map
 FROM atlaspages
-WHERE map='mostrans-frequent-atlas4' AND ref<>'all' AND ref='center'
+WHERE map='mostrans-trolleybus-atlas4' AND ref<>'all' AND ref='center'
 ORDER BY map,ref;
                 ''')
-        rows = cur.fetchall()
-        for currentmap in rows:
-            cmd="gdal_translate -of ""PDF""  -a_srs ""EPSG:3857"" -co ""COMPRESS=JPEG"" -co ""JPEG_QUALITY=76""  -projwin "+currentmap[0]+" "+tmpfiles['center'] +" "+os.path.join(tmpfiles['folder'], currentmap[1]+'-'+currentmap[2])+".pdf"
-            os.system(cmd)
-            atlaspages.append(os.path.join(tmpfiles['folder'], currentmap[1]+'-'+currentmap[2])+".pdf")
+    rows = cur.fetchall()
+    for currentmap in rows:
+        cmd="gdal_translate -of ""PDF""  -a_srs ""EPSG:3857"" -co ""COMPRESS=JPEG"" -co ""JPEG_QUALITY=76""  -projwin "+currentmap[0]+" "+tmpfiles['center'] +" "+os.path.join(tmpfiles['folder'], currentmap[1]+'-'+currentmap[2])+".pdf"
+        os.system(cmd)
+        atlaspages.append(os.path.join(tmpfiles['folder'], currentmap[1]+'-'+currentmap[2])+".pdf")
 
 
-        cmd="convert "+' '.join(atlaspages)+' "'+tmpfiles['atlas']+'"'
-        os.system(cmd) 
+    cmd="convert "+' '.join(atlaspages)+' "'+tmpfiles['atlas']+'"'
+    print cmd
+    os.system(cmd) 
 
 
 
 
 
 
-        print 'Upload GeoTIF to Yandex'
+    print 'Upload GeoTIF to Yandex'
 
-        token=config.yandex_token
+    token=config.yandex_token
 
-        def upload_yandex(token,pathdata,filedata):
+    def upload_yandex(token,pathdata,filedata):
             method_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload?'
             response = requests.get(method_url, pathdata,headers={'Authorization': 'OAuth '+token}, timeout=20)
             result = json.loads(response.text)
@@ -246,69 +222,50 @@ ORDER BY map,ref;
             if response.status_code <> 201:
                 print 'Error upload file to Yandex'
 
-        upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path+'Москва, атлас троллейбусных маршрутов [Openstreetmap] [latest].tif',overwrite='True'),filedata=open(geotiff_export_filename, 'rb'))
-        upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path+tmpfiles['atlas_yandex']+'.tif',overwrite='True'),filedata=open(geotiff_export_filename, 'rb'))
+    ngw2png(where="map='mostrans-trolleybus-atlas4' AND ref='all'",
+        ngwstyles='749,755,751,753,715,725',
+        size=size_main,
+        filename=os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-all-screen")
+    )      
+    cmd="gdal_translate -of ""GTiff""  -a_srs ""EPSG:3857"" -co ""COMPRESS=JPEG"" -co ""JPEG_QUALITY=96""   "+os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-all-screen.png") +" "+os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-all-screen.tiff")
+    os.system(cmd)
+
+    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path+'Москва, атлас троллейбусных маршрутов [Openstreetmap] [latest].tif',overwrite='True'),filedata=open(os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-all-screen.tiff"), 'rb'))
+    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path+tmpfiles['atlas_yandex']+'.tif',overwrite='True'),filedata=open(os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-all-screen.tiff"), 'rb'))
 
 
 
 
 
-        print 'Upload PDF to Yandex'
+    print 'Upload PDF to Yandex'
+    method_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload?'
+    data = dict(path=config.yandex_disk_path+'Москва, атлас троллейбусных маршрутов [Openstreetmap] [latest].pdf',overwrite='True')
+    response = requests.get(method_url, data,headers={'Authorization': 'OAuth '+token}, timeout=20)
+    result = json.loads(response.text)
+    upload_url = result['href']
 
+    response = requests.put(upload_url, data=open(tmpfiles['atlas'], 'rb'),headers={'Authorization': 'OAuth '+token}, timeout=120)
+    if response.status_code <> 201:
+        print 'Error upload file to Yandex'
 
+    method_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload?'
+    data = dict(path=config.yandex_disk_path+tmpfiles['atlas_yandex']+'.pdf',overwrite='True')
+    response = requests.get(method_url, data,headers={'Authorization': 'OAuth '+token}, timeout=20)
+    result = json.loads(response.text)
+    upload_url = result['href']
 
-        method_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload?'
-        data = dict(path=config.yandex_disk_path+'Москва, атлас троллейбусных маршрутов [Openstreetmap] [latest].pdf',overwrite='True')
-        response = requests.get(method_url, data,headers={'Authorization': 'OAuth '+token}, timeout=20)
-        result = json.loads(response.text)
-        upload_url = result['href']
+    response = requests.put(upload_url, data=open(tmpfiles['atlas'], 'rb'),headers={'Authorization': 'OAuth '+token}, timeout=120)
+    if response.status_code <> 201:
+        print 'Error upload file to Yandex'
 
-        response = requests.put(upload_url, data=open(tmpfiles['atlas'], 'rb'),headers={'Authorization': 'OAuth '+token}, timeout=120)
-        if response.status_code <> 201:
-            print 'Error upload file to Yandex'
-
-        method_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload?'
-        data = dict(path=config.yandex_disk_path+tmpfiles['atlas_yandex']+'.pdf',overwrite='True')
-        response = requests.get(method_url, data,headers={'Authorization': 'OAuth '+token}, timeout=20)
-        result = json.loads(response.text)
-        upload_url = result['href']
-
-        response = requests.put(upload_url, data=open(tmpfiles['atlas'], 'rb'),headers={'Authorization': 'OAuth '+token}, timeout=120)
-        if response.status_code <> 201:
-            print 'Error upload file to Yandex'
-
-        '''
+    '''
 toilet -f bigmono12 --width 250 -k -F border  --export tga "Атлас Московского троллейбуса" > title.tga
         '''
-        continue
+
 
         
             
-        #stage1 - simple png picture
 
-        gdalcmd='gdal_translate -of "GTiff" -a_nodata 0 -co ALPHA=YES -outsize '+currentmap['size_px']+' -r lanczos -projwin  '+currentmap['bbox_string_gdal']+'   gdal_wms/wmsosmot.xml '+tmpfiles['stage1']
-        print gdalcmd
-        os.system( gdalcmd)      
-
-        gdalcmd='gdal_translate -of "PNG" -outsize '+currentmap['size_px']+' -r lanczos -projwin  '+currentmap['bbox_string_gdal']+'   gdal_wms/wmsosm.xml '+tmpfiles['background']
-        print gdalcmd
-        os.system( gdalcmd)   
-      
-
-        import Image
-
-        background = Image.open(tmpfiles['background'])
-        overlay = Image.open(tmpfiles['stage1'])
-
-        background = background.convert("RGBA")
-        overlay = overlay.convert("RGBA")
-
-        background.paste(overlay, (0, 0), overlay)
-        #new_img = Image.blend(background, overlay, 0.5)
-        background.save("stage02.png","PNG")
-        
-        fileDateStrinng=strftime('%Y-%m-%d %H%M%S', gmtime())
-        os.rename("stage02.png",os.path.join('output',currentmap['map_id']+' MAP '+fileDateStrinng+'.png'))
 
 
 if __name__ == '__main__':
