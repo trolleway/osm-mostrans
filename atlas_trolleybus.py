@@ -144,7 +144,7 @@ ogr2ogr -f PostgreSQL "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+
 
     #used for convert to atlas 
     ngw2png(where="map='mostrans-trolleybus-atlas4' AND ref='all'",
-        ngwstyles='759,758,760,753,715,725,98',
+        ngwstyles='759,758,760,753,715,725',
         size=size_main,
         filename=os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-all-atlas")
     )      
@@ -175,10 +175,10 @@ ORDER BY map,ref;
                 ''')
     rows = cur.fetchall()
     for currentmap in rows:
-            page_filename=os.path.join(tmpfiles['folder'], currentmap[1]+'-'+currentmap[2])+".pdf"
+            page_filename=os.path.join(tmpfiles['folder'], currentmap[1]+'-'+currentmap[2])+".png"
             if os.path.exists(page_filename):
                 os.remove(page_filename)
-            cmd="gdal_translate -of ""PDF""  -a_srs ""EPSG:3857"" -co ""COMPRESS=JPEG"" -co ""JPEG_QUALITY=76""  -projwin "+currentmap[0]+" "+os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-all-atlas") +".png "+page_filename
+            cmd="gdal_translate -of ""PNG""  -a_srs ""EPSG:3857"" -co ""COMPRESS=JPEG"" -co ""JPEG_QUALITY=76""  -projwin "+currentmap[0]+" "+os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-all-atlas") +".png "+page_filename
             os.system(cmd)
             atlaspages.append(page_filename)
 
@@ -197,14 +197,17 @@ ORDER BY map,ref;
                 ''')
     rows = cur.fetchall()
     for currentmap in rows:
-        page_filename=os.path.join(tmpfiles['folder'], currentmap[1]+'-'+currentmap[2])+".pdf"
-        cmd="gdal_translate -of ""PDF""  -a_srs ""EPSG:3857"" -co ""COMPRESS=JPEG"" -co ""JPEG_QUALITY=76""  -projwin "+currentmap[0]+" "+os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-all-atlas") +".png "+page_filename
+        page_filename=os.path.join(tmpfiles['folder'], currentmap[1]+'-'+currentmap[2])+".png"
+        cmd="gdal_translate -of ""PNG""  -a_srs ""EPSG:3857"" -co ""COMPRESS=JPEG"" -co ""JPEG_QUALITY=76""  -projwin "+currentmap[0]+" "+os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-center") +".png "+page_filename
+        os.system(cmd)
         atlaspages.append(page_filename)
 
 
     cmd="convert "+' '.join(atlaspages)+' "'+tmpfiles['atlas']+'"'
     print cmd
     os.system(cmd) 
+    for page_filename in atlaspages:
+        os.remove(page_filename)
 
 
 
