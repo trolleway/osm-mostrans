@@ -248,6 +248,17 @@ ORDER BY map,ref;
         os.system(cmd)
         atlaspages.append(page_filename)
 
+    #Вставка выходных данных на первую страницу
+    datestring="Дата рендеринга: " + time.strftime("%d.%m.%Y")
+    cmd='convert ' + atlaspages[0] + ' branding/logo.png -geometry +0+38 -composite ' + atlaspages[0]
+    os.system(cmd)
+    cmd='convert ' + atlaspages[0] + ' -background white  -alpha remove  ' + atlaspages[0]
+    os.system(cmd)
+    cmd='convert ' + atlaspages[0] +  "  -pointsize 24 label:'" + mapname + "' -gravity NorthEast -flatten " + atlaspages[0]
+    os.system(cmd)
+    cmd='convert ' + atlaspages[0] + "  -background white -undercolor white -pointsize 10 -annotate +0+33 '" + datestring + "'  -flatten " + atlaspages[0]
+    os.system(cmd)
+
 
     cmd="convert "+' '.join(atlaspages)+' "'+tmpfiles['atlas']+'"'
     print cmd
@@ -267,17 +278,17 @@ ORDER BY map,ref;
       
 
     #add overlay logo, and keep same filename
-    datestring="Дата рендеринга: "+time.strftime("%d.%m.%Y")
-    cmd='convert '+tmpfiles['screenall']+'.png'+' branding/logo.png -geometry +0+38 -composite '+tmpfiles['screenall']+'.png '
+    datestring="Дата рендеринга: " + time.strftime("%d.%m.%Y")
+    cmd='convert ' + tmpfiles['screenall'] + '.png' + ' branding/logo.png -geometry +0+38 -composite ' + tmpfiles['screenall'] + '.png '
     os.system(cmd)
-    cmd='convert  '+tmpfiles['screenall']+'.png'+' -background white  -alpha remove  '+tmpfiles['screenall']+'.png'
+    cmd='convert ' + tmpfiles['screenall'] + '.png' + ' -background white  -alpha remove  ' + tmpfiles['screenall'] + '.png'
     os.system(cmd)
-    cmd='convert  '+tmpfiles['screenall']+'.png'+"  -pointsize 24 label:'"+mapname+"' -gravity NorthEast -flatten "+tmpfiles['screenall']+'.png'
+    cmd='convert ' + tmpfiles['screenall'] + '.png' + "  -pointsize 24 label:'" + mapname + "' -gravity NorthEast -flatten " + tmpfiles['screenall'] + '.png'
     os.system(cmd)
-    cmd='convert  '+tmpfiles['screenall']+'.png'+"  -background white -undercolor white -pointsize 10 -annotate +0+33 '"+datestring+"'  -flatten "+tmpfiles['screenall']+'.png'
+    cmd='convert ' + tmpfiles['screenall'] + '.png' + "  -background white -undercolor white -pointsize 10 -annotate +0+33 '" + datestring + "'  -flatten " + tmpfiles['screenall'] + '.png'
     os.system(cmd)
 
-    cmd="gdal_translate -of ""GTiff""  -a_srs ""EPSG:3857"" -co ""COMPRESS=JPEG"" -co ""JPEG_QUALITY=96""   "+tmpfiles['screenall'] +".png "+tmpfiles['screenall']+'.tiff'
+    cmd="gdal_translate -of ""GTiff"" -a_srs ""EPSG:3857"" -co ""COMPRESS=JPEG"" -co ""JPEG_QUALITY=96"" " + tmpfiles['screenall'] + ".png " + tmpfiles['screenall'] + '.tiff'
     os.system(cmd)
 
     print 'Upload GeoTIF to Yandex'
