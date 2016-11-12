@@ -107,22 +107,13 @@ def render_atlas(host,dbname,user,password):
     now = datetime.datetime.now()
 
     mapname='Московский троллейбус'
+    longname = 'Москва, атлас троллейбусных маршрутов'
     tmpfiles=dict()   
     tmpfiles['folder'] = 'tmp'
-    tmpfiles['lines'] = 'tmp/lines.png'
-    tmpfiles['lines_worldfile'] = 'tmp/lines.pngw'
 
     tmpfiles['screenall']=os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-all-screen") #no extension
-    tmpfiles['center'] = 'tmp/center.png'
-    tmpfiles['center_worldfile'] = 'tmp/center.pngw'
-
     tmpfiles['atlas'] = 'tmp/moscow_trolleybus_ru_openstreetmap_'+now.strftime("%Y-%m-%d %H:%M")+'.pdf'
     tmpfiles['atlas_yandex'] = 'archive/moscow_trolleybus_ru_openstreetmap_'+now.strftime("%Y-%m-%d") #withouth time - only one file at day will saved
-
-    tmpfiles['terminals'] = 'tmp/terminals.png'
-
-    tmpfiles['stage1'] = 'tmp/stage1.tif'
-    tmpfiles['background'] = 'tmp/background.png'
 
     if not os.path.exists('tmp'):
         os.makedirs('tmp')
@@ -267,9 +258,6 @@ ORDER BY map,ref;
         os.remove(page_filename)
 
 
-
-
-
     ngw2png(where="map='mostrans-trolleybus-atlas4' AND ref='all'",
         ngwstyles='749,755,751,753,715,725',
         size=size_main,
@@ -289,13 +277,13 @@ ORDER BY map,ref;
     os.system(cmd)
 
     print 'Upload png to Yandex'
-    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path+'Москва, атлас троллейбусных маршрутов [Openstreetmap] [latest].png',overwrite='True'),filedata=open(tmpfiles['screenall']+'.png', 'rb'))
+    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + longname + ' [Openstreetmap] [latest].png',overwrite='True'),filedata=open(tmpfiles['screenall']+'.png', 'rb'))
 
     cmd="gdal_translate -of ""GTiff"" -a_srs ""EPSG:3857"" -co ""COMPRESS=DEFLATE"" -co ""ZLEVEL=9"" " + tmpfiles['screenall'] + ".png " + tmpfiles['screenall'] + '.tiff'
     #gdal_translate -of "GTiff" -a_srs "EPSG:3857" -co "COMPRESS=JPEG" -co "JPEG_QUALITY=96" tmp/mostrans-trolleybus-atlas4-all-screen.png tmp/mostrans-trolleybus-atlas4-all-screen.tiff
     os.system(cmd)
     print 'Upload GeoTIF to Yandex'
-    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path+'Москва, атлас троллейбусных маршрутов [Openstreetmap] [latest].tif',overwrite='True'),filedata=open(tmpfiles['screenall']+'.tiff', 'rb'))
+    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + longname + ' [Openstreetmap] [latest].tif',overwrite='True'),filedata=open(tmpfiles['screenall']+'.tiff', 'rb'))
     upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path+tmpfiles['atlas_yandex']+'.tif',overwrite='True'),filedata=open(tmpfiles['screenall']+'.tiff', 'rb'))
 
 
@@ -303,17 +291,9 @@ ORDER BY map,ref;
 
 
     print 'Upload PDF to Yandex'
-    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path+'Москва, атлас троллейбусных маршрутов [Openstreetmap] [latest].pdf',overwrite='True'),filedata=open(tmpfiles['atlas'], 'rb'))
+    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + longname + ' [Openstreetmap] [latest].pdf',overwrite='True'),filedata=open(tmpfiles['atlas'], 'rb'))
     upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path+tmpfiles['atlas_yandex']+'.pdf',overwrite='True'),filedata=open(tmpfiles['atlas'], 'rb'))
 
-
-    '''
-
-        '''
-
-
-        
-            
 
 
 
