@@ -189,7 +189,7 @@ ogr2ogr -f PostgreSQL "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+
 
 
 
-#Согласно принципу KISS: генерируются одиночные pdf в gdal, затем они склеиваются в один посредством pdfjoin
+#Согласно принципу KISS: генерируются одиночные pdf в gdal, затем они склеиваются в один посредством imagemagick
     atlaspages=list()
     cur.execute('''
 SELECT 
