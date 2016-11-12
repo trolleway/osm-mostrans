@@ -265,12 +265,11 @@ ORDER BY map,ref;
     )
       
     #add overlay logo, and keep same filename
-    cmd='composite branding/logo.svg '+tmpfiles['screenall']+'.png'+' -gravity NorthWest '+tmpfiles['screenall']+'_logo.png'
-    #print command
+    cmd='composite branding/logo.png '+tmpfiles['screenall']+'.png'+' -gravity NorthWest '+tmpfiles['screenall']+'.png'
     os.system(cmd)
-    os.rename(tmpfiles['screenall']+'_logo.png',tmpfiles['screenall']+'.png')
+    #os.rename(tmpfiles['screenall']+'_logo.png',tmpfiles['screenall']+'.png')
 
-    cmd="gdal_translate -of ""GTiff""  -a_srs ""EPSG:3857"" -co ""COMPRESS=JPEG"" -co ""JPEG_QUALITY=96""   "+tmpfiles['screenall'] +".png "+tmpfiles['screenall']+'.tiff'
+    cmd="gdal_translate -of ""GTiff""  -a_srs ""EPSG:3857"" -b 1 -b 2 -b 3 -co ""COMPRESS=JPEG"" -co ""JPEG_QUALITY=96""   "+tmpfiles['screenall'] +".png "+tmpfiles['screenall']+'.tiff'
     os.system(cmd)
 
     print 'Upload GeoTIF to Yandex'
@@ -282,25 +281,9 @@ ORDER BY map,ref;
 
 
     print 'Upload PDF to Yandex'
-    method_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload?'
-    data = dict(path=config.yandex_disk_path+'Москва, атлас троллейбусных маршрутов [Openstreetmap] [latest].pdf',overwrite='True')
-    response = requests.get(method_url, data,headers={'Authorization': 'OAuth '+config.yandex_token}, timeout=20)
-    result = json.loads(response.text)
-    upload_url = result['href']
+    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path+'Москва, атлас троллейбусных маршрутов [Openstreetmap] [latest].pdf',overwrite='True'),filedata=open(tmpfiles['atlas'], 'rb'))
+    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path+tmpfiles['atlas_yandex']+'.pdf',overwrite='True'),filedata=open(tmpfiles['atlas'], 'rb'))
 
-    response = requests.put(upload_url, data=open(tmpfiles['atlas'], 'rb'),headers={'Authorization': 'OAuth '+config.yandex_token}, timeout=120)
-    if response.status_code <> 201:
-        print 'Error upload file to Yandex'
-
-    method_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload?'
-    data = dict(path=config.yandex_disk_path+tmpfiles['atlas_yandex']+'.pdf',overwrite='True')
-    response = requests.get(method_url, data,headers={'Authorization': 'OAuth '+config.yandex_token}, timeout=20)
-    result = json.loads(response.text)
-    upload_url = result['href']
-
-    response = requests.put(upload_url, data=open(tmpfiles['atlas'], 'rb'),headers={'Authorization': 'OAuth '+config.yandex_token}, timeout=120)
-    if response.status_code <> 201:
-        print 'Error upload file to Yandex'
 
     '''
 toilet -f bigmono12 --width 250 -k -F border  --export tga "Атлас Московского троллейбуса" > title.tga
