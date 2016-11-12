@@ -274,8 +274,8 @@ ORDER BY map,ref;
     os.system(cmd)
 
     print 'Upload GeoTIF to Yandex'
-    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path+'Москва, атлас троллейбусных маршрутов [Openstreetmap] [latest].tif',overwrite='True'),filedata=open(tmpfiles['screenall']+'.tiff'), 'rb'))
-    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path+tmpfiles['atlas_yandex']+'.tif',overwrite='True'),filedata=open(tmpfiles['screenall']+'.tiff'), 'rb'))
+    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path+'Москва, атлас троллейбусных маршрутов [Openstreetmap] [latest].tif',overwrite='True'),filedata=open(tmpfiles['screenall']+'.tiff', 'rb'))
+    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path+tmpfiles['atlas_yandex']+'.tif',overwrite='True'),filedata=open(tmpfiles['screenall']+'.tiff', 'rb'))
 
 
 
