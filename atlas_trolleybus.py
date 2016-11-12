@@ -94,7 +94,7 @@ def render_atlas(host,dbname,user,password):
     #debug
     retrive_map=True
 
-
+    cmd='toilet -f mono9 --width 250 -W -F border --metal --export svg "Московский троллейбус" > tmp/title.svg'
 
 
     #Получаем одну картинку со всеми слоями на всю карту
@@ -106,6 +106,7 @@ def render_atlas(host,dbname,user,password):
 
     now = datetime.datetime.now()
 
+    mapname='Московский троллейбус'
     tmpfiles=dict()   
     tmpfiles['folder'] = 'tmp'
     tmpfiles['lines'] = 'tmp/lines.png'
@@ -223,7 +224,7 @@ ORDER BY map,ref;
             page_filename=os.path.join(tmpfiles['folder'], currentmap[1]+'-'+currentmap[2])+".png"
             if os.path.exists(page_filename):
                 os.remove(page_filename)
-            cmd="gdal_translate -of ""PNG""  -a_srs ""EPSG:3857"" -co ""COMPRESS=JPEG"" -co ""JPEG_QUALITY=76""  -projwin "+currentmap[0]+" "+os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-all-atlas") +".png "+page_filename
+            cmd="gdal_translate -of ""PNG""  -a_srs ""EPSG:3857""   -projwin "+currentmap[0]+" "+os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-all-atlas") +".png "+page_filename
             os.system(cmd)
             atlaspages.append(page_filename)
 
@@ -264,12 +265,19 @@ ORDER BY map,ref;
         filename=os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-all-screen")
     )
       
-    #add overlay logo, and keep same filename
-    cmd='composite branding/logo.png '+tmpfiles['screenall']+'.png'+' -gravity NorthWest '+tmpfiles['screenall']+'.png'
-    os.system(cmd)
-    #os.rename(tmpfiles['screenall']+'_logo.png',tmpfiles['screenall']+'.png')
 
-    cmd="gdal_translate -of ""GTiff""  -a_srs ""EPSG:3857"" -b 1 -b 2 -b 3 -co ""COMPRESS=JPEG"" -co ""JPEG_QUALITY=96""   "+tmpfiles['screenall'] +".png "+tmpfiles['screenall']+'.tiff'
+    #add overlay logo, and keep same filename
+    datestring="Дата рендеринга: "+time.strftime("%d.%m.%Y")
+    cmd='convert '+tmpfiles['screenall']+'.png'+' branding/logo.png -geometry +0+38 -composite '+tmpfiles['screenall']+'.png '
+    os.system(cmd)
+    cmd='convert  '+tmpfiles['screenall']+'.png'+' -background white  -alpha remove  '+tmpfiles['screenall']+'.png'
+    os.system(cmd)
+    cmd='convert  '+tmpfiles['screenall']+'.png'+"  -pointsize 24 label:'"+mapname+"' -gravity NorthEast -flatten "+tmpfiles['screenall']+'.png'
+    os.system(cmd)
+    cmd='convert  '+tmpfiles['screenall']+'.png'+"  -background white -undercolor white -pointsize 10 -annotate +0+33 '"+datestring+"'  -flatten "+tmpfiles['screenall']+'.png'
+    os.system(cmd)
+
+    cmd="gdal_translate -of ""GTiff""  -a_srs ""EPSG:3857"" -co ""COMPRESS=JPEG"" -co ""JPEG_QUALITY=96""   "+tmpfiles['screenall'] +".png "+tmpfiles['screenall']+'.tiff'
     os.system(cmd)
 
     print 'Upload GeoTIF to Yandex'
@@ -286,7 +294,7 @@ ORDER BY map,ref;
 
 
     '''
-toilet -f bigmono12 --width 250 -k -F border  --export tga "Атлас Московского троллейбуса" > title.tga
+
         '''
 
 
