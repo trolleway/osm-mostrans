@@ -285,12 +285,15 @@ ORDER BY map,ref;
     os.system(cmd)
     cmd='convert ' + tmpfiles['screenall'] + '.png' + "  -pointsize 24 label:'" + mapname + "' -gravity NorthEast -flatten " + tmpfiles['screenall'] + '.png'
     os.system(cmd)
-    cmd='convert ' + tmpfiles['screenall'] + '.png' + "  -background white -undercolor white -pointsize 10 -annotate +0+33 '" + datestring + "'  -flatten " + tmpfiles['screenall'] + '.png'
+    cmd='convert ' + tmpfiles['screenall'] + '.png' + "  -colors 64  -background white -undercolor white -pointsize 10 -annotate +0+33 '" + datestring + "'  -flatten " + tmpfiles['screenall'] + '.png'
     os.system(cmd)
 
-    cmd="gdal_translate -of ""GTiff"" -a_srs ""EPSG:3857"" -co ""COMPRESS=JPEG"" -co ""JPEG_QUALITY=96"" " + tmpfiles['screenall'] + ".png " + tmpfiles['screenall'] + '.tiff'
-    os.system(cmd)
+    print 'Upload png to Yandex'
+    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path+'Москва, атлас троллейбусных маршрутов [Openstreetmap] [latest].png',overwrite='True'),filedata=open(tmpfiles['screenall']+'.png', 'rb'))
 
+    cmd="gdal_translate -of ""GTiff"" -a_srs ""EPSG:3857"" -co ""COMPRESS=DEFLATE"" -co ""ZLEVEL=9"" " + tmpfiles['screenall'] + ".png " + tmpfiles['screenall'] + '.tiff'
+    #gdal_translate -of "GTiff" -a_srs "EPSG:3857" -co "COMPRESS=JPEG" -co "JPEG_QUALITY=96" tmp/mostrans-trolleybus-atlas4-all-screen.png tmp/mostrans-trolleybus-atlas4-all-screen.tiff
+    os.system(cmd)
     print 'Upload GeoTIF to Yandex'
     upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path+'Москва, атлас троллейбусных маршрутов [Openstreetmap] [latest].tif',overwrite='True'),filedata=open(tmpfiles['screenall']+'.tiff', 'rb'))
     upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path+tmpfiles['atlas_yandex']+'.tif',overwrite='True'),filedata=open(tmpfiles['screenall']+'.tiff', 'rb'))
