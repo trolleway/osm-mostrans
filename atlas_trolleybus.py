@@ -63,6 +63,20 @@ def argparser_prepare():
         % {'prog': parser.prog}
     return parser
 
+
+
+def upload_yandex(token,pathdata,filedata):
+    #Upload file to yandex.disk from local disk
+            method_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload?'
+            response = requests.get(method_url, pathdata,headers={'Authorization': 'OAuth '+token}, timeout=20)
+            result = json.loads(response.text)
+            upload_url = result['href']
+
+            response = requests.put(upload_url, filedata,headers={'Authorization': 'OAuth '+token}, timeout=120)
+            if response.status_code <> 201:
+                print 'Error upload file to Yandex'
+
+
 def render_atlas(host,dbname,user,password):
 
     size_main=3500
@@ -93,14 +107,17 @@ def render_atlas(host,dbname,user,password):
     now = datetime.datetime.now()
 
     tmpfiles=dict()   
+    tmpfiles['folder'] = 'tmp'
     tmpfiles['lines'] = 'tmp/lines.png'
     tmpfiles['lines_worldfile'] = 'tmp/lines.pngw'
+
+    tmpfiles['screenall']=os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-all-screen") #no extension
     tmpfiles['center'] = 'tmp/center.png'
     tmpfiles['center_worldfile'] = 'tmp/center.pngw'
 
     tmpfiles['atlas'] = 'tmp/moscow_trolleybus_ru_openstreetmap_'+now.strftime("%Y-%m-%d %H:%M")+'.pdf'
     tmpfiles['atlas_yandex'] = 'archive/moscow_trolleybus_ru_openstreetmap_'+now.strftime("%Y-%m-%d") #withouth time - only one file at day will saved
-    tmpfiles['folder'] = 'tmp'
+
     tmpfiles['terminals'] = 'tmp/terminals.png'
 
     tmpfiles['stage1'] = 'tmp/stage1.tif'
@@ -226,7 +243,7 @@ ORDER BY map,ref;
     rows = cur.fetchall()
     for currentmap in rows:
         page_filename=os.path.join(tmpfiles['folder'], currentmap[1]+'-'+currentmap[2])+".png"
-        cmd="gdal_translate -of ""PNG""  -a_srs ""EPSG:3857"" -co ""COMPRESS=JPEG"" -co ""JPEG_QUALITY=76""  -projwin "+currentmap[0]+" "+os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-center") +".png "+page_filename
+        cmd="gdal_translate -of ""PNG""  -a_srs ""EPSG:3857""  -projwin "+currentmap[0]+" "+os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-center") +".png "+page_filename
         os.system(cmd)
         atlaspages.append(page_filename)
 
@@ -241,31 +258,24 @@ ORDER BY map,ref;
 
 
 
-
-    print 'Upload GeoTIF to Yandex'
-
-    token=config.yandex_token
-
-    def upload_yandex(token,pathdata,filedata):
-            method_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload?'
-            response = requests.get(method_url, pathdata,headers={'Authorization': 'OAuth '+token}, timeout=20)
-            result = json.loads(response.text)
-            upload_url = result['href']
-
-            response = requests.put(upload_url, filedata,headers={'Authorization': 'OAuth '+token}, timeout=120)
-            if response.status_code <> 201:
-                print 'Error upload file to Yandex'
-
     ngw2png(where="map='mostrans-trolleybus-atlas4' AND ref='all'",
         ngwstyles='749,755,751,753,715,725',
         size=size_main,
         filename=os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-all-screen")
-    )      
-    cmd="gdal_translate -of ""GTiff""  -a_srs ""EPSG:3857"" -co ""COMPRESS=JPEG"" -co ""JPEG_QUALITY=96""   "+os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-all-screen.png") +" "+os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-all-screen.tiff")
+    )
+      
+    #add overlay logo, and keep same filename
+    cmd='composite branding/logo.svg '+tmpfiles['screenall']+'.png'+' -gravity NorthWest '+tmpfiles['screenall']+'_logo.png'
+    #print command
+    os.system(cmd)
+    os.rename(tmpfiles['screenall']+'_logo.png',tmpfiles['screenall']+'.png')
+
+    cmd="gdal_translate -of ""GTiff""  -a_srs ""EPSG:3857"" -co ""COMPRESS=JPEG"" -co ""JPEG_QUALITY=96""   "+tmpfiles['screenall'] +".png "+tmpfiles['screenall']+'.tiff'
     os.system(cmd)
 
-    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path+'Москва, атлас троллейбусных маршрутов [Openstreetmap] [latest].tif',overwrite='True'),filedata=open(os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-all-screen.tiff"), 'rb'))
-    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path+tmpfiles['atlas_yandex']+'.tif',overwrite='True'),filedata=open(os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-all-screen.tiff"), 'rb'))
+    print 'Upload GeoTIF to Yandex'
+    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path+'Москва, атлас троллейбусных маршрутов [Openstreetmap] [latest].tif',overwrite='True'),filedata=open(tmpfiles['screenall']+'.tiff'), 'rb'))
+    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path+tmpfiles['atlas_yandex']+'.tif',overwrite='True'),filedata=open(tmpfiles['screenall']+'.tiff'), 'rb'))
 
 
 
@@ -274,21 +284,21 @@ ORDER BY map,ref;
     print 'Upload PDF to Yandex'
     method_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload?'
     data = dict(path=config.yandex_disk_path+'Москва, атлас троллейбусных маршрутов [Openstreetmap] [latest].pdf',overwrite='True')
-    response = requests.get(method_url, data,headers={'Authorization': 'OAuth '+token}, timeout=20)
+    response = requests.get(method_url, data,headers={'Authorization': 'OAuth '+config.yandex_token}, timeout=20)
     result = json.loads(response.text)
     upload_url = result['href']
 
-    response = requests.put(upload_url, data=open(tmpfiles['atlas'], 'rb'),headers={'Authorization': 'OAuth '+token}, timeout=120)
+    response = requests.put(upload_url, data=open(tmpfiles['atlas'], 'rb'),headers={'Authorization': 'OAuth '+config.yandex_token}, timeout=120)
     if response.status_code <> 201:
         print 'Error upload file to Yandex'
 
     method_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload?'
     data = dict(path=config.yandex_disk_path+tmpfiles['atlas_yandex']+'.pdf',overwrite='True')
-    response = requests.get(method_url, data,headers={'Authorization': 'OAuth '+token}, timeout=20)
+    response = requests.get(method_url, data,headers={'Authorization': 'OAuth '+config.yandex_token}, timeout=20)
     result = json.loads(response.text)
     upload_url = result['href']
 
-    response = requests.put(upload_url, data=open(tmpfiles['atlas'], 'rb'),headers={'Authorization': 'OAuth '+token}, timeout=120)
+    response = requests.put(upload_url, data=open(tmpfiles['atlas'], 'rb'),headers={'Authorization': 'OAuth '+config.yandex_token}, timeout=120)
     if response.status_code <> 201:
         print 'Error upload file to Yandex'
 
