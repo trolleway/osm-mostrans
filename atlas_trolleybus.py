@@ -181,7 +181,7 @@ ogr2ogr -f PostgreSQL "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+
 
     #used for convert to atlas 
     ngw2png(where="map='mostrans-trolleybus-atlas4' AND ref='all'",
-        ngwstyles='759,758,760,753,715,725',
+        ngwstyles='762,764,759,758,760,753,715,725',
         size=size_main,
         filename=os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-all-atlas")
     )      
