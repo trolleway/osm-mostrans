@@ -22,13 +22,15 @@ def updateDump():
         os.rename(downloaded_dump, work_dump) 
 
     #if prevdump dump exists - run osmupdate, it updating it to last hour state with MosOblast clipping, and save as currentdump
-    cmd='osmupdate '+ work_dump + ' ' + updated_dump + ' --base-url=download.geofabrik.de/russia-updates  -v -B='+poly_file #--day --hour 
+    cmd='osmupdate '+ work_dump + ' ' + updated_dump + '   -v -B='+poly_file #--day --hour 
     print cmd
-    os.system(cmd)    
-
-    #rename currentdump to prevdump
-    os.remove(work_dump)
-    os.rename(updated_dump, work_dump)
+    os.system(cmd)
+    
+    #if osmupdate not find updates in internet - new file not created, will be used downloaded file
+    if os.path.exists(work_dump) == True: 
+        #rename currentdump to prevdump
+        os.remove(work_dump)
+        os.rename(updated_dump, work_dump)
 
     return 0
 
