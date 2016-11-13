@@ -112,7 +112,7 @@ def render_atlas(host,dbname,user,password):
     tmpfiles['folder'] = 'tmp'
 
     tmpfiles['screenall']=os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-all-screen") #no extension
-    tmpfiles['atlas'] = 'tmp/moscow_trolleybus_ru_openstreetmap_'+now.strftime("%Y-%m-%d %H:%M")+'.pdf'
+    tmpfiles['atlas'] = 'tmp/moscow_trolleybus_ru_openstreetmap_'+now.strftime("%Y-%m-%d")+'.pdf'
     tmpfiles['atlas_yandex'] = 'archive/moscow_trolleybus_ru_openstreetmap_'+now.strftime("%Y-%m-%d") #withouth time - only one file at day will saved
 
     if not os.path.exists('tmp'):
@@ -251,7 +251,7 @@ ORDER BY map,ref;
     os.system(cmd)
 
 
-    cmd="convert "+' '.join(atlaspages)+' "'+tmpfiles['atlas']+'"'
+    cmd="convert "+' '.join(atlaspages)+'  "'+tmpfiles['atlas']+'"'
     print cmd
     os.system(cmd) 
     for page_filename in atlaspages:

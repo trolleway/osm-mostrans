@@ -9,7 +9,8 @@ git submodule foreach git checkout master
 
 
 
-sudo apt-get install postgresql postgresql-contrib postgis
+sudo apt-get install postgresql postgresql-contrib postgis 
+sudo apt-get install imagemagick
 
 sudo service postgresql restart
 
