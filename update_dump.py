@@ -11,7 +11,7 @@ import os
 def updateDump():
     
     dump_url='http://download.geofabrik.de/russia/central-fed-district-latest.osm.pbf'
-    downloaded_dump='osm/central-fed-district-latest.osm.pbf'
+    downloaded_dump='central-fed-district-latest.osm.pbf'
     work_dump='moscow_russia.osm.pbf'
     updated_dump='osm/just_updated_dump.osm.pbf'
     poly_file='cfg/mostrans.poly'
