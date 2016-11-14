@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf8 -*-
+
 dbname='osmot'
 user='gisuser'
 host='localhost'
