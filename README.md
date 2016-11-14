@@ -75,7 +75,7 @@ sudo service postgresql restart
 sudo -u postgres psql -d osmot -c "ALTER USER "gisuser" WITH PASSWORD 'localgisuserpassword'"
 sudo -u postgres psql -d osmot -c "ALTER ROLE gisuser WITH login;"
 
-#install new osmosis from binary
+# install new osmosis from binary
 
 wget http://bretth.dev.openstreetmap.org/osmosis-build/osmosis-latest.tgz
 mkdir osmosis
@@ -85,6 +85,9 @@ tar xvfz osmosis-latest.tgz
 rm osmosis-latest.tgz
 chmod a+x bin/osmosis
 bin/osmosis
+
+# If osmupdate or osmosis fails - add swap space, see https://www.digitalocean.com/community/tutorials/how-to-add-swap-on-ubuntu-14-04
+
 
 #end
 
