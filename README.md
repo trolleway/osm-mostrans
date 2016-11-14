@@ -7,6 +7,7 @@ osm-mostrans
 git submodule foreach git checkout master
 
 
+#if you want use upload atlases via REST api - install latest python, eq 2.7.12.
 
 
 sudo apt-get install postgresql postgresql-contrib postgis 
