@@ -2,12 +2,18 @@
 Generator of public transport map from OSM as a service
 
 ```
+#if you want use upload atlases via REST api - install latest python, eq 2.7.12.
+#http://www.georgevreilly.com/blog/2016/01/16/InstallingPython2_7_11onUbuntu.html
+
+sudo apt-add-repository ppa:fkrull/deadsnakes-python2.7
+sudo apt-get update
+sudo apt-get install python2.7 python2.7-dev
+
+sudp apt-get install git
+
 git clone --recursive https://github.com/trolleway/osm-mostrans.git
 osm-mostrans
 git submodule foreach git checkout master
-
-
-#if you want use upload atlases via REST api - install latest python, eq 2.7.12.
 
 
 sudo apt-get install postgresql postgresql-contrib postgis 
@@ -15,23 +21,14 @@ sudo apt-get install imagemagick
 
 sudo service postgresql restart
 
-
 #Установить PostGIS:
-
 sudo apt-cache search postgis
-
 #В полученном списке найдите пакет, подходящий для вашей версии PostgreSQL, его имя должно иметь вид postgresql-{version}-postgis-{version} и установите его:
 
 sudo apt-get install postgresql-9.3-postgis-2.1
 
-
-
-
-
 sudo invoke-rc.d postgresql restart
 sudo invoke-rc.d postgresql reload
-
-
 
 sudo -u postgres psql 
 
@@ -41,9 +38,6 @@ ALTER ROLE gisuser WITH login;
 
 sudo -u postgres createdb -O gisuser --encoding=UTF8 osmot
 sudo -u postgres psql -d osmot -c 'CREATE EXTENSION postgis;'
-
-
-
 
 sudo -u postgres psql -d osmot -c 'ALTER TABLE geometry_columns OWNER TO gisuser;'
 sudo -u postgres psql -d osmot -c 'ALTER TABLE spatial_ref_sys OWNER TO gisuser;'
@@ -61,7 +55,6 @@ sudo apt-get install software-properties-common python-software-properties
 sudo apt-get install gdal-bin python-gdal
 
 #edit main config here
-
 
 sudo apt-get install python-psycopg2
 sudo apt-get install python-pip
