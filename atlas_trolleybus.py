@@ -121,7 +121,7 @@ def render_atlas(host,dbname,user,password):
     
     #Load to PostGIS config file with pages bounds
     cmd='''
-ogr2ogr -f PostgreSQL "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+''' password='''+password+'''" cfg/atlaspages.geojson -nln atlaspages  -overwrite    \
+ogr2ogr -f PostgreSQL "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+''' password='''+password+'''" cfg/mostrans-trolleybus.geojson -nln atlaspages  -overwrite    \
 
     '''
     
