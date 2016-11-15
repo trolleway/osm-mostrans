@@ -3,11 +3,7 @@ Generator of public transport map from OSM as a service
 
 ```
 #if you want use upload atlases via REST api - install latest python, eq 2.7.12.
-#http://www.georgevreilly.com/blog/2016/01/16/InstallingPython2_7_11onUbuntu.html
 
-sudo apt-add-repository ppa:fkrull/deadsnakes-python2.7
-sudo apt-get update
-sudo apt-get install python2.7 python2.7-dev
 
 sudp apt-get install git
 
