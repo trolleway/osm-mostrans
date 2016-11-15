@@ -3,21 +3,16 @@ Generator of public transport map from OSM as a service
 
 ```
 #if you want use upload atlases via REST api - install latest python, eq 2.7.12.
+cd ~
 
 
-sudp apt-get install git
 
-git clone --recursive https://github.com/trolleway/osm-mostrans.git
-osm-mostrans
-git submodule foreach git checkout master
-
-
-sudo apt-get install postgresql postgresql-contrib postgis 
-sudo apt-get install imagemagick
+sudo apt-get install git imagemagick postgresql postgresql-contrib postgis 
+sudo apt-get install python-psycopg2 python-pip libpq-dev
 
 sudo service postgresql restart
 
-#Установить PostGIS:
+#Install PostGIS
 sudo apt-cache search postgis
 #В полученном списке найдите пакет, подходящий для вашей версии PostgreSQL, его имя должно иметь вид postgresql-{version}-postgis-{version} и установите его:
 
@@ -46,6 +41,9 @@ sudo -u postgres psql -d osmot -c 'ALTER TABLE geography_columns OWNER TO gisuse
 psql -h localhost -d osmot -U gisuser -c "SELECT PostGIS_Full_Version();"
 sudo apt-get install osm2pgsql
 
+# install new version of GDAL
+
+
 sudo apt-get install software-properties-common python-software-properties
 sudo apt-add-repository ppa:nextgis/ppa
 sudo apt-get update
@@ -54,18 +52,19 @@ sudo apt-get install gdal-bin python-gdal
 #check that gdal version >= 2
 gdalinfo --version 
 
+git clone --recursive https://github.com/trolleway/osm-mostrans.git
+cd osm-mostrans
+git submodule foreach git checkout master
 
-mv config.exampe.py config.py
+mv config.example.py config.py
 nano config.py
 #fill passwords
 
 
-sudo apt-get install python-psycopg2
-sudo apt-get install python-pip
-sudo apt-get install libpq-dev
+
 sudo pip install -r requirements.txt
 
-sudo nano /etc/postgresql/9.3/main/pg_hba.conf
+sudo nano /etc/postgresql/9.5/main/pg_hba.conf
 #set local   all             all                                     peer to local   all             all                                     md5
 sudo service postgresql restart
 
@@ -75,6 +74,7 @@ sudo -u postgres psql -d osmot -c "ALTER ROLE gisuser WITH login;"
 
 # install new osmosis from binary
 
+cd ~
 wget http://bretth.dev.openstreetmap.org/osmosis-build/osmosis-latest.tgz
 mkdir osmosis
 mv osmosis-latest.tgz osmosis
