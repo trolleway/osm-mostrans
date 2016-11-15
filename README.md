@@ -47,10 +47,18 @@ psql -h localhost -d osmot -U gisuser -c "SELECT PostGIS_Full_Version();"
 sudo apt-get install osm2pgsql
 
 sudo apt-get install software-properties-common python-software-properties
-#append nextgis ppa, when it become okay
+sudo apt-add-repository ppa:nextgis/ppa
+sudo apt-get update
 sudo apt-get install gdal-bin python-gdal
 
-#edit main config here
+#check that gdal version >= 2
+gdalinfo --version 
+
+
+mv config.exampe.py config.py
+nano config.py
+#fill passwords
+
 
 sudo apt-get install python-psycopg2
 sudo apt-get install python-pip
