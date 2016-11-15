@@ -15,6 +15,10 @@ def updateDump():
     work_dump='moscow_russia.osm.pbf'
     updated_dump='osm/just_updated_dump.osm.pbf'
     poly_file='cfg/mostrans.poly'
+    directory='osm'
+    
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
     #frist run of program
     if os.path.exists(work_dump) == False:
