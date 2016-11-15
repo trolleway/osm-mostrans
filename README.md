@@ -68,8 +68,8 @@ env/bin/pip install psycopg2
 
 mv config.example.py config.py
 nano config.py
-#fill passwords
-
+#fill passwords here
+#create password file for osm2pgsql here
 
 
 sudo pip install -r requirements.txt
