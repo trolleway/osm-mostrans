@@ -43,7 +43,6 @@ sudo apt-get install osm2pgsql
 
 # install new version of GDAL
 
-
 sudo apt-get install software-properties-common python-software-properties
 sudo apt-add-repository ppa:nextgis/ppa
 sudo apt-get update
@@ -52,9 +51,20 @@ sudo apt-get install gdal-bin python-gdal
 #check that gdal version >= 2
 gdalinfo --version 
 
-git clone --recursive https://github.com/trolleway/osm-mostrans.git
+#Python won't see psycopg2, so we should use virtualenv
+sudo apt-get install virtualenv
+
+cd ~
+mkdir osm-mostrans
 cd osm-mostrans
-git submodule foreach git checkout master
+git clone --recursive https://github.com/trolleway/osm-mostrans.git
+virtualenv --no-site-packages env
+env/bin/pip install psycopg2
+
+
+
+#? cd osm-mostrans
+#? git submodule foreach git checkout master
 
 mv config.example.py config.py
 nano config.py
@@ -89,6 +99,10 @@ bin/osmosis
 
 #end
 
+#run
+
+~/osm-mostrans/env/bin/python update_dump.py
+~/osm-mostrans/env/bin/python mostrans-trolleybus.py
 ```
 
 
