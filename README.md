@@ -7,7 +7,7 @@ cd ~
 
 
 
-sudo apt-get install git imagemagick osmctools postgresql postgresql-contrib postgis 
+sudo apt-get install git imagemagick osmctools postgresql postgresql-contrib postgis default-jre
 sudo apt-get install python-psycopg2 python-pip libpq-dev
 
 sudo service postgresql restart
