@@ -99,6 +99,11 @@ bin/osmosis
 
 # If osmupdate or osmosis fails - add swap space, see https://www.digitalocean.com/community/tutorials/how-to-add-swap-on-ubuntu-14-04
 
+#tune java and osmosis
+To change the amount of memory allocated to Osmosis, edit the ~/.osmosis file and set the JAVACMD_OPTIONS parameter with the memory arguments. For example, to allocate 2GB RAM to the Osmosis, process, use the following entry:
+
+JAVACMD_OPTIONS=-Xmx2G
+(This may be a good quick fix to try if you're getting "java.lang.OutOfMemoryError: Java heap space")
 
 #end
 
