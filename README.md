@@ -78,7 +78,7 @@ chmod 700 ~/.pgpass
 sudo pip install -r requirements.txt
 
 sudo nano /etc/postgresql/9.5/main/pg_hba.conf
-#set local   all             all                                     peer to local   all             all                                     md5
+#set local   all             all                                     peer to local   all             all                                     trust
 sudo service postgresql restart
 
 
