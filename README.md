@@ -105,6 +105,9 @@ To change the amount of memory allocated to Osmosis, edit the ~/.osmosis file an
 JAVACMD_OPTIONS=-Xmx2G
 (This may be a good quick fix to try if you're getting "java.lang.OutOfMemoryError: Java heap space")
 
+#install osgeo for python
+Не знаю как
+
 #end
 
 #run
