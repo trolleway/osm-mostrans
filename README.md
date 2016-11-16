@@ -70,7 +70,10 @@ mv config.example.py config.py
 nano config.py
 #fill passwords here
 #create password file for osm2pgsql here
+touch ~/.pgpass
 
+echo "127.0.0.1:5432:osmot:gisuser:localgisuserpassword" > ~/.pgpass
+chmod 060 ~/.pgpass
 
 sudo pip install -r requirements.txt
 
