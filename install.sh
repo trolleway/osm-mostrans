@@ -1,7 +1,7 @@
-sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
-sudo apt-get update
-sudo apt-get install -y build-essential checkinstall
-sudo apt-get install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
+sudo apt-get install -y software-properties-common
+sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
+sudo apt-get update && apt-get install -y build-essential checkinstall libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
+
 cd /usr/src
 sudo wget https://www.python.org/ftp/python/2.7.12/Python-2.7.12.tgz
 sudo tar xzf Python-2.7.12.tgz
@@ -12,7 +12,7 @@ cd ~
 
 sudo apt-get install -y git imagemagick osmctools postgresql postgresql-contrib postgis default-jre
 sudo apt-get install -y python-psycopg2 python-pip libpq-dev 
-sudo apt-get upgrade libproj-dev
+sudo apt-get upgrade  -y libproj-dev
 
 sudo service postgresql restart
 
