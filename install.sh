@@ -25,11 +25,10 @@ sudo apt-get install postgis
 sudo invoke-rc.d postgresql restart
 sudo invoke-rc.d postgresql reload
 
-sudo -u postgres psql 
+su postgres 
+psql -c "CREATE gisuser WITH PASSWORD 'localgisuserpassword';"
+psql -c "ALTER ROLE gisuser WITH login;"
 
-CREATE ROLE gisuser  password 'localgisuserpassword';
-ALTER ROLE gisuser WITH login;
-\q
 
 sudo -u postgres createdb -O gisuser --encoding=UTF8 osmot
 sudo -u postgres psql -d osmot -c 'CREATE EXTENSION postgis;'
@@ -38,6 +37,7 @@ sudo -u postgres psql -d osmot -c 'ALTER TABLE geometry_columns OWNER TO gisuser
 sudo -u postgres psql -d osmot -c 'ALTER TABLE spatial_ref_sys OWNER TO gisuser;'
 sudo -u postgres psql -d osmot -c 'ALTER TABLE geography_columns OWNER TO gisuser;'
 
+su gisuser
 #После этих операций будут созданы БД PostgreSQL с установленным в ней PostGIS и пользователь БД, который станет ее владельцем, а также таблиц geometry_columns, georgaphy_columns, spatial_ref_sys.
 
 #Убедитесь, что функции PostGIS появились в базе:
