@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#create ubuntu user gisuser 
 apt-get install -y software-properties-common
 add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
 apt-get update && apt-get install -y build-essential checkinstall libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
@@ -40,3 +41,5 @@ sudo -u postgres psql -d osmot -c 'ALTER TABLE geography_columns OWNER TO gisuse
 #После этих операций будут созданы БД PostgreSQL с установленным в ней PostGIS и пользователь БД, который станет ее владельцем, а также таблиц geometry_columns, georgaphy_columns, spatial_ref_sys.
 
 #PostGIS появились в базе:
+
+pip install --upgrade pip
