@@ -68,7 +68,12 @@ python-psycopg2
 #check that gdal version >= 2
 gdalinfo --version 
 
+pip install -r requirements.txt
+service postgresql restart
+
 #create password file for osm2pgsql 
-touch ~/.pgpass
-echo "127.0.0.1:5432:osmot:gisuser:localgisuserpassword" > ~/.pgpass
-chmod 700 ~/.pgpass
+cd ~
+touch .pgpass
+echo "127.0.0.1:5432:osmot:gisuser:localgisuserpassword" >> .pgpass
+chmod 666 .pgpass
+cd osm-mostrans
