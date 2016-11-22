@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #create ubuntu user gisuser 
-apt-get update && apt-get install -y software-properties-common
+apt-get update 
 apt-get upgrade
 apt-get install -y  build-essential \
 checkinstall \
@@ -24,7 +24,8 @@ python-pip \
 libpq-dev \
 postgresql-9.5-postgis-2.2 \
 software-properties-common \
-python-software-properties
+python-software-properties \
+osm2pgsql
 
 apt-get upgrade  -y libproj-dev
 
@@ -61,8 +62,7 @@ pip install --upgrade pip
 
 sudo apt-add-repository -y ppa:nextgis/ppa
 sudo apt-get update
-sudo apt-get install -y osm2pgsql \
-gdal-bin \
+sudo apt-get install -y gdal-bin \
 python-gdal \
 python-psycopg2
 
