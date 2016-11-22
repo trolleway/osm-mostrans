@@ -54,14 +54,16 @@ sudo -u postgres psql -d osmot -c 'ALTER TABLE geography_columns OWNER TO gisuse
 
 pip install --upgrade pip
 
-sudo apt-get install osm2pgsql
+
 
 # install new version of GDAL
 
 
 sudo apt-add-repository -y ppa:nextgis/ppa
 sudo apt-get update
-sudo apt-get install -y gdal-bin python-gdal
+sudo apt-get install -y osm2pgsql \
+gdal-bin \
+python-gdal
 
 #check that gdal version >= 2
 gdalinfo --version 
