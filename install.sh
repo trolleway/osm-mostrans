@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #create ubuntu user gisuser 
-apt-get update 
-apt-get upgrade
+apt-get update  -y
+apt-get upgrade -y
 apt-get install -y  build-essential \
 checkinstall \
 libreadline-gplv2-dev \
@@ -61,7 +61,7 @@ pip install --upgrade pip
 
 
 sudo apt-add-repository -y ppa:nextgis/ppa
-sudo apt-get update
+sudo apt-get update  -y
 sudo apt-get install -y gdal-bin \
 python-gdal \
 python-psycopg2
