@@ -6,7 +6,7 @@ Generator of public transport map from OSM as a service
 
 git clone --recursive https://github.com/trolleway/osm-mostrans.git
 cd osm-mostrans
-sudo chmod install.sh
+sudo chmod 777 install.sh
 sudo ./install.sh
 
 
