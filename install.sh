@@ -1,8 +1,9 @@
 #!/bin/bash
 
 #create ubuntu user gisuser 
-apt-get install -y software-properties-common
-apt-get update && apt-get install -y  build-essential \
+apt-get update && apt-get install -y software-properties-common
+apt-get upgrade
+apt-get install -y  build-essential \
 checkinstall \
 libreadline-gplv2-dev \
 libncursesw5-dev \
