@@ -2,19 +2,27 @@
 
 #create ubuntu user gisuser 
 apt-get install -y software-properties-common
-add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
-apt-get update && apt-get install -y build-essential checkinstall libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
+apt-get update && apt-get install -y  build-essential \
+checkinstall \
+libreadline-gplv2-dev \
+libncursesw5-dev \
+libssl-dev \
+libsqlite3-dev \
+tk-dev \
+libgdbm-dev \
+libc6-dev \
+libbz2-dev \
+git \
+python \
+imagemagick \
+osmctools \
+postgresql \
+postgresql-contrib \
+default-jre \
+python-pip \
+libpq-dev \
+postgresql-9.5-postgis-2.2
 
-cd /usr/src
-wget https://www.python.org/ftp/python/2.7.12/Python-2.7.12.tgz
-tar xzf Python-2.7.12.tgz
-cd Python-2.7.12
-./configure
-make install
-cd /home/trolleway
-
-apt-get install -y git imagemagick osmctools postgresql postgresql-contrib postgis default-jre python-psycopg2 python-pip libpq-dev postgis
-apt-get install -y 
 apt-get upgrade  -y libproj-dev
 
 service postgresql restart
