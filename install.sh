@@ -92,8 +92,8 @@ chmod a+x bin/osmosis
 #tune java 
 cd ~
 touch .osmosis
-echo "JAVACMD_OPTIONS=-Xmx2G" > .pgpass
-chmod 666 .pgpass
+echo "JAVACMD_OPTIONS=-Xmx2G" > .osmosis
+chmod 666 .osmosis
 cd osm-mostrans
 
 #unpack config
