@@ -21,7 +21,9 @@ postgresql-contrib \
 default-jre \
 python-pip \
 libpq-dev \
-postgresql-9.5-postgis-2.2
+postgresql-9.5-postgis-2.2 \
+software-properties-common \
+python-software-properties
 
 apt-get upgrade  -y libproj-dev
 
@@ -51,3 +53,15 @@ sudo -u postgres psql -d osmot -c 'ALTER TABLE geography_columns OWNER TO gisuse
 #PostGIS появились в базе:
 
 pip install --upgrade pip
+
+sudo apt-get install osm2pgsql
+
+# install new version of GDAL
+
+
+sudo apt-add-repository -y ppa:nextgis/ppa
+sudo apt-get update
+sudo apt-get install -y gdal-bin python-gdal
+
+#check that gdal version >= 2
+gdalinfo --version 
