@@ -68,7 +68,7 @@ python-psycopg2
 #check that gdal version >= 2
 gdalinfo --version 
 
-pip install -r requirements.txt
+
 service postgresql restart
 
 #create password file for osm2pgsql 
