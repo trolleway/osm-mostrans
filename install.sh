@@ -74,6 +74,28 @@ service postgresql restart
 #create password file for osm2pgsql 
 cd ~
 touch .pgpass
-echo "127.0.0.1:5432:osmot:gisuser:localgisuserpassword" >> .pgpass
+echo "127.0.0.1:5432:osmot:gisuser:localgisuserpassword" > .pgpass
 chmod 666 .pgpass
 cd osm-mostrans
+
+
+#compile osmosis
+cd ~
+wget http://bretth.dev.openstreetmap.org/osmosis-build/osmosis-latest.tgz
+mkdir osmosis
+mv osmosis-latest.tgz osmosis
+cd osmosis
+tar xvfz osmosis-latest.tgz
+rm osmosis-latest.tgz
+chmod a+x bin/osmosis
+
+#tune java 
+cd ~
+touch .osmosis
+echo "JAVACMD_OPTIONS=-Xmx2G" > .pgpass
+chmod 666 .pgpass
+cd osm-mostrans
+
+#unpack config
+mv config.example.py config.py
+
