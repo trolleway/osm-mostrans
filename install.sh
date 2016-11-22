@@ -96,6 +96,3 @@ echo "JAVACMD_OPTIONS=-Xmx2G" > .osmosis
 chmod 666 .osmosis
 cd osm-mostrans
 
-#unpack config
-mv config.example.py config.py
-
