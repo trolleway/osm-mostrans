@@ -50,7 +50,6 @@ sudo -u postgres psql -d osmot -c 'ALTER TABLE geography_columns OWNER TO gisuse
 
 #После этих операций будут созданы БД PostgreSQL с установленным в ней PostGIS и пользователь БД, который станет ее владельцем, а также таблиц geometry_columns, georgaphy_columns, spatial_ref_sys.
 
-#PostGIS появились в базе:
 
 pip install --upgrade pip
 
@@ -63,7 +62,13 @@ sudo apt-add-repository -y ppa:nextgis/ppa
 sudo apt-get update
 sudo apt-get install -y osm2pgsql \
 gdal-bin \
-python-gdal
+python-gdal \
+python-psycopg2
 
 #check that gdal version >= 2
 gdalinfo --version 
+
+#create password file for osm2pgsql 
+touch ~/.pgpass
+echo "127.0.0.1:5432:osmot:gisuser:localgisuserpassword" > ~/.pgpass
+chmod 700 ~/.pgpass
