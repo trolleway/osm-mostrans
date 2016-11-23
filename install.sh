@@ -76,7 +76,7 @@ service postgresql restart
 cd ~
 touch .pgpass
 echo "127.0.0.1:5432:osmot:gisuser:localgisuserpassword" > .pgpass
-chmod 666 .pgpass
+chmod 0600 .pgpass
 cd osm-mostrans
 
 
