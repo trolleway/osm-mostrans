@@ -59,12 +59,12 @@ pip install --upgrade pip
 
 # install new version of GDAL
 
-
-sudo apt-add-repository -y ppa:nextgis/ppa
-sudo apt-get update  -y
-sudo apt-get install -y gdal-bin \
-python-gdal \
-python-psycopg2
+http://stackoverflow.com/questions/37294127/python-gdal-2-1-installation-on-ubuntu-16-04
+#sudo apt-add-repository -y ppa:nextgis/ppa
+#sudo apt-get update  -y
+#sudo apt-get install -y gdal-bin \
+#python-gdal \
+#python-psycopg2
 
 #check that gdal version >= 2
 gdalinfo --version 
