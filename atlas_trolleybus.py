@@ -74,7 +74,7 @@ def upload_yandex(token,pathdata,filedata):
                 upload_url = result['href']
             except:
                 print response.json()
-                print response.status_code()
+                print str(response.status_code())
                 quit()
                 
                 
