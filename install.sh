@@ -57,9 +57,7 @@ pip install --upgrade pip
 
 
 
-# install new version of GDAL
 
-http://stackoverflow.com/questions/37294127/python-gdal-2-1-installation-on-ubuntu-16-04
 #sudo apt-add-repository -y ppa:nextgis/ppa
 #sudo apt-get update  -y
 #sudo apt-get install -y gdal-bin \
