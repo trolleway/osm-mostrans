@@ -69,9 +69,6 @@ def argparser_prepare():
         % {'prog': parser.prog}
     return parser
 
-
-
-
 def cleardb(host,dbname,user,password):
     ConnectionString="dbname=" + dbname + " user="+ user + " host=" + host + " password=" + password
 
@@ -110,14 +107,12 @@ def filter_routes(host,dbname,user,password):
     ConnectionString="dbname=" + dbname + " user="+ user + " host=" + host + " password=" + password
 
     try:
-
         conn = psycopg2.connect(ConnectionString)
     except:
         print 'I am unable to connect to the database                  ' 
         print ConnectionString
         return 0
     cur = conn.cursor()
-
 
     cmd='''
 ogr2ogr -overwrite    \
@@ -153,10 +148,6 @@ WHERE ST_Intersects(l.way , red_zone.wkb_geometry);  '''
     cur.execute(sql)
     conn.commit()
     #Удаление всех веев, по которым не проходит маршрутов
-    
-
-
-    
 
 def process(host,dbname,user,password):
     
@@ -176,11 +167,7 @@ ogr2ogr -f GeoJSON '''+table+'''.geojson    \
     print cmd
     os.system(cmd)
 
-
-
-
 if __name__ == '__main__':
-
 
         host=config.host
         dbname=config.dbname
