@@ -9,6 +9,9 @@ cd osm-mostrans
 sudo chmod 777 install.sh
 sudo ./install.sh
 
+sudo nano /etc/postgresql/9.5/main/pg_hba.conf
+#замените peer на md5 
+
 
 # If osmupdate or osmosis fails - add swap space, 
 # https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-16-04
