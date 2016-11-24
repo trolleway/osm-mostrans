@@ -75,7 +75,7 @@ service postgresql restart
 #create password file for osm2pgsql 
 cd ~
 touch .pgpass
-echo "127.0.0.1:5432:osmot:gisuser:localgisuserpassword" > .pgpass
+echo "localhost:5432:osmot:gisuser:localgisuserpassword" > .pgpass
 chmod 0600 .pgpass
 cd osm-mostrans
 
