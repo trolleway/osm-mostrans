@@ -11,3 +11,5 @@ ngw_login = ''
 ngw_password = '' 
 
 #obtain yandex token from https://oauth.yandex.ru/authorize?response_type=token&client_id=<идентификатор приложения
+yandex_token = ''
+yandex_disk_path = 'Приложения/osm-mostrans'
