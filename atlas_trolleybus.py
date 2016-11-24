@@ -63,8 +63,6 @@ def argparser_prepare():
         % {'prog': parser.prog}
     return parser
 
-
-
 def upload_yandex(token,pathdata,filedata):
     #Upload file to yandex.disk from local disk
             method_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload?'
@@ -77,16 +75,14 @@ def upload_yandex(token,pathdata,filedata):
                 print str(response.status_code())
                 quit()
                 
-                
             response = requests.put(upload_url, filedata,headers={'Authorization': 'OAuth '+token}, timeout=120)
             if response.status_code <> 201:
                 print 'Error upload file to Yandex'
-
-
+                
+                
 def render_atlas(host,dbname,user,password):
 
     size_main=3500
-
     ConnectionString="dbname=" + dbname + " user="+ user + " host=" + host + " password=" + password
     try:
         conn = psycopg2.connect(ConnectionString)
@@ -96,15 +92,11 @@ def render_atlas(host,dbname,user,password):
         return 0
     cur = conn.cursor()
 
-
     #debug
     retrive_map=True
 
     cmd='toilet -f mono9 --width 250 -W -F border --metal --export svg "Московский троллейбус" > tmp/title.svg'
-
-
     #Получаем одну картинку со всеми слоями на всю карту
-
     #Генерируем к этой картинке файл привязки
     #Запрашиваем охваты отдельных страниц атласа
     #Режем картинку на страницы по географическим координатам в EPSG:3857 используя gdal
@@ -124,17 +116,11 @@ def render_atlas(host,dbname,user,password):
     if not os.path.exists('tmp'):
         os.makedirs('tmp')
 
-    
     #Load to PostGIS config file with pages bounds
     cmd='''
-ogr2ogr -f PostgreSQL "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+''' password='''+password+'''" cfg/mostrans-trolleybus.geojson -nln atlaspages  -overwrite    \
-
-    '''
-    
+ogr2ogr -f PostgreSQL "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+''' password='''+password+'''" cfg/mostrans-trolleybus.geojson -nln atlaspages  -overwrite'''
     os.system(cmd)
-    
-
-
+  
     #get
     def ngw2png(where,ngwstyles,size,filename):
 
@@ -181,8 +167,6 @@ ogr2ogr -f PostgreSQL "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+
             worldfile.write(str(currentmap[2])+"\n")
             worldfile.write(str(currentmap[3])+"\n")
             worldfile.close()
-
-
         return
 
     #used for convert to atlas 
@@ -192,17 +176,12 @@ ogr2ogr -f PostgreSQL "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+
         filename=os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-all-atlas")
     )      
 
-    
-
     #used for convert to atlas 
     ngw2png(where="map='mostrans-trolleybus-atlas4' AND ref='center'",
         ngwstyles='759,758,760,753,715,725',
         size=1500,
         filename=os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-center")
     )    
-
-
-
 
 #Согласно принципу KISS: генерируются одиночные pdf в gdal, затем они склеиваются в один посредством imagemagick
     atlaspages=list()
@@ -224,7 +203,6 @@ ORDER BY map,ref;
             cmd="gdal_translate -of ""PNG""  -a_srs ""EPSG:3857""   -projwin "+currentmap[0]+" "+os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-all-atlas") +".png "+page_filename
             os.system(cmd)
             atlaspages.append(page_filename)
-
 
         #Врезка center
 
@@ -256,13 +234,11 @@ ORDER BY map,ref;
     cmd='convert ' + atlaspages[0] + "  -background white -undercolor white -pointsize 10 -annotate +0+33 '" + datestring + "'  -flatten " + atlaspages[0]
     os.system(cmd)
 
-
     cmd="convert "+' '.join(atlaspages)+'  "'+tmpfiles['atlas']+'"'
     print cmd
     os.system(cmd) 
     for page_filename in atlaspages:
         os.remove(page_filename)
-
 
     ngw2png(where="map='mostrans-trolleybus-atlas4' AND ref='all'",
         ngwstyles='749,755,751,753,715,725',
@@ -270,7 +246,6 @@ ORDER BY map,ref;
         filename=os.path.join(tmpfiles['folder'], "mostrans-trolleybus-atlas4-all-screen")
     )
       
-
     #add overlay logo, and keep same filename
     datestring="Дата рендеринга: " + time.strftime("%d.%m.%Y")
     cmd='convert ' + tmpfiles['screenall'] + '.png' + ' branding/logo.png -geometry +0+38 -composite ' + tmpfiles['screenall'] + '.png '
@@ -292,18 +267,11 @@ ORDER BY map,ref;
     upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + longname + ' [Openstreetmap] [latest].tif',overwrite='True'),filedata=open(tmpfiles['screenall']+'.tiff', 'rb'))
     upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + tmpfiles['atlas_yandex']+'.tif',overwrite='True'),filedata=open(tmpfiles['screenall']+'.tiff', 'rb'))
 
-
-
-
-
     print 'Upload PDF to Yandex'
     upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + longname + ' [Openstreetmap] [latest].pdf',overwrite='True'),filedata=open(tmpfiles['atlas'], 'rb'))
+
     
-
-
-
 if __name__ == '__main__':
-
 
         host=config.host
         dbname=config.dbname
@@ -318,9 +286,3 @@ if __name__ == '__main__':
         print ("Current time %s"  % now )
         
         render_atlas(host,dbname,user,password)
-        #import geojson to postgis in 3857
-        #generate png for all pages
-        #montage pages
-        #overlay texts
-        #convert to pdf
-        #save
