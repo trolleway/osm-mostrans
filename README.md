@@ -12,6 +12,9 @@ sudo ./install.sh
 sudo nano /etc/postgresql/9.5/main/pg_hba.conf
 #замените peer на md5 
 
+# Install new version of GDAL.
+#http://stackoverflow.com/questions/37294127/python-gdal-2-1-installation-on-ubuntu-16-04
+# Use most new version
 
 # If osmupdate or osmosis fails - add swap space, 
 # https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-16-04
