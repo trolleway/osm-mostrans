@@ -69,9 +69,15 @@ def upload_yandex(token,pathdata,filedata):
     #Upload file to yandex.disk from local disk
             method_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload?'
             response = requests.get(method_url, pathdata,headers={'Authorization': 'OAuth '+token}, timeout=20)
-            result = json.loads(response.text)
-            upload_url = result['href']
-
+            try:
+                result = json.loads(response.text)
+                upload_url = result['href']
+            except:
+                print response.json()
+                print response.status_code()
+                quit()
+                
+                
             response = requests.put(upload_url, filedata,headers={'Authorization': 'OAuth '+token}, timeout=120)
             if response.status_code <> 201:
                 print 'Error upload file to Yandex'
