@@ -8,15 +8,6 @@ import config
 import argparse
 
 
-
-
-
-
-
-
-
-
-
 def download_osm_dump():
 
         if not os.path.exists('osm'):
@@ -27,10 +18,8 @@ def filter_osm_dump():
         import json
         import pprint
         pp=pprint.PrettyPrinter(indent=2)
-
+        
         refs=[]
-
-
         
         print 'OSM filter step 1'
         cmd='''
@@ -42,9 +31,6 @@ def filter_osm_dump():
       --write-pbf osm/routesFinal.osm.pbf
     '''
         os.system(cmd)
-
-
-
 
 def argparser_prepare():
 
@@ -68,14 +54,10 @@ def argparser_prepare():
         % {'prog': parser.prog}
     return parser
 
-
-
-
 def cleardb(host,dbname,user,password):
     ConnectionString="dbname=" + dbname + " user="+ user + " host=" + host + " password=" + password
 
     try:
-
         conn = psycopg2.connect(ConnectionString)
     except:
         print 'I am unable to connect to the database                  ' 
@@ -109,14 +91,12 @@ def filter_routes(host,dbname,user,password):
     ConnectionString="dbname=" + dbname + " user="+ user + " host=" + host + " password=" + password
 
     try:
-
         conn = psycopg2.connect(ConnectionString)
     except:
         print 'I am unable to connect to the database                  ' 
         print ConnectionString
         return 0
     cur = conn.cursor()
-
 
     cmd='''
 ogr2ogr -overwrite    \
@@ -154,9 +134,6 @@ WHERE ST_Intersects(l.way , red_zone.wkb_geometry);  '''
     #Удаление всех веев, по которым не проходит маршрутов
     
 
-
-    
-
 def process(host,dbname,user,password):
     
         cmd='''python osmot/osmot.py -hs localhost -d '''+dbname+''' -u '''+user+''' -p '''+password+'''
@@ -169,14 +146,9 @@ def postgis2geojson(host,dbname,user,password,table):
         os.remove(table+'.geojson')
 
     cmd='''
-ogr2ogr -f GeoJSON '''+table+'''.geojson    \
-  "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+''' password='''+password+'''" "'''+table+'''"
-    '''
+ogr2ogr -f GeoJSON '''+table+'''.geojson "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+''' password='''+password+'''" "'''+table+'''" '''
     print cmd
     os.system(cmd)
-
-
-
 
 if __name__ == '__main__':
 
