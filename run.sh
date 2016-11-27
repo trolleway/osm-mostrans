@@ -10,6 +10,8 @@ python update_dump.py
 python mostrans-newbuses2016.py
 python mostrans-bus.py
 python mostrans-trolleybus.py
+python mostrans-trolleybus-atlas.py
 python mostrans-tram.py
+python mostrans-tram-atlas.py
 python mostrans-night.py
 python mostrans-frequent.py
