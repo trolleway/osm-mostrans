@@ -269,7 +269,7 @@ ORDER BY map,ref;
 
     print 'Upload PDF to Yandex'
     upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + longname_atlas + ' [Openstreetmap] [latest].pdf',overwrite='True'),filedata=open(tmpfiles['atlas'], 'rb'))
-
+    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + tmpfiles['atlas_yandex']+'.pdf',overwrite='True'),filedata=open(tmpfiles['atlas'], 'rb'))
     
 if __name__ == '__main__':
 
