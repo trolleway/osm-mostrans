@@ -191,6 +191,8 @@ WHERE ref<>'all' AND ref<>'center'
 ORDER BY map,ref;
                 ''')
     rows = cur.fetchall()
+    print len(rows)
+    quit()
     for currentmap in rows:
             page_filename=os.path.join(tmpfiles['folder'], currentmap[1]+'-'+currentmap[2])+".png"
             if os.path.exists(page_filename):
