@@ -171,7 +171,7 @@ ogr2ogr -f PostgreSQL "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+
 
     #used for convert to atlas 
     ngw2png(where="map='mostrans-bus' AND ref='all'",
-        ngwstyles='762,764,759,758,760,753,808,809',
+        ngwstyles='762,764,759,758,760,753,810,811',
         size=size_main,
         filename=os.path.join(tmpfiles['folder'], "mostrans-bus-all-atlas")
     )      
@@ -219,7 +219,7 @@ ORDER BY map,ref;
         os.remove(page_filename)
 
     ngw2png(where="map='mostrans-bus' AND ref='all'",
-        ngwstyles='749,755,751,753,808,809',
+        ngwstyles='749,755,751,753,810,811',
         size=size_main,
         filename=os.path.join(tmpfiles['folder'], "mostrans-bus-all-screen")
     )
