@@ -169,12 +169,7 @@ ogr2ogr -f PostgreSQL "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+
             worldfile.close()
         return
 
-    #used for convert to atlas 
-    ngw2png(where="map='mostrans-bus' AND ref='all'",
-        ngwstyles='762,764,759,758,760,753,810,811',
-        size=size_main,
-        filename=os.path.join(tmpfiles['folder'], "mostrans-bus-all-atlas")
-    )      
+    
 
 
 
@@ -193,6 +188,12 @@ ORDER BY map,ref;
     rows = cur.fetchall()
     print len(rows)
     quit()
+    #used for convert to atlas 
+    ngw2png(where="map='mostrans-bus' AND ref='all'",
+        ngwstyles='762,764,759,758,760,753,810,811',
+        size=size_main,
+        filename=os.path.join(tmpfiles['folder'], "mostrans-bus-all-atlas")
+    )  
     for currentmap in rows:
             page_filename=os.path.join(tmpfiles['folder'], currentmap[1]+'-'+currentmap[2])+".png"
             if os.path.exists(page_filename):
