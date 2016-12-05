@@ -157,7 +157,7 @@ ogr2ogr -f PostgreSQL "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+
             if retrive_map:
                 try:
                     response = urllib2.urlopen(url)
-                except urllib.error.URLError as e:
+                except urllib2.error.URLError as e:
                     print(e.reason)
                     print url
                     quit()
