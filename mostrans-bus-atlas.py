@@ -82,7 +82,7 @@ def upload_yandex(token,pathdata,filedata):
                 
 def render_atlas(host,dbname,user,password):
 
-    size_main=9500
+    size_main=9000
     ConnectionString="dbname=" + dbname + " user="+ user + " host=" + host + " password=" + password
     try:
         conn = psycopg2.connect(ConnectionString)
@@ -155,7 +155,12 @@ ogr2ogr -f PostgreSQL "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+
         for currentmap in rows:
             url="http://trolleway.nextgis.com/api/component/render/image?resource="+ngwstyles+"&extent="+str(currentmap[0])+"&size="+str(size)+","+str(int(round(size*float(currentmap[1]))))
             if retrive_map:
-                response = urllib2.urlopen(url)
+                try:
+                    response = urllib2.urlopen(url)
+                except urllib.error.URLError as e:
+                    print(e.reason)
+                    print url
+                    quit()
                 image=open(filename+'.png','w')
                 image.write(response.read())
                 image.close()
@@ -221,6 +226,8 @@ ORDER BY map,ref;
         for page_filename in atlaspages:
             os.remove(page_filename)
         #end of generate atlas
+    else:
+        print "Atlas generation skipped, Not found pages coordinates  with ref<>'all' AND ref<>'center' in geojson file"
 
     ngw2png(where="map='mostrans-bus' AND ref='all'",
         ngwstyles='749,755,751,753,810,811',
