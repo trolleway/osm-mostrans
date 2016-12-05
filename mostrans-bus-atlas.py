@@ -83,7 +83,7 @@ def upload_yandex(token,pathdata,filedata):
                 
 def render_atlas(host,dbname,user,password):
 
-    size_main=4000
+    size_main=3500
     ConnectionString="dbname=" + dbname + " user="+ user + " host=" + host + " password=" + password
     try:
         conn = psycopg2.connect(ConnectionString)
