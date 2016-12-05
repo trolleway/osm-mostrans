@@ -157,8 +157,8 @@ ogr2ogr -f PostgreSQL "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+
             if retrive_map:
                 try:
                     response = urllib2.urlopen(url)
-                except urllib2.error.URLError as e:
-                    print(e.reason)
+                except:
+                    print sys.exc_info()[0]
                     print url
                     quit()
                 image=open(filename+'.png','w')
