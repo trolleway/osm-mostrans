@@ -186,15 +186,15 @@ WHERE ref<>'all' AND ref<>'center'
 ORDER BY map,ref;
                 ''')
     rows = cur.fetchall()
-    print len(rows)
-    quit()
-    #used for convert to atlas 
-    ngw2png(where="map='mostrans-bus' AND ref='all'",
-        ngwstyles='762,764,759,758,760,753,810,811',
-        size=size_main,
-        filename=os.path.join(tmpfiles['folder'], "mostrans-bus-all-atlas")
-    )  
-    for currentmap in rows:
+    if len(rows) > 0:
+        
+        #used for convert to atlas 
+        ngw2png(where="map='mostrans-bus' AND ref='all'",
+            ngwstyles='762,764,759,758,760,753,810,811',
+            size=size_main,
+            filename=os.path.join(tmpfiles['folder'], "mostrans-bus-all-atlas")
+        )  
+        for currentmap in rows:
             page_filename=os.path.join(tmpfiles['folder'], currentmap[1]+'-'+currentmap[2])+".png"
             if os.path.exists(page_filename):
                 os.remove(page_filename)
@@ -204,22 +204,23 @@ ORDER BY map,ref;
 
        
 
-    #Вставка выходных данных на первую страницу
-    datestring="Дата рендеринга: " + time.strftime("%d.%m.%Y")
-    cmd='convert ' + atlaspages[0] + ' branding/logo.png -geometry +0+38 -composite ' + atlaspages[0]
-    os.system(cmd)
-    cmd='convert ' + atlaspages[0] + ' -background white  -alpha remove  ' + atlaspages[0]
-    os.system(cmd)
-    cmd='convert ' + atlaspages[0] +  "  -pointsize 24 label:'" + mapname + "' -gravity NorthEast -flatten " + atlaspages[0]
-    os.system(cmd)
-    cmd='convert ' + atlaspages[0] + "  -background white -undercolor white -pointsize 10 -annotate +0+33 '" + datestring + "'  -flatten " + atlaspages[0]
-    os.system(cmd)
-
-    cmd="convert "+' '.join(atlaspages)+'  "'+tmpfiles['atlas']+'"'
-    print cmd
-    os.system(cmd) 
-    for page_filename in atlaspages:
-        os.remove(page_filename)
+        #Вставка выходных данных на первую страницу
+        datestring="Дата рендеринга: " + time.strftime("%d.%m.%Y")
+        cmd='convert ' + atlaspages[0] + ' branding/logo.png -geometry +0+38 -composite ' + atlaspages[0]
+        os.system(cmd)
+        cmd='convert ' + atlaspages[0] + ' -background white  -alpha remove  ' + atlaspages[0]
+        os.system(cmd)
+        cmd='convert ' + atlaspages[0] +  "  -pointsize 24 label:'" + mapname + "' -gravity NorthEast -flatten " + atlaspages[0]
+        os.system(cmd)
+        cmd='convert ' + atlaspages[0] + "  -background white -undercolor white -pointsize 10 -annotate +0+33 '" + datestring + "'  -flatten " + atlaspages[0]
+        os.system(cmd)
+        
+        cmd="convert "+' '.join(atlaspages)+'  "'+tmpfiles['atlas']+'"'
+        print cmd
+        os.system(cmd) 
+        for page_filename in atlaspages:
+            os.remove(page_filename)
+        #end of generate atlas
 
     ngw2png(where="map='mostrans-bus' AND ref='all'",
         ngwstyles='749,755,751,753,810,811',
