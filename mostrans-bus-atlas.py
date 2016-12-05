@@ -82,7 +82,7 @@ def upload_yandex(token,pathdata,filedata):
                 
 def render_atlas(host,dbname,user,password):
 
-    size_main=3500
+    size_main=9500
     ConnectionString="dbname=" + dbname + " user="+ user + " host=" + host + " password=" + password
     try:
         conn = psycopg2.connect(ConnectionString)
@@ -104,21 +104,21 @@ def render_atlas(host,dbname,user,password):
     now = datetime.datetime.now()
 
     mapname='Московский трамвай'
-    longname_atlas = 'Москва, атлас трамвайных маршрутов'
-    longname_single = 'Москва, карта трамвайных маршрутов'
+    longname_atlas = 'Москва, атлас автобусных маршрутов'
+    longname_single = 'Москва, карта автобусных маршрутов'
     tmpfiles=dict()   
     tmpfiles['folder'] = 'tmp'
 
-    tmpfiles['screenall']=os.path.join(tmpfiles['folder'], "mostrans-tram-all-screen") #no extension
-    tmpfiles['atlas'] = 'tmp/moscow_tram_ru_openstreetmap_'+now.strftime("%Y-%m-%d")+'.pdf'
-    tmpfiles['atlas_yandex'] = 'archive/moscow_tram_ru_openstreetmap_'+now.strftime("%Y-%m-%d") #withouth time - only one file at day will saved
+    tmpfiles['screenall']=os.path.join(tmpfiles['folder'], "mostrans-bus-all-screen") #no extension
+    tmpfiles['atlas'] = 'tmp/moscow_bus_ru_openstreetmap_'+now.strftime("%Y-%m-%d")+'.pdf'
+    tmpfiles['atlas_yandex'] = 'archive/moscow_bus_ru_openstreetmap_'+now.strftime("%Y-%m-%d") #withouth time - only one file at day will saved
 
     if not os.path.exists('tmp'):
         os.makedirs('tmp')
 
     #Load to PostGIS config file with pages bounds
     cmd='''
-ogr2ogr -f PostgreSQL "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+''' password='''+password+'''" cfg/mostrans-tram-atlas.geojson -nln atlaspages  -overwrite'''
+ogr2ogr -f PostgreSQL "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+''' password='''+password+'''" cfg/mostrans-bus-atlas.geojson -nln atlaspages  -overwrite'''
     os.system(cmd)
   
     #get
@@ -170,10 +170,10 @@ ogr2ogr -f PostgreSQL "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+
         return
 
     #used for convert to atlas 
-    ngw2png(where="map='mostrans-tram' AND ref='all'",
+    ngw2png(where="map='mostrans-bus' AND ref='all'",
         ngwstyles='762,764,759,758,760,753,808,809',
         size=size_main,
-        filename=os.path.join(tmpfiles['folder'], "mostrans-tram-all-atlas")
+        filename=os.path.join(tmpfiles['folder'], "mostrans-bus-all-atlas")
     )      
 
 
@@ -195,7 +195,7 @@ ORDER BY map,ref;
             page_filename=os.path.join(tmpfiles['folder'], currentmap[1]+'-'+currentmap[2])+".png"
             if os.path.exists(page_filename):
                 os.remove(page_filename)
-            cmd="gdal_translate -of ""PNG""  -a_srs ""EPSG:3857""   -projwin "+currentmap[0]+" "+os.path.join(tmpfiles['folder'], "mostrans-tram-all-atlas") +".png "+page_filename
+            cmd="gdal_translate -of ""PNG""  -a_srs ""EPSG:3857""   -projwin "+currentmap[0]+" "+os.path.join(tmpfiles['folder'], "mostrans-bus-all-atlas") +".png "+page_filename
             os.system(cmd)
             atlaspages.append(page_filename)
 
@@ -218,10 +218,10 @@ ORDER BY map,ref;
     for page_filename in atlaspages:
         os.remove(page_filename)
 
-    ngw2png(where="map='mostrans-tram' AND ref='all'",
+    ngw2png(where="map='mostrans-bus' AND ref='all'",
         ngwstyles='749,755,751,753,808,809',
         size=size_main,
-        filename=os.path.join(tmpfiles['folder'], "mostrans-tram-all-screen")
+        filename=os.path.join(tmpfiles['folder'], "mostrans-bus-all-screen")
     )
       
     #add overlay logo, and keep same filename
@@ -246,8 +246,8 @@ ORDER BY map,ref;
     upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + tmpfiles['atlas_yandex']+'.tif',overwrite='True'),filedata=open(tmpfiles['screenall']+'.tiff', 'rb'))
 
     print 'Upload PDF to Yandex'
-    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + longname_atlas + ' [Openstreetmap] [latest].pdf',overwrite='True'),filedata=open(tmpfiles['atlas'], 'rb'))
-    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + tmpfiles['atlas_yandex'] + '.pdf',overwrite='True'),filedata=open(tmpfiles['atlas'], 'rb'))
+    #upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + longname_atlas + ' [Openstreetmap] [latest].pdf',overwrite='True'),filedata=open(tmpfiles['atlas'], 'rb'))
+    #upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + tmpfiles['atlas_yandex'] + '.pdf',overwrite='True'),filedata=open(tmpfiles['atlas'], 'rb'))
 
     
 if __name__ == '__main__':
