@@ -104,7 +104,8 @@ def render_atlas(host,dbname,user,password):
     now = datetime.datetime.now()
 
     mapname='Московский трамвай'
-    longname = 'Москва, атлас трамвайных маршрутов'
+    longname_atlas = 'Москва, атлас трамвайных маршрутов'
+    longname_single = 'Москва, карта трамвайных маршрутов'
     tmpfiles=dict()   
     tmpfiles['folder'] = 'tmp'
 
@@ -235,17 +236,18 @@ ORDER BY map,ref;
     os.system(cmd)
 
     print 'Upload png to Yandex'
-    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + longname + ' [Openstreetmap] [latest].png',overwrite='True'),filedata=open(tmpfiles['screenall']+'.png', 'rb'))
+    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + longname_single + ' [Openstreetmap] [latest].png',overwrite='True'),filedata=open(tmpfiles['screenall']+'.png', 'rb'))
 
     cmd="gdal_translate -of ""GTiff"" -a_srs ""EPSG:3857"" -co ""COMPRESS=DEFLATE"" -co ""ZLEVEL=9"" " + tmpfiles['screenall'] + ".png " + tmpfiles['screenall'] + '.tiff'
 
     os.system(cmd)
     print 'Upload GeoTIF to Yandex'
-    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + longname + ' [Openstreetmap] [latest].tif',overwrite='True'),filedata=open(tmpfiles['screenall']+'.tiff', 'rb'))
+    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + longname_single + ' [Openstreetmap] [latest].tif',overwrite='True'),filedata=open(tmpfiles['screenall']+'.tiff', 'rb'))
     upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + tmpfiles['atlas_yandex']+'.tif',overwrite='True'),filedata=open(tmpfiles['screenall']+'.tiff', 'rb'))
 
     print 'Upload PDF to Yandex'
-    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + longname + ' [Openstreetmap] [latest].pdf',overwrite='True'),filedata=open(tmpfiles['atlas'], 'rb'))
+    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + longname_atlas + ' [Openstreetmap] [latest].pdf',overwrite='True'),filedata=open(tmpfiles['atlas'], 'rb'))
+    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + tmpfiles['atlas_yandex'] + '.pdf',overwrite='True'),filedata=open(tmpfiles['atlas'], 'rb'))
 
     
 if __name__ == '__main__':
