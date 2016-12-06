@@ -157,7 +157,7 @@ ogr2ogr -f PostgreSQL "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+
             url="http://trolleway.nextgis.com/api/component/render/image?resource="+ngwstyles+"&extent="+str(currentmap[0])+"&size="+str(size)+","+str(int(round(size*float(currentmap[1]))))
             if size > 3500:
                 #url="http://trolleway.nextgis.com/api/resource/828/wms?service=WMS&request=GetMap&layers=lines-print,terminals-print&styles=&format=image%2Fpng&transparent=false&version=1.1.1&height=6000&width=6000&srs=EPSG%3A3857&bbox=4226661.916057106,7435794.111581949,4304933.433021126,7514065.628545967"
-                url="http://trolleway.nextgis.com/api/resource/828/wms?service=WMS&request=GetMap&layers=lines-print,terminals-print&styles=&format=image%2Fpng&transparent=false&version=1.1.1&srs=EPSG%3A3857&bbox="+str(currentmap[0])+"&height="+str(size)+"&width"+str(int(round(size*float(currentmap[1]))))
+                url="http://trolleway.nextgis.com/api/resource/828/wms?service=WMS&request=GetMap&layers=lines-print,terminals-print&styles=&format=image%2Fpng&transparent=false&version=1.1.1&srs=EPSG%3A3857&bbox="+str(currentmap[0])+"&height="+str(size)+"&width="+str(int(round(size*float(currentmap[1]))))
             print url
             if retrive_map:
                 try:
