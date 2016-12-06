@@ -155,6 +155,7 @@ ogr2ogr -f PostgreSQL "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+
         size
         for currentmap in rows:
             url="http://trolleway.nextgis.com/api/component/render/image?resource="+ngwstyles+"&extent="+str(currentmap[0])+"&size="+str(size)+","+str(int(round(size*float(currentmap[1]))))
+            print url
             if retrive_map:
                 try:
                     response = urllib2.urlopen(url)
