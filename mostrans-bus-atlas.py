@@ -178,7 +178,63 @@ ogr2ogr -f PostgreSQL "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+
             worldfile.write(str(currentmap[3])+"\n")
             worldfile.close()
         return
+    
+def ngw2png_wfs(where,ngwstyles,size,filename):
 
+        cur.execute('''
+    SELECT 
+    CONCAT(
+    ST_XMin(Box2D(ST_Transform(wkb_geometry,3857))),',',
+    ST_YMin(Box2D(ST_Transform(wkb_geometry,3857))),',',
+    ST_XMax(Box2D(ST_Transform(wkb_geometry,3857))),',',
+    ST_YMax(Box2D(ST_Transform(wkb_geometry,3857)))
+    ) AS bbox_string_ngw_image
+    ,
+    (
+    ST_YMax(ST_Transform(wkb_geometry,3857)) - ST_YMin(ST_Transform(wkb_geometry,3857))
+    )/
+    (
+    ST_XMax(ST_Transform(wkb_geometry,3857)) - ST_XMin(ST_Transform(wkb_geometry,3857))
+    )::real AS aspect,
+
+    ST_XMin(Box2D(ST_Transform(wkb_geometry,3857))) AS xmin,
+    ST_YMax(Box2D(ST_Transform(wkb_geometry,3857))) AS ymax,
+    ST_XMax(Box2D(ST_Transform(wkb_geometry,3857))) AS xmax,
+    ST_YMin(Box2D(ST_Transform(wkb_geometry,3857))) AS ymin,
+    ref,
+    map
+    FROM atlaspages
+    WHERE '''+where+'''
+    ORDER BY map,ref;
+                    ''')
+        rows = cur.fetchall()
+        size
+        for currentmap in rows:
+            url="http://trolleway.nextgis.com/api/component/render/image?resource="+ngwstyles+"&extent="+str(currentmap[0])+"&size="+str(size)+","+str(int(round(size*float(currentmap[1]))))
+            if size > 3500:
+                #url="http://trolleway.nextgis.com/api/resource/828/wms?service=WMS&request=GetMap&layers=lines-print,terminals-print&styles=&format=image%2Fpng&transparent=false&version=1.1.1&height=6000&width=6000&srs=EPSG%3A3857&bbox=4226661.916057106,7435794.111581949,4304933.433021126,7514065.628545967"
+                url="http://trolleway.nextgis.com/api/resource/828/wms?service=WMS&request=GetMap&layers=lines-print,terminals-print&styles=&format=image%2Fpng&transparent=true&version=1.1.1&height="+str(size)+"&width="+str(int(round(size*float(currentmap[1]))))+"&srs=EPSG%3A3857&bbox="+str(currentmap[0])
+           #time gdal_translate -of "GTIFF" -outsize 9000 0 -co COMPRESS=JPEG -r cubic -projwin  4136319.77912795 7548083.35883325 4229696.39700085 7456056.76435128   ngw.xml test_jpg.tiff
+            print url
+            if retrive_map:
+                try:
+                    response = urllib2.urlopen(url)
+                except:
+                    print sys.exc_info()[0]
+                    print url
+                    quit()
+                image=open(filename+'.png','w')
+                image.write(response.read())
+                image.close()
+            worldfile=open(filename+'.pngw','w')
+            worldfile.write(str((currentmap[4]-currentmap[2])/size)+"\n")
+            worldfile.write('0'+"\n")
+            worldfile.write('0'+"\n")
+            worldfile.write('-'+str((currentmap[3]-currentmap[5])/int(round(size*float(currentmap[1]))))+"\n")
+            worldfile.write(str(currentmap[2])+"\n")
+            worldfile.write(str(currentmap[3])+"\n")
+            worldfile.close()
+        return
     
 
 
