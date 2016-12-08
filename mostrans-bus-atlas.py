@@ -80,7 +80,7 @@ def upload_yandex(token,pathdata,filedata):
             if response.status_code <> 201:
                 print 'Error upload file to Yandex'
                 
-    def ngw2png(where,ngwstyles,size,filename):
+def ngw2png(where,ngwstyles,size,filename):
         #if size is big, then image will be retrieved from wfs service
         cur.execute('''
     SELECT 
