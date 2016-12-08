@@ -238,7 +238,7 @@ def wfs2png(where,size,filename,wfs_url='',wfslayers=''):
             text_file = open(xml_filename, "w")
             text_file.write(wms_xml)
             text_file.close()
-            cmd = 'gdal_translate -of "png" -outsize '+size+' 0  -r lanczos -projwin ' + str(currentmap[0]) +' +' xml_filename + ' ' + filename +'.png'
+            cmd = 'gdal_translate -of "png" -outsize '+size+' 0  -r lanczos -projwin ' + str(currentmap[0]) +' ' + xml_filename + ' ' + filename +'.png'
             #print cmd
             #os.system(cmd)
         
