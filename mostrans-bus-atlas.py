@@ -104,7 +104,7 @@ def render_atlas(host,dbname,user,password):
 
     now = datetime.datetime.now()
 
-    mapname='Московский трамвай'
+    mapname='Московский автобус'
     longname_atlas = 'Москва, атлас автобусных маршрутов'
     longname_single = 'Москва, карта автобусных маршрутов'
     tmpfiles=dict()   
@@ -179,7 +179,7 @@ ogr2ogr -f PostgreSQL "PG:host='''+host+''' dbname='''+dbname+''' user='''+user+
             worldfile.close()
         return
     
-def wfs2tif(where,size,filename,wfs_url='',wfslayers=''):
+def wfs2png(where,size,filename,wfs_url='',wfslayers=''):
 
         cur.execute('''
     SELECT 
@@ -238,10 +238,10 @@ def wfs2tif(where,size,filename,wfs_url='',wfslayers=''):
             text_file = open(xml_filename, "w")
             text_file.write(wms_xml)
             text_file.close()
-            cmd = 'gdal_translate -of "GTIFF" -outsize '+size+' 0 -co COMPRESS=JPEG -r lanczos -projwin ' + str(currentmap[0]) +' +' xml_filename + ' ' + filename +'.tiff'
-            print cmd
-            os.system(cmd)
-        return
+            cmd = 'gdal_translate -of "png" -outsize '+size+' 0  -r lanczos -projwin ' + str(currentmap[0]) +' +' xml_filename + ' ' + filename +'.png'
+            #print cmd
+            #os.system(cmd)
+        
             if retrive_map:
                 try:
                     os.system(cmd)
@@ -275,6 +275,7 @@ WHERE ref<>'all' AND ref<>'center'
 ORDER BY map,ref;
                 ''')
     rows = cur.fetchall()
+    #не имплементировано для автобусной карты москвы, не выполняется
     if len(rows) > 0:
         
         #used for convert to atlas 
@@ -315,31 +316,31 @@ ORDER BY map,ref;
 
 
     
-    wfs2tif(where="map='mostrans-bus' AND ref='all'",size=1000,filename=os.path.join(tmpfiles['folder'], "mostrans-bus-all-screen"),wfs_url='',wfslayers='')
-    #wfs2tif returns file with tiff extension
+    wfs2png(where="map='mostrans-bus' AND ref='all'",size=1000,filename=os.path.join(tmpfiles['folder'], "mostrans-bus-all-screen"),wfs_url='',wfslayers='')
+
     
     #add overlay logo, and keep same filename
     datestring="Дата рендеринга: " + time.strftime("%d.%m.%Y")
-    cmd='convert ' + tmpfiles['screenall'] + '.tiff' + ' branding/logo.png -geometry +0+38 -composite ' + tmpfiles['screenall'] + '.tiff '
+    cmd='convert ' + tmpfiles['screenall'] + '.png' + ' branding/logo.png -geometry +0+38 -composite ' + tmpfiles['screenall'] + '.png '
     os.system(cmd)
-    cmd='convert ' + tmpfiles['screenall'] + '.tiff' + ' -background white  -alpha remove  ' + tmpfiles['screenall'] + '.tiff'
+    cmd='convert ' + tmpfiles['screenall'] + '.png' + ' -background white  -alpha remove  ' + tmpfiles['screenall'] + '.png'
     os.system(cmd)
-    cmd='convert ' + tmpfiles['screenall'] + '.tiff' + "  -pointsize 24 label:'" + mapname + "' -gravity NorthEast -flatten " + tmpfiles['screenall'] + '.tiff'
+    cmd='convert ' + tmpfiles['screenall'] + '.png' + "  -pointsize 24 label:'" + mapname + "' -gravity NorthEast -flatten " + tmpfiles['screenall'] + '.png'
     os.system(cmd)
-    cmd='convert ' + tmpfiles['screenall'] + '.tiff' + "  -colors 64  -background white -undercolor white -pointsize 10 -annotate +0+33 '" + datestring + "'  -flatten " + tmpfiles['screenall'] + '.tiff'
+    cmd='convert ' + tmpfiles['screenall'] + '.png' + "  -colors 64  -background white -undercolor white -pointsize 10 -annotate +0+33 '" + datestring + "'  -flatten " + tmpfiles['screenall'] + '.png'
     os.system(cmd)
 
-    print 'Upload png to Yandex'
+    #print 'Upload map to Yandex'
     #upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + longname_single + ' [Openstreetmap] [latest].png',overwrite='True'),filedata=open(tmpfiles['screenall']+'.png', 'rb'))
 
-    #cmd="gdal_translate -of ""GTiff"" -a_srs ""EPSG:3857"" -co ""COMPRESS=DEFLATE"" -co ""ZLEVEL=9"" " + tmpfiles['screenall'] + ".png " + tmpfiles['screenall'] + '.tiff'
+    cmd="gdal_translate -of ""GTiff"" -a_srs ""EPSG:3857"" -co ""COMPRESS=DEFLATE"" -co ""ZLEVEL=9"" " + tmpfiles['screenall'] + ".png " + tmpfiles['screenall'] + '.tiff'
 
     #os.system(cmd)
     print 'Upload GeoTIF to Yandex'
     upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + longname_single + ' [Openstreetmap] [latest].tif',overwrite='True'),filedata=open(tmpfiles['screenall']+'.tiff', 'rb'))
     upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + tmpfiles['atlas_yandex']+'.tif',overwrite='True'),filedata=open(tmpfiles['screenall']+'.tiff', 'rb'))
 
-    print 'Upload PDF to Yandex'
+    #print 'Upload PDF to Yandex'
     #upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + longname_atlas + ' [Openstreetmap] [latest].pdf',overwrite='True'),filedata=open(tmpfiles['atlas'], 'rb'))
     #upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + tmpfiles['atlas_yandex'] + '.pdf',overwrite='True'),filedata=open(tmpfiles['atlas'], 'rb'))
 
