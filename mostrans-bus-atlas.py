@@ -239,7 +239,9 @@ def wfs2tif(where,size,filename,wfs_url='',wfslayers=''):
             text_file.write(wms_xml)
             text_file.close()
             cmd = 'gdal_translate -of "GTIFF" -outsize '+size+' 0 -co COMPRESS=JPEG -r lanczos -projwin ' + str(currentmap[0]) +' +' xml_filename + ' ' + filename +'.tiff'
-            
+            print cmd
+            os.system(cmd)
+        return
             if retrive_map:
                 try:
                     os.system(cmd)
@@ -311,29 +313,28 @@ ORDER BY map,ref;
     else:
         print "Atlas generation skipped, Not found pages coordinates  with ref<>'all' AND ref<>'center' in geojson file"
 
-    ngw2png(where="map='mostrans-bus' AND ref='all'",
-        ngwstyles='749,755,751,753,810,811',
-        size=size_main,
-        filename=os.path.join(tmpfiles['folder'], "mostrans-bus-all-screen")
-    )
-      
+
+    
+    wfs2tif(where="map='mostrans-bus' AND ref='all'",size=1000,filename=os.path.join(tmpfiles['folder'], "mostrans-bus-all-screen"),wfs_url='',wfslayers='')
+    #wfs2tif returns file with tiff extension
+    
     #add overlay logo, and keep same filename
     datestring="Дата рендеринга: " + time.strftime("%d.%m.%Y")
-    cmd='convert ' + tmpfiles['screenall'] + '.png' + ' branding/logo.png -geometry +0+38 -composite ' + tmpfiles['screenall'] + '.png '
+    cmd='convert ' + tmpfiles['screenall'] + '.tiff' + ' branding/logo.png -geometry +0+38 -composite ' + tmpfiles['screenall'] + '.tiff '
     os.system(cmd)
-    cmd='convert ' + tmpfiles['screenall'] + '.png' + ' -background white  -alpha remove  ' + tmpfiles['screenall'] + '.png'
+    cmd='convert ' + tmpfiles['screenall'] + '.tiff' + ' -background white  -alpha remove  ' + tmpfiles['screenall'] + '.tiff'
     os.system(cmd)
-    cmd='convert ' + tmpfiles['screenall'] + '.png' + "  -pointsize 24 label:'" + mapname + "' -gravity NorthEast -flatten " + tmpfiles['screenall'] + '.png'
+    cmd='convert ' + tmpfiles['screenall'] + '.tiff' + "  -pointsize 24 label:'" + mapname + "' -gravity NorthEast -flatten " + tmpfiles['screenall'] + '.tiff'
     os.system(cmd)
-    cmd='convert ' + tmpfiles['screenall'] + '.png' + "  -colors 64  -background white -undercolor white -pointsize 10 -annotate +0+33 '" + datestring + "'  -flatten " + tmpfiles['screenall'] + '.png'
+    cmd='convert ' + tmpfiles['screenall'] + '.tiff' + "  -colors 64  -background white -undercolor white -pointsize 10 -annotate +0+33 '" + datestring + "'  -flatten " + tmpfiles['screenall'] + '.tiff'
     os.system(cmd)
 
     print 'Upload png to Yandex'
-    upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + longname_single + ' [Openstreetmap] [latest].png',overwrite='True'),filedata=open(tmpfiles['screenall']+'.png', 'rb'))
+    #upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + longname_single + ' [Openstreetmap] [latest].png',overwrite='True'),filedata=open(tmpfiles['screenall']+'.png', 'rb'))
 
-    cmd="gdal_translate -of ""GTiff"" -a_srs ""EPSG:3857"" -co ""COMPRESS=DEFLATE"" -co ""ZLEVEL=9"" " + tmpfiles['screenall'] + ".png " + tmpfiles['screenall'] + '.tiff'
+    #cmd="gdal_translate -of ""GTiff"" -a_srs ""EPSG:3857"" -co ""COMPRESS=DEFLATE"" -co ""ZLEVEL=9"" " + tmpfiles['screenall'] + ".png " + tmpfiles['screenall'] + '.tiff'
 
-    os.system(cmd)
+    #os.system(cmd)
     print 'Upload GeoTIF to Yandex'
     upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + longname_single + ' [Openstreetmap] [latest].tif',overwrite='True'),filedata=open(tmpfiles['screenall']+'.tiff', 'rb'))
     upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + tmpfiles['atlas_yandex']+'.tif',overwrite='True'),filedata=open(tmpfiles['screenall']+'.tiff', 'rb'))
