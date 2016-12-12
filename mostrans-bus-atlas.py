@@ -80,142 +80,7 @@ def upload_yandex(token,pathdata,filedata):
             if response.status_code <> 201:
                 print 'Error upload file to Yandex'
                 
-def ngw2png(where,ngwstyles,size,filename):
-        #if size is big, then image will be retrieved from wfs service
-        cur.execute('''
-    SELECT 
-    CONCAT(
-    ST_XMin(Box2D(ST_Transform(wkb_geometry,3857))),',',
-    ST_YMin(Box2D(ST_Transform(wkb_geometry,3857))),',',
-    ST_XMax(Box2D(ST_Transform(wkb_geometry,3857))),',',
-    ST_YMax(Box2D(ST_Transform(wkb_geometry,3857)))
-    ) AS bbox_string_ngw_image
-    ,
-    (
-    ST_YMax(ST_Transform(wkb_geometry,3857)) - ST_YMin(ST_Transform(wkb_geometry,3857))
-    )/
-    (
-    ST_XMax(ST_Transform(wkb_geometry,3857)) - ST_XMin(ST_Transform(wkb_geometry,3857))
-    )::real AS aspect,
 
-    ST_XMin(Box2D(ST_Transform(wkb_geometry,3857))) AS xmin,
-    ST_YMax(Box2D(ST_Transform(wkb_geometry,3857))) AS ymax,
-    ST_XMax(Box2D(ST_Transform(wkb_geometry,3857))) AS xmax,
-    ST_YMin(Box2D(ST_Transform(wkb_geometry,3857))) AS ymin,
-    ref,
-    map
-    FROM atlaspages
-    WHERE '''+where+'''
-    ORDER BY map,ref;
-                    ''')
-        rows = cur.fetchall()
-        size
-        for currentmap in rows:
-            url="http://trolleway.nextgis.com/api/component/render/image?resource="+ngwstyles+"&extent="+str(currentmap[0])+"&size="+str(size)+","+str(int(round(size*float(currentmap[1]))))
-            if size > 3500:
-                #url="http://trolleway.nextgis.com/api/resource/828/wms?service=WMS&request=GetMap&layers=lines-print,terminals-print&styles=&format=image%2Fpng&transparent=false&version=1.1.1&height=6000&width=6000&srs=EPSG%3A3857&bbox=4226661.916057106,7435794.111581949,4304933.433021126,7514065.628545967"
-                url="http://trolleway.nextgis.com/api/resource/828/wms?service=WMS&request=GetMap&layers=lines-print,terminals-print&styles=&format=image%2Fpng&transparent=true&version=1.1.1&height="+str(size)+"&width="+str(int(round(size*float(currentmap[1]))))+"&srs=EPSG%3A3857&bbox="+str(currentmap[0])
-            print url
-            if retrive_map:
-                try:
-                    response = urllib2.urlopen(url)
-                except:
-                    print sys.exc_info()[0]
-                    print url
-                    quit()
-                image=open(filename+'.png','w')
-                image.write(response.read())
-                image.close()
-            worldfile=open(filename+'.pngw','w')
-            worldfile.write(str((currentmap[4]-currentmap[2])/size)+"\n")
-            worldfile.write('0'+"\n")
-            worldfile.write('0'+"\n")
-            worldfile.write('-'+str((currentmap[3]-currentmap[5])/int(round(size*float(currentmap[1]))))+"\n")
-            worldfile.write(str(currentmap[2])+"\n")
-            worldfile.write(str(currentmap[3])+"\n")
-            worldfile.close()
-        return
-    
-def wfs2png(where,size,filename,wfs_url='',wfslayers=''):
-
-        cur.execute('''
-    SELECT 
-    CONCAT(
-    ST_XMin(Box2D(ST_Transform(wkb_geometry,3857))),',',
-    ST_YMax(Box2D(ST_Transform(wkb_geometry,3857))),',',
-    ST_XMax(Box2D(ST_Transform(wkb_geometry,3857))),',',
-    ST_YMin(Box2D(ST_Transform(wkb_geometry,3857)))
-    ) AS gdal_translate_projwin_bbox 
-    ,
-    (
-    ST_YMax(ST_Transform(wkb_geometry,3857)) - ST_YMin(ST_Transform(wkb_geometry,3857))
-    )/
-    (
-    ST_XMax(ST_Transform(wkb_geometry,3857)) - ST_XMin(ST_Transform(wkb_geometry,3857))
-    )::real AS aspect,
-
-    ST_XMin(Box2D(ST_Transform(wkb_geometry,3857))) AS xmin,
-    ST_YMax(Box2D(ST_Transform(wkb_geometry,3857))) AS ymax,
-    ST_XMax(Box2D(ST_Transform(wkb_geometry,3857))) AS xmax,
-    ST_YMin(Box2D(ST_Transform(wkb_geometry,3857))) AS ymin,
-    ref,
-    map
-    FROM atlaspages
-    WHERE '''+where+'''
-    ORDER BY map,ref;
-                    ''')
-        rows = cur.fetchall()
-        size
-        for currentmap in rows:
-            wms_xml='''
-<GDAL_WMS>
- <Service name="WMS">
-     <Version>1.1.1</Version>
-     <ServerUrl>http://trolleway.nextgis.com/api/resource/828/wms?</ServerUrl>
-     <SRS>EPSG:3857</SRS>
-     <ImageFormat>image/png</ImageFormat>
-     <Layers>basemap-water,basemap-landuse,basemap-roads,basemap-railways,lines-print,terminals-print</Layers>
-     <Styles></Styles>
- </Service>
- <DataWindow>
-   <UpperLeftX>-20037508.34</UpperLeftX>
-   <UpperLeftY>20037508.34</UpperLeftY>
-   <LowerRightX>20037508.34</LowerRightX>
-   <LowerRightY>-20037508.34</LowerRightY>
-   <SizeY>40075016</SizeY>
-   <SizeX>40075016.857</SizeX>
- </DataWindow>
- <Projection>EPSG:3857</Projection>
- <BandsCount>4</BandsCount>
-</GDAL_WMS>
-'''
-            xml_filename='wms.xml'
-            if os.path.exists(xml_filename):
-                os.remove(xml_filename)
-            text_file = open(xml_filename, "w")
-            text_file.write(wms_xml)
-            text_file.close()
-            cmd = 'gdal_translate -of "png" -outsize '+size+' 0  -r lanczos -projwin ' + str(currentmap[0]) +' ' + xml_filename + ' ' + filename +'.png'
-            #print cmd
-            #os.system(cmd)
-        
-            if retrive_map:
-                try:
-                    os.system(cmd)
-                except:
-                    print sys.exc_info()[0]
-                    print cmd
-                    quit()
-            worldfile=open(filename+'.pngw','w')
-            worldfile.write(str((currentmap[4]-currentmap[2])/size)+"\n")
-            worldfile.write('0'+"\n")
-            worldfile.write('0'+"\n")
-            worldfile.write('-'+str((currentmap[3]-currentmap[5])/int(round(size*float(currentmap[1]))))+"\n")
-            worldfile.write(str(currentmap[2])+"\n")
-            worldfile.write(str(currentmap[3])+"\n")
-            worldfile.close()
-        return
-    
     
     
 def render_atlas(host,dbname,user,password):
@@ -229,6 +94,145 @@ def render_atlas(host,dbname,user,password):
         print ConnectionString
         return 0
     cur = conn.cursor()
+
+
+
+
+    def ngw2png(where,ngwstyles,size,filename):
+            #if size is big, then image will be retrieved from wfs service
+            cur.execute('''
+        SELECT 
+        CONCAT(
+        ST_XMin(Box2D(ST_Transform(wkb_geometry,3857))),',',
+        ST_YMin(Box2D(ST_Transform(wkb_geometry,3857))),',',
+        ST_XMax(Box2D(ST_Transform(wkb_geometry,3857))),',',
+        ST_YMax(Box2D(ST_Transform(wkb_geometry,3857)))
+        ) AS bbox_string_ngw_image
+        ,
+        (
+        ST_YMax(ST_Transform(wkb_geometry,3857)) - ST_YMin(ST_Transform(wkb_geometry,3857))
+        )/
+        (
+        ST_XMax(ST_Transform(wkb_geometry,3857)) - ST_XMin(ST_Transform(wkb_geometry,3857))
+        )::real AS aspect,
+
+        ST_XMin(Box2D(ST_Transform(wkb_geometry,3857))) AS xmin,
+        ST_YMax(Box2D(ST_Transform(wkb_geometry,3857))) AS ymax,
+        ST_XMax(Box2D(ST_Transform(wkb_geometry,3857))) AS xmax,
+        ST_YMin(Box2D(ST_Transform(wkb_geometry,3857))) AS ymin,
+        ref,
+        map
+        FROM atlaspages
+        WHERE '''+where+'''
+        ORDER BY map,ref;
+                        ''')
+            rows = cur.fetchall()
+            size
+            for currentmap in rows:
+                url="http://trolleway.nextgis.com/api/component/render/image?resource="+ngwstyles+"&extent="+str(currentmap[0])+"&size="+str(size)+","+str(int(round(size*float(currentmap[1]))))
+                if size > 3500:
+                    #url="http://trolleway.nextgis.com/api/resource/828/wms?service=WMS&request=GetMap&layers=lines-print,terminals-print&styles=&format=image%2Fpng&transparent=false&version=1.1.1&height=6000&width=6000&srs=EPSG%3A3857&bbox=4226661.916057106,7435794.111581949,4304933.433021126,7514065.628545967"
+                    url="http://trolleway.nextgis.com/api/resource/828/wms?service=WMS&request=GetMap&layers=lines-print,terminals-print&styles=&format=image%2Fpng&transparent=true&version=1.1.1&height="+str(size)+"&width="+str(int(round(size*float(currentmap[1]))))+"&srs=EPSG%3A3857&bbox="+str(currentmap[0])
+                print url
+                if retrive_map:
+                    try:
+                        response = urllib2.urlopen(url)
+                    except:
+                        print sys.exc_info()[0]
+                        print url
+                        quit()
+                    image=open(filename+'.png','w')
+                    image.write(response.read())
+                    image.close()
+                worldfile=open(filename+'.pngw','w')
+                worldfile.write(str((currentmap[4]-currentmap[2])/size)+"\n")
+                worldfile.write('0'+"\n")
+                worldfile.write('0'+"\n")
+                worldfile.write('-'+str((currentmap[3]-currentmap[5])/int(round(size*float(currentmap[1]))))+"\n")
+                worldfile.write(str(currentmap[2])+"\n")
+                worldfile.write(str(currentmap[3])+"\n")
+                worldfile.close()
+            return
+        
+    def wfs2png(where,size,filename,wfs_url='',wfslayers=''):
+
+            cur.execute('''
+        SELECT 
+        CONCAT(
+        ST_XMin(Box2D(ST_Transform(wkb_geometry,3857))),',',
+        ST_YMax(Box2D(ST_Transform(wkb_geometry,3857))),',',
+        ST_XMax(Box2D(ST_Transform(wkb_geometry,3857))),',',
+        ST_YMin(Box2D(ST_Transform(wkb_geometry,3857)))
+        ) AS gdal_translate_projwin_bbox 
+        ,
+        (
+        ST_YMax(ST_Transform(wkb_geometry,3857)) - ST_YMin(ST_Transform(wkb_geometry,3857))
+        )/
+        (
+        ST_XMax(ST_Transform(wkb_geometry,3857)) - ST_XMin(ST_Transform(wkb_geometry,3857))
+        )::real AS aspect,
+
+        ST_XMin(Box2D(ST_Transform(wkb_geometry,3857))) AS xmin,
+        ST_YMax(Box2D(ST_Transform(wkb_geometry,3857))) AS ymax,
+        ST_XMax(Box2D(ST_Transform(wkb_geometry,3857))) AS xmax,
+        ST_YMin(Box2D(ST_Transform(wkb_geometry,3857))) AS ymin,
+        ref,
+        map
+        FROM atlaspages
+        WHERE '''+where+'''
+        ORDER BY map,ref;
+                        ''')
+            rows = cur.fetchall()
+            size
+            for currentmap in rows:
+                wms_xml='''
+    <GDAL_WMS>
+     <Service name="WMS">
+         <Version>1.1.1</Version>
+         <ServerUrl>http://trolleway.nextgis.com/api/resource/828/wms?</ServerUrl>
+         <SRS>EPSG:3857</SRS>
+         <ImageFormat>image/png</ImageFormat>
+         <Layers>basemap-water,basemap-landuse,basemap-roads,basemap-railways,lines-print,terminals-print</Layers>
+         <Styles></Styles>
+     </Service>
+     <DataWindow>
+       <UpperLeftX>-20037508.34</UpperLeftX>
+       <UpperLeftY>20037508.34</UpperLeftY>
+       <LowerRightX>20037508.34</LowerRightX>
+       <LowerRightY>-20037508.34</LowerRightY>
+       <SizeY>40075016</SizeY>
+       <SizeX>40075016.857</SizeX>
+     </DataWindow>
+     <Projection>EPSG:3857</Projection>
+     <BandsCount>4</BandsCount>
+    </GDAL_WMS>
+    '''
+                xml_filename='wms.xml'
+                if os.path.exists(xml_filename):
+                    os.remove(xml_filename)
+                text_file = open(xml_filename, "w")
+                text_file.write(wms_xml)
+                text_file.close()
+                cmd = 'gdal_translate -of "png" -outsize ' + str(size) + ' 0  -r lanczos -projwin ' + str(currentmap[0]) +' ' + str(xml_filename) + ' ' + filename +'.png'
+                print cmd
+                os.system(cmd)
+            
+                if retrive_map:
+                    try:
+                        os.system(cmd)
+                    except:
+                        print sys.exc_info()[0]
+                        print cmd
+                        quit()
+                worldfile=open(filename+'.pngw','w')
+                worldfile.write(str((currentmap[4]-currentmap[2])/size)+"\n")
+                worldfile.write('0'+"\n")
+                worldfile.write('0'+"\n")
+                worldfile.write('-'+str((currentmap[3]-currentmap[5])/int(round(size*float(currentmap[1]))))+"\n")
+                worldfile.write(str(currentmap[2])+"\n")
+                worldfile.write(str(currentmap[3])+"\n")
+                worldfile.close()
+            return
 
     #debug
     retrive_map=True
@@ -333,7 +337,7 @@ ORDER BY map,ref;
 
     cmd="gdal_translate -of ""GTiff"" -a_srs ""EPSG:3857"" -co ""COMPRESS=DEFLATE"" -co ""ZLEVEL=9"" " + tmpfiles['screenall'] + ".png " + tmpfiles['screenall'] + '.tiff'
 
-    #os.system(cmd)
+    os.system(cmd)
     print 'Upload GeoTIF to Yandex'
     upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + longname_single + ' [Openstreetmap] [latest].tif',overwrite='True'),filedata=open(tmpfiles['screenall']+'.tiff', 'rb'))
     upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + tmpfiles['atlas_yandex']+'.tif',overwrite='True'),filedata=open(tmpfiles['screenall']+'.tiff', 'rb'))
@@ -342,6 +346,8 @@ ORDER BY map,ref;
     #upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + longname_atlas + ' [Openstreetmap] [latest].pdf',overwrite='True'),filedata=open(tmpfiles['atlas'], 'rb'))
     #upload_yandex(config.yandex_token,pathdata=dict(path=config.yandex_disk_path + tmpfiles['atlas_yandex'] + '.pdf',overwrite='True'),filedata=open(tmpfiles['atlas'], 'rb'))
 
+
+    
     
 if __name__ == '__main__':
 
