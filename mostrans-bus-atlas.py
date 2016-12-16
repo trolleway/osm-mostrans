@@ -214,8 +214,8 @@ def render_atlas(host,dbname,user,password):
                 text_file.write(wms_xml) 
                 text_file.close()
                 cmd = 'gdal_translate -of "png" -outsize ' + str(size) + ' ' + str(size * currentmap[1]) + ' -r lanczos   "<GDAL_WMS><Service name="WMS"><Version>1.1.1</Version><ServerUrl>http://trolleway.nextgis.com/api/resource/828/wms?</ServerUrl><SRS>EPSG:3857</SRS><ImageFormat>image/png</ImageFormat><Layers>basemap-water,basemap-landuse,basemap-roads,basemap-railways,lines-print,terminals-print</Layers><Styles></Styles></Service><DataWindow><UpperLeftX>' + str(currentmap[2]) + '</UpperLeftX><UpperLeftY>' + str(currentmap[3]) + '</UpperLeftY><LowerRightX>' + str(currentmap[4]) + '</LowerRightX><LowerRightY>' + str(currentmap[5]) + '</LowerRightY><SizeY>40075016</SizeY><SizeX>40075016.857</SizeX></DataWindow><Projection>EPSG:3857</Projection><BandsCount>4</BandsCount></GDAL_WMS>" ' + filename +'.png'
-                print cmd #
-                os.system(cmd)
+
+
                 
             
                 if retrive_map:
