@@ -183,7 +183,7 @@ def render_atlas(host,dbname,user,password):
         ORDER BY map,ref;
                         ''')
             rows = cur.fetchall()
-            size = 888
+            size = 10000
             for currentmap in rows:
                 wms_xml='''
     <GDAL_WMS>
