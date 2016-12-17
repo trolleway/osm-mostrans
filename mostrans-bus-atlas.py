@@ -85,7 +85,7 @@ def upload_yandex(token,pathdata,filedata):
     
 def render_atlas(host,dbname,user,password):
 
-    size_main=9500
+    size_main=15000
     ConnectionString="dbname=" + dbname + " user="+ user + " host=" + host + " password=" + password
     try:
         conn = psycopg2.connect(ConnectionString)
@@ -183,7 +183,6 @@ def render_atlas(host,dbname,user,password):
         ORDER BY map,ref;
                         ''')
             rows = cur.fetchall()
-            size = 20000
             for currentmap in rows:
                 wms_xml='''
     <GDAL_WMS>
@@ -319,7 +318,7 @@ ORDER BY map,ref;
 
 
     
-    wfs2png(where="map='mostrans-bus' AND ref='all'",size=1000,filename=os.path.join(tmpfiles['folder'], "mostrans-bus-all-screen"),wfs_url='',wfslayers='')
+    wfs2png(where="map='mostrans-bus' AND ref='all'",size_main,filename=os.path.join(tmpfiles['folder'], "mostrans-bus-all-screen"),wfs_url='',wfslayers='')
 
     
     #add overlay logo, and keep same filename
