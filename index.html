@@ -377,14 +377,6 @@ $(document).ready(function() {
             
     </script>
         
-                <section id="downloads">
-          <!--<a href="https://github.com/trolleway/osm-mostrans/zipball/master" class="btn">Download as .zip</a>-->
-          <!--<a href="https://github.com/trolleway/osm-mostrans/tarball/master" class="btn">Download as .tar.gz</a>-->
-          <a href="https://github.com/trolleway/osm-mostrans" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
-          <a href="http://nextgis.ru"><img src="http://nextgis.com/wp-content/themes/nextgis_clean/img/logo.svg" width="200"></a>
-          <a href="https://wiki.openstreetmap.org/wiki/RU:%D0%97%D0%B0%D0%B3%D0%BB%D0%B0%D0%B2%D0%BD%D0%B0%D1%8F_%D1%81%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0">
-          <img src="https://wiki.openstreetmap.org/w/images/thumb/b/b0/Openstreetmap_logo.svg/100px-Openstreetmap_logo.svg.png" width="100"></a>
-        </section>
 <p>
   
 На этой странице показываются выгрузки маршрутов НОТ по Московскому региону из Openstreetmap. Обновление - каждые 2 часа. 
@@ -401,7 +393,18 @@ $(document).ready(function() {
   Показаны маршруты route=bus, payment:troika=yes, из  <a href="https://github.com/trolleway/osm-mostrans/blob/master/cfg/moscow_newmodel_bus_routes_2016.json">списка</a>
 <li>Ночные маршруты - показаны маршруты всех видов транспорта из <a href="https://github.com/trolleway/osm-mostrans/blob/master/cfg/mostrans_night.json">списка</a></li> 
 </ul>  
-  
+        <h3>Скачать карты</h3>        
+        Вместе с веб-картами генерируются карты в png, GeoTIFF и атласы, нарезанные на страницы. <a href="https://yadi.sk/d/Gdp9gA36y6Eq7">Скачать</a>
+        <h3>Мобильное приложение</h3>  
+        Эти карты вы можете смотреть на Android в программе <a href="https://play.google.com/store/apps/details?id=com.nextgis.mobile">NextGIS Mobile</a>. В программе добавьте геосервис, и найдите эти слои по слову "Автобус", "Троллейбус" или "Трамвай". Программа NextGIS Mobile может закешировать слои, для просмотра их без интернета.
+        <h3>JOSM</h3>  
+        Эти слои можно подключать в JOSM для нахождения мест, где маршруты нарисованы неправльно. Добавляйте WMS http://trolleway.nextgis.com/api/resource/104/wms.
+        <h3><a id="Использование-карты-маршрутов-в-вашей-ГИС" class="anchor" href="#%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D0%BA%D0%B0%D1%80%D1%82%D1%8B-%D0%BC%D0%B0%D1%80%D1%88%D1%80%D1%83%D1%82%D0%BE%D0%B2-%D0%B2-%D0%B2%D0%B0%D1%88%D0%B5%D0%B9-%D0%93%D0%98%D0%A1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Использование карты маршрутов в вашей ГИС</h3>
+        Эти слои добавлены в базу <a href="https://qms.nextgis.com/">Quick Map Services</a>, значит их видно в QGIS и ArcGIS. Используйте поисковый запрос OSM-Mostrans
+        
+<p>У нас есть WMS-сервис. Можно верстать карту в QGIS. Подключайтесь по протоколу WMS по адресу <a href="http://trolleway.nextgis.com/api/resource/104/wms">http://trolleway.nextgis.com/api/resource/104/wms</a></p>
+        
+        
 <h3>Техническая реализация</h3>    
   <p>В репозитории находится скрипт, который регулярно генерирует карты городского транспорта Москвы по данным Openstreetmap. 
   Данные в нём неполные, но одна из задач этой странички - сделать так, что бы люди правили эти данные. </p>
@@ -417,14 +420,6 @@ $(document).ready(function() {
 
         <p>Данные автоматически обновляются каждый день из свежей базы Openstreetmap. <a href="https://trolleway.github.io/vvod_marshutov_OT_openstreetmap">Правьте маршруты в ней</a></p>
         
-<h3>
-<a id="Другие-варианты-использования" class="anchor" href="#%D0%94%D1%80%D1%83%D0%B3%D0%B8%D0%B5-%D0%B2%D0%B0%D1%80%D0%B8%D0%B0%D0%BD%D1%82%D1%8B-%D0%B8%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Другие варианты использования</h3>
-
-
-<h5>
-<a id="Использование-карты-маршрутов-в-вашей-ГИС" class="anchor" href="#%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D0%BA%D0%B0%D1%80%D1%82%D1%8B-%D0%BC%D0%B0%D1%80%D1%88%D1%80%D1%83%D1%82%D0%BE%D0%B2-%D0%B2-%D0%B2%D0%B0%D1%88%D0%B5%D0%B9-%D0%93%D0%98%D0%A1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Использование карты маршрутов в вашей ГИС</h5>
-
-<p>У нас есть WMS-сервис. Можно верстать карту в QGIS. Подключайтесь по протоколу WMS по адресу <a href="http://trolleway.nextgis.com/api/resource/104/wms">http://trolleway.nextgis.com/api/resource/104/wms</a></p>
       </section>
     </div>
 
