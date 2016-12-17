@@ -318,7 +318,7 @@ ORDER BY map,ref;
 
 
     
-    wfs2png(where="map='mostrans-bus' AND ref='all'",size_main,filename=os.path.join(tmpfiles['folder'], "mostrans-bus-all-screen"),wfs_url='',wfslayers='')
+    wfs2png(where="map='mostrans-bus' AND ref='all'",size=size_main,filename=os.path.join(tmpfiles['folder'], "mostrans-bus-all-screen"),wfs_url='',wfslayers='')
 
     
     #add overlay logo, and keep same filename
