@@ -151,7 +151,7 @@ WHERE ST_Intersects(l.way , red_zone.wkb_geometry);  '''
 
 def process(host,dbname,user,password):
     
-        cmd='''python osmot/osmot.py -hs localhost -d '''+dbname+''' -u '''+user+''' -p '''+password+'''
+        cmd='''python osmot/osmot.py -hs '''+host+''' -d '''+dbname+''' -u '''+user+''' -p '''+password+'''
     '''
         print cmd
         os.system(cmd)
