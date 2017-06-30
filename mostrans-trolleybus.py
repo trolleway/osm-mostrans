@@ -99,9 +99,9 @@ def cleardb(host,dbname,user,password):
     print ('Database wiped')
 
 def importdb(host,dbname,user,password):
-    os.system('''
-    osm2pgsql --create --slim -E 3857 --cache-strategy sparse --cache 100 --database '''+dbname+''' --username '''+user+'''  routesFinal.osm.pbf
-    ''')
+    os.system('osm2pgsql --create --slim -E 3857 --cache-strategy sparse --cache 100 --host {host} --database {database} --username {username} routesFinal.osm.pbf'.format(host=host,
+    dbname=dbname,username=user,password=password))
+
 
 def filter_routes(host,dbname,user,password):
     ConnectionString="dbname=" + dbname + " user="+ user + " host=" + host + " password=" + password
