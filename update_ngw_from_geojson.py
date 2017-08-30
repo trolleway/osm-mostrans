@@ -200,7 +200,6 @@ class NGWSynchroniser:
                 sr = osr.SpatialReference()
                 sr.ImportFromEPSG(3857)
                 geom_type = geom.GetGeometryType() #say to Dima
-                geom.TransformTo(sr)
                 
                 if self.ForceToMultiGeom:
                     if geom_type == ogr.wkbLineString:
