@@ -71,8 +71,9 @@ def upload_yandex(token,pathdata,filedata):
                 result = json.loads(response.text)
                 upload_url = result['href']
             except:
+                print 'Status code: ' + str(response.status_code)
                 print response.text
-                print str(response.status_code())
+                
                 quit()
                 
             response = requests.put(upload_url, filedata,headers={'Authorization': 'OAuth '+token}, timeout=120)
