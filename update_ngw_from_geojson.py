@@ -80,7 +80,7 @@ class NGWSynchroniser:
         self.ngw_creds = (cfg['ngw_login'], cfg['ngw_password'])
 
         
-    def progress(count, total, status=''):
+    def progress(self, count, total, status=''):
         bar_len = 60
         filled_len = int(round(bar_len * count / float(total)))
         percents = round(100.0 * count / float(total), 1)
