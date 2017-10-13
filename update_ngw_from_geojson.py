@@ -188,13 +188,7 @@ class NGWSynchroniser:
 
     #Taken from wfs2ngw.py
 
-
-
-
-
     def openGeoJson(self,check_field, filename):
-
-
 
         driver = ogr.GetDriverByName("GeoJSON")
         dataSource = driver.Open(filename, 0)
@@ -278,12 +272,7 @@ class NGWSynchroniser:
         return layer_result_sorted
 
     def GetNGWData(self,code,check_field):
-
-        
-        
         #check_field = 'synchronisation_key'
-        
-
         # Put NGW records into array   
 
         req = requests.get(self.ngw_url + str(self.resid) + '/feature/', auth=self.ngw_creds)
@@ -309,10 +298,7 @@ class NGWSynchroniser:
         for key in sorted(ngw_result):
             ngw_result_sorted[key]=ngw_result[key]
 
- 
-
         return ngw_result_sorted
-
 
     def synchronize(self,wfs_result, ngw_result, check_field):
 
@@ -364,7 +350,7 @@ class NGWSynchroniser:
             else:
                 message = 'delete feature ' + str(ngw_id) + ' ngw_feature_id='+str(ngwFeatureId)
                 req = requests.delete(self.ngw_url + str(self.resid) + '/feature/' + str(ngwFeatureId), auth=self.ngw_creds)
-            self.progress(cnt, max_cnt, status = message)       
+            self.progress(cnt, max_cnt, message)       
         # add new
 
         max_cnt = len(wfs_result_sorted)
@@ -377,16 +363,8 @@ class NGWSynchroniser:
                 message = 'add new feature #' + str(wfs_id)
                 payload = self.createPayload(wfs_result[wfs_id])
                 req = requests.post(self.ngw_url + str(self.resid) + '/feature/', data=json.dumps(payload), auth=self.ngw_creds)
-            self.progress(cnt, max_cnt, status = message) 
+            self.progress(cnt, max_cnt, message) 
     
-
-    
-
-
-
-
-
-
 
 
 if __name__ == '__main__':
