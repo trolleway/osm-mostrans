@@ -360,6 +360,7 @@ class NGWSynchroniser:
         for wfs_id in wfs_result:
             #wfsFeatureId=wfs_result[wfs_id]['fields'][check_field]
             message = ''
+            cnt = cnt + 1
             if wfs_id not in ngw_result:
                 
                 payload = self.createPayload(wfs_result[wfs_id])
