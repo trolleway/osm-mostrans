@@ -151,9 +151,13 @@ WHERE ST_Intersects(l.way , red_zone.wkb_geometry);  '''
 
 def process(host,dbname,user,password):
     
-        cmd='''python osmot/osmot.py -hs '''+host+''' -d '''+dbname+''' -u '''+user+''' -p '''+password+'''
-    '''
-        print cmd
+        cmd='''python osmot/osmot.py -hs {host} -d {dbname} -u {user} -p {password}
+    '''.format(
+                host=host,
+                dbname=dbname,
+                user=user,
+                password=password
+        )
         os.system(cmd)
 
 def postgis2geojson(host,dbname,user,password,table):
