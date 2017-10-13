@@ -348,8 +348,9 @@ class NGWSynchroniser:
                     message = 'update feature #' + str(ngw_id) + ' ' + str(req)
                 #print 'same feature: '+str(ngw_id)
             else:
-                message = 'delete feature ' + str(ngw_id) + ' ngw_feature_id='+str(ngwFeatureId)
+                
                 req = requests.delete(self.ngw_url + str(self.resid) + '/feature/' + str(ngwFeatureId), auth=self.ngw_creds)
+                message = 'delete feature ' + str(ngw_id) + ' ngw_feature_id='+str(ngwFeatureId) + ' ' + str(req)
             self.progress(cnt, max_cnt, message)       
         # add new
 
@@ -360,9 +361,10 @@ class NGWSynchroniser:
             #wfsFeatureId=wfs_result[wfs_id]['fields'][check_field]
             message = ''
             if wfs_id not in ngw_result:
-                message = 'add new feature #' + str(wfs_id)
+                
                 payload = self.createPayload(wfs_result[wfs_id])
                 req = requests.post(self.ngw_url + str(self.resid) + '/feature/', data=json.dumps(payload), auth=self.ngw_creds)
+                message = 'add new feature #' + str(wfs_id)  + ' ' + str(req)
             self.progress(cnt, max_cnt, message) 
     
 
