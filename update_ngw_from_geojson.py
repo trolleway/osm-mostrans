@@ -354,7 +354,7 @@ class NGWSynchroniser:
             self.progress(cnt, max_cnt, message)       
         # add new
 
-        max_cnt = len(wfs_result_sorted)
+        max_cnt = len(wfs_result)
         cnt=0
         message=''
         for wfs_id in wfs_result:
