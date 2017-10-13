@@ -103,10 +103,11 @@ def cleardb(host,dbname,user,password):
     conn.commit()
     print ('Database wiped')
 
-def importdb(host,dbname,user,password):
-    os.system('''
-    osm2pgsql --create --slim -E 3857 --cache-strategy sparse --cache 100 --database '''+dbname+''' --username '''+user+'''  routesFinal.osm.pbf
-    ''')
+
+def importdb(host,database,username,password):
+    os.system('osm2pgsql --create --slim -E 3857 --cache-strategy sparse --cache 100 --host {host} --database {database} --username {username} routesFinal.osm.pbf'.format(host=host,
+    database=database,username=username,password=password))
+
 
 def filter_routes(host,dbname,user,password):
     ConnectionString="dbname=" + dbname + " user="+ user + " host=" + host + " password=" + password
@@ -162,7 +163,7 @@ WHERE ST_Intersects(l.way , red_zone.wkb_geometry);  '''
 
 def process(host,dbname,user,password):
     
-        cmd='''python osmot/osmot.py -hs localhost -d '''+dbname+''' -u '''+user+''' -p '''+password+'''
+        cmd='''python osmot/osmot.py -hs '''+host+''' -d '''+dbname+''' -u '''+user+''' -p '''+password+'''
     '''
         print cmd
         os.system(cmd)
