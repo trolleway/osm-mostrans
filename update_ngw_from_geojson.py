@@ -79,6 +79,16 @@ class NGWSynchroniser:
         self.resid=cfg['ngw_resource_id']
         self.ngw_creds = (cfg['ngw_login'], cfg['ngw_password'])
 
+        
+    def progress(count, total, status=''):
+        bar_len = 60
+        filled_len = int(round(bar_len * count / float(total)))
+        percents = round(100.0 * count / float(total), 1)
+        bar = '=' * filled_len + '-' * (bar_len - filled_len)
+        sys.stdout.write('[%s] %s%s ...%s\r' % (bar, percents, '%', status))
+        sys.stdout.flush() 
+
+    
      #Taken from wfs2ngw.py
     def compareValues(self,ngw_value, wfs_value):
         if (ngw_value == '' or ngw_value == None) and (wfs_value == '' or wfs_value == None):
@@ -333,7 +343,12 @@ class NGWSynchroniser:
             wfs_result_sorted[wfs_result[key]['fields'][check_field]]=wfs_result[key]
         wfs_result = wfs_result_sorted
 
+        max_cnt = len(ngw_result_sorted)
+        cnt=0
+        
         for ngw_id in ngw_result:
+            cnt=cnt+1
+            message=''
             #ngwFeatureId=ngw_result[ngw_id]['fields'][check_field]
             ngwFeatureId=ngw_result[ngw_id]['id']
 
@@ -344,23 +359,25 @@ class NGWSynchroniser:
                     
                     payload = self.createPayload(wfs_result[ngw_id])
                     req = requests.put(self.ngw_url + str(self.resid) + '/feature/' + str(ngwFeatureId), data=json.dumps(payload), auth=self.ngw_creds)
-                    print 'update feature #' + str(ngw_id) + ' ' + str(req)
+                    message = 'update feature #' + str(ngw_id) + ' ' + str(req)
                 #print 'same feature: '+str(ngw_id)
             else:
-                print 'delete feature ' + str(ngw_id) + ' ngw_feature_id='+str(ngwFeatureId)
+                message = 'delete feature ' + str(ngw_id) + ' ngw_feature_id='+str(ngwFeatureId)
                 req = requests.delete(self.ngw_url + str(self.resid) + '/feature/' + str(ngwFeatureId), auth=self.ngw_creds)
-                
+            progress(cnt, max_cnt, status = message)       
         # add new
 
-
+        max_cnt = len(wfs_result_sorted)
+        cnt=0
+        message=''
         for wfs_id in wfs_result:
             #wfsFeatureId=wfs_result[wfs_id]['fields'][check_field]
-
+            message = ''
             if wfs_id not in ngw_result:
-                print 'add new feature #' + str(wfs_id)
+                message = 'add new feature #' + str(wfs_id)
                 payload = self.createPayload(wfs_result[wfs_id])
                 req = requests.post(self.ngw_url + str(self.resid) + '/feature/', data=json.dumps(payload), auth=self.ngw_creds)
-
+            progress(cnt, max_cnt, status = message) 
     
 
     
