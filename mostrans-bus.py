@@ -93,7 +93,7 @@ def importdb(host,database,username,password):
     --host {host} --database {database} --username {username} \ 
     routesFinal.osm.pbf'''.format(host=host,
     database=database,username=username,password=password)
-
+        print cmd
         os.system(cmd)
 
 
