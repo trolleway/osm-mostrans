@@ -90,8 +90,7 @@ def importdb(host,database,username,password):
     -E 3857 \
     --cache-strategy sparse \
     --cache 100 \
-    --host {host} --database {database} --username {username} \ 
-    routesFinal.osm.pbf'''.format(host=host,
+    --host {host} --database {database} --username {username} routesFinal.osm.pbf'''.format(host=host,
     database=database,username=username,password=password)
         print cmd
         os.system(cmd)
