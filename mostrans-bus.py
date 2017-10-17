@@ -28,7 +28,7 @@ def filter_osm_dump():
       --read-pbf moscow_russia.osm.pbf \
       --tf accept-relations route="bus" \
       --used-way --used-node \
-      --write-pbf osm/routesFinal.osm.pbf
+      --write-pbf routesFinal.osm.pbf
     '''
         os.system(cmd)
 
@@ -91,7 +91,7 @@ def importdb(host,database,username,password):
     --cache-strategy sparse \
     --cache 100 \
     --host {host} --database {database} --username {username} \ 
-    osm/routesFinal.osm.pbf'''.format(host=host,
+    routesFinal.osm.pbf'''.format(host=host,
     database=database,username=username,password=password)
 
         os.system(cmd)
