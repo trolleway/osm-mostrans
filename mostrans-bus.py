@@ -94,7 +94,7 @@ def importdb(host,database,username,password):
     osm/routesFinal.osm.pbf'''.format(host=host,
     database=database,username=username,password=password)
 
-    os.system(cmd)
+        os.system(cmd)
 
 
 def filter_routes(host,dbname,user,password):
