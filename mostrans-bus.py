@@ -83,8 +83,18 @@ def cleardb(host,dbname,user,password):
     print ('Database wiped')
 
 def importdb(host,database,username,password):
-    os.system('osm2pgsql --create --slim -E 3857 --cache-strategy sparse --cache 100 --host {host} --database {database} --username {username} routesFinal.osm.pbf'.format(host=host,
-    database=database,username=username,password=password))
+        cmd='''
+    osm2pgsql \
+    --create  \
+    --slim \
+    -E 3857 \
+    --cache-strategy sparse \
+    --cache 100 \
+    --host {host} --database {database} --username {username} \ 
+    osm/routesFinal.osm.pbf'''.format(host=host,
+    database=database,username=username,password=password)
+
+    os.system(cmd)
 
 
 def filter_routes(host,dbname,user,password):
