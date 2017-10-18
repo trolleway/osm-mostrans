@@ -147,8 +147,9 @@ def process(host,dbname,user,password):
     
         cmd='''python osmot/osmot.py -hs '''+host+''' -d '''+dbname+''' -u '''+user+''' -p '''+password+'''
     '''
-        print cmd
+        
         os.system(cmd)
+        print cmd
 
 def postgis2geojson(host,dbname,user,password,table):
     if os.path.exists(table+'.geojson'):
