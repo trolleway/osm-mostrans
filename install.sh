@@ -22,9 +22,11 @@ postgresql-contrib \
 default-jre \
 python-pip \
 libpq-dev \
-postgresql-10-postgis-2.4 \
 software-properties-common \
 osm2pgsql
+
+#найдите пакет postgis, подходящий для вашей версии PostgreSQL, его имя должно иметь вид postgresql-{version}-postgis-{version} и установите его:
+apt-get install -y postgresql-10-postgis-2.4 
 
 apt-get upgrade  -y libproj-dev
 
@@ -32,7 +34,6 @@ service postgresql restart
 
 #Install PostGIS
 apt-get install -y  postgis
-#В полученном списке найдите пакет, подходящий для вашей версии PostgreSQL, его имя должно иметь вид postgresql-{version}-postgis-{version} и установите его:
 
 invoke-rc.d postgresql restart
 invoke-rc.d postgresql reload
