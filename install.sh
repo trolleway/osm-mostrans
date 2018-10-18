@@ -22,7 +22,7 @@ postgresql-contrib \
 default-jre \
 python-pip \
 libpq-dev \
-postgresql-9.5-postgis-2.2 \
+postgresql-10-postgis-2.4 \
 software-properties-common \
 python-software-properties \
 osm2pgsql
