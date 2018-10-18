@@ -28,7 +28,7 @@ If osmupdate or osmosis fails - add swap space
 ```
 
 # If osmupdate or osmosis fails - add swap space, 
-# https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-16-04
+# https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-18-04
 # adding swap at digitalocean is okay for rare use, such as OSM import procedures, according to https://www.digitalocean.com/community/tutorials/how-to-set-up-an-osrm-server-on-ubuntu-14-04
 
 sudo fallocate -l 4G /swapfile
