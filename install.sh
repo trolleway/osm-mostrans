@@ -89,5 +89,7 @@ cd ~
 touch .osmosis
 echo "JAVACMD_OPTIONS=-Xmx2G" > .osmosis
 chmod 666 .osmosis
+
 cd osm-mostrans
+sudo pip install -r requirements.txt
 
