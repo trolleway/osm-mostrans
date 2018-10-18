@@ -25,6 +25,8 @@ libpq-dev \
 software-properties-common \
 osm2pgsql
 
+
+#Install PostGIS
 #найдите пакет postgis, подходящий для вашей версии PostgreSQL, его имя должно иметь вид postgresql-{version}-postgis-{version} и установите его:
 apt-get install -y postgresql-10-postgis-2.4 
 
@@ -32,8 +34,6 @@ apt-get upgrade  -y libproj-dev
 
 service postgresql restart
 
-#Install PostGIS
-apt-get install -y  postgis
 
 invoke-rc.d postgresql restart
 invoke-rc.d postgresql reload
