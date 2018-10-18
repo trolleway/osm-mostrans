@@ -2,7 +2,7 @@
 Generator of public transport map from OSM as a service
 
 ```
-#This installation tested in fresh Ubuntu Server 16.04 LTS
+#This installation tested in fresh Ubuntu Server 18.04.1 LTS
 
 git clone --recursive https://github.com/trolleway/osm-mostrans.git
 cd osm-mostrans
