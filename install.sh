@@ -58,7 +58,7 @@ pip install --upgrade pip
 
 sudo apt-add-repository ppa:nextgis/ppa
 sudo apt-get update
-sudo apt-get install gdal-bin python-gdal
+sudo apt-get install -y  gdal-bin python-gdal
 
 #check that gdal version >= 2
 gdalinfo --version 
