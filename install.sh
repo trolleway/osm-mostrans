@@ -24,7 +24,6 @@ python-pip \
 libpq-dev \
 postgresql-10-postgis-2.4 \
 software-properties-common \
-python-software-properties \
 osm2pgsql
 
 apt-get upgrade  -y libproj-dev
