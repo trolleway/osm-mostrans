@@ -12,16 +12,18 @@ for page in result:
     print cmd
     os.system(cmd)
     
-    cmd = 'ogr2poly.py'
-    cmd = cmd.format
+    cmd = 'ogr2poly.py {source}'
+    cmd = cmd.format(source=os.path.join(datadir,'roi.gpkg')
     print cmd
     os.system(cmd)
     
     #prepare pbf file for lines
     
     #clip pbf file by poly
-    cmd = 'osmconvert polyfile country_pbf city_pbf'
-    cmd = cmd.format(polyfile=polyfile)
+    cmd = 'osmconvert {sourcepbf} -B={polyfile} -o={resultpbf}'
+    cmd = cmd.format(sourcepbf = os.path.join(datadir,'country.pbf'),
+                     polyfile=polyfile,
+                    resultpbf = os.path.join(datadir, 'city.pbf') )
     print cmd
     os.system(cmd)
     
