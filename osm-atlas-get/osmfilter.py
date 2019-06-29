@@ -13,21 +13,21 @@ def get_args():
 
 
 def process(filter, source_filename, result_filename, debug=false):
-        filename = 'a.pbf'
         print 'pbf to o5m'
-        cmd='osmconvert {filename}.osm.pbf -o={filename}.o5m'.format(filename=filename)
+        cmd='osmconvert {filename} -o={filename}.o5m'.format(filename=source_filename)
         if debug:
             print cmd        
         os.system(cmd)
 
         print 'o5m tag filtration'
-        cmd='osmfilter {filename}.o5m --drop-author --keep="{fl}"   --out-o5m >{filename}-filtered.o5m'.format(filename=filename, fl=filter)
+        cmd='osmfilter {filename}.o5m --drop-author --keep="{fl}"   --out-o5m >{filename}-filtered.o5m'.format(filename=source_filename,
+                                                                                                         fl=filter)
         if debug:
             print cmd        
         os.system(cmd)
 
         print 'o5m to pbf'
-        cmd='osmconvert {filename}-filtered.o5m -o={filename}-filtered.pbf'.format(filename=filename)
+        cmd='osmconvert {filename}-filtered.o5m -o={result_filename}'.format(filename=source_filename,result_filename = result_filename)
         if debug:
             print cmd        
         os.system(cmd)
